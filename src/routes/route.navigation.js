@@ -1,16 +1,109 @@
-import React from 'react';
-import {Router, Scene, Stack} from 'react-native-router-flux';
+import React, {useEffect, useRef} from 'react';
+import {BackHandler, ToastAndroid} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {SplashScreen} from '../screens';
+import {navigationRef} from './RootNavigation';
+import {
+  ActionScreen,
+  SplashScreen,
+  WelcomeScreen,
+  HomeScreen,
+  TransactionsScreen,
+} from '../screens';
+import {connect} from 'react-redux';
 
-const Routes = () => {
+const Stack = createNativeStackNavigator();
+
+let clicks = 0;
+
+const Routes = props => {
+  const {i18n} = props;
+  let routeNameRef = useRef();
+
+  useEffect(() => {
+    const backAction = () => {
+      if (
+        routeNameRef.current === 'Home' ||
+        routeNameRef.current === 'Action' ||
+        routeNameRef.current === 'Welcome'
+      ) {
+        if (clicks !== 1) {
+          ToastAndroid.show(
+            i18n.t('phrases.tapAgainToExit'),
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
+        }
+        if (clicks > 0) {
+          BackHandler.exitApp();
+        } else {
+          clicks++;
+        }
+        setTimeout(() => {
+          clicks = 0;
+        }, 2000);
+        return true;
+      }
+      return false;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, [i18n]);
+
   return (
-    <Router>
-      <Stack key="root" hideNavBar>
-        <Scene key="splash" component={SplashScreen} hideNavBar />
-      </Stack>
-    </Router>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() =>
+        (routeNameRef.current = navigationRef.current.getCurrentRoute().name)
+      }
+      onStateChange={() => {
+        const currentRouteName = navigationRef.current.getCurrentRoute().name;
+        if (routeNameRef.current !== currentRouteName) {
+          routeNameRef.current = currentRouteName;
+        }
+        routeNameRef.current = currentRouteName;
+      }}>
+      <Stack.Navigator initialRouteName="Splash">
+        <Stack.Screen
+          name="Splash"
+          component={SplashScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Welcome"
+          component={WelcomeScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Action"
+          component={ActionScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Transaction"
+          component={TransactionsScreen}
+          options={{headerShown: false}}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
-export default Routes;
+const mapStateToProps = ({i18n}) => {
+  return {
+    i18n: i18n.i18n,
+  };
+};
+
+export default connect(mapStateToProps)(Routes);

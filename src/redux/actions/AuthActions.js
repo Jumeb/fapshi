@@ -9,6 +9,7 @@ import {
   SET_WALLET,
   SET_ORDERS,
   SIGNOUT,
+  ACTION,
 } from '../types';
 
 export const setUser = user => {
@@ -75,5 +76,12 @@ export const SetOrders = data => {
 export const signOut = () => {
   return {
     type: SIGNOUT,
+  };
+};
+
+export const setAction = data => {
+  return {
+    type: ACTION,
+    payload: data,
   };
 };

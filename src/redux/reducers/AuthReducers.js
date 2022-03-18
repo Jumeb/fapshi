@@ -10,9 +10,11 @@ import {
   SET_WALLET,
   SET_ORDERS,
   SIGNOUT,
+  ACTION,
 } from '../types';
 
 const INITIAL_STATE = {
+  actionType: '',
   token: '',
   user: {},
   chefs: [],
@@ -25,6 +27,9 @@ const INITIAL_STATE = {
 
 const AuthReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case ACTION:
+      const actionType = action.payload;
+      return {...state, actionType};
     case SET_USER:
       const user = action.payload;
       Storage.storeInfo('USER', user);

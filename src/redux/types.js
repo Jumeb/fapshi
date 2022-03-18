@@ -21,3 +21,4 @@ export const SET_LOCATIONS = 'set_locations';
 export const SET_WALLET = 'set_wallet';
 export const SET_ORDERS = 'set_orders';
 export const SIGNOUT = 'signout';
+export const ACTION = 'action';

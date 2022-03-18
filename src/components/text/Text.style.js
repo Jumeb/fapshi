@@ -1,4 +1,4 @@
-import theme from '../../../resources/Colors/theme';
+import theme from '../../utils/theme';
 
 let styles = {
   text: {
