@@ -11,6 +11,11 @@ export default {
     transactions: 'Transactions',
     payouts: 'Payouts',
     all: 'All',
+    home: 'Home',
+    settings: 'Settings',
+    profile: 'Profile',
+    notification: 'Notification',
+    notifications: 'Notifications',
   },
   phrases: {
     signUp: 'Sign Up',

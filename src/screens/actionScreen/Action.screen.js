@@ -228,7 +228,9 @@ const ActionS = props => {
       <Animated.View style={[styles.topBannerContainer, animatedTopBC]}>
         <Animated.View style={[styles.topBannerBold, animatedTopBB]} />
       </Animated.View>
-      <ScrollView style={styles.scrollContainer}>
+      <ScrollView
+        style={styles.scrollContainer}
+        keyboardShouldPersistTaps={true}>
         <Animated.View style={animatedSignUp}>
           <SignUp
             i18n={i18n}
@@ -305,7 +307,7 @@ const SignIn = props => {
       return;
     }
 
-    navigation.navigate('Home');
+    navigation.navigate('Main Stack');
   };
 
   return (
@@ -412,7 +414,7 @@ const SignUp = props => {
       return;
     }
 
-    navigation.navigate('Home');
+    navigation.navigate('Main Stack');
   };
 
   return (
