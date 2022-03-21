@@ -9,6 +9,7 @@ import Function from './buttons/FunctionButton.component';
 import Detail from './detail/Detail.component';
 import TabBar from './tabbar/TabBar.component';
 import Filter from './buttons/FilterButtons.component';
+import Filters from './buttons/FilterButton.component';
 
 export {
   Text,
@@ -22,4 +23,5 @@ export {
   Detail,
   TabBar,
   Filter,
+  Filters,
 };

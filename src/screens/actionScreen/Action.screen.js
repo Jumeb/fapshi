@@ -230,7 +230,7 @@ const ActionS = props => {
       </Animated.View>
       <ScrollView
         style={styles.scrollContainer}
-        keyboardShouldPersistTaps={true}>
+        keyboardShouldPersistTaps={'always'}>
         <Animated.View style={animatedSignUp}>
           <SignUp
             i18n={i18n}

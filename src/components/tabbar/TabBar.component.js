@@ -87,7 +87,7 @@ const TabIcon = props => {
     index = 3;
   }
   if (title === 'Settings Stack') {
-    icon = 'ios-cog';
+    icon = 'ios-build';
     index = 2;
   }
   // if (title === 'orders') {

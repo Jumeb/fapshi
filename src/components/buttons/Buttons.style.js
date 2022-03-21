@@ -124,6 +124,42 @@ const styles = StyleSheet.create({
     fontSize: theme.FONT_SIZE_SMALL,
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
   },
+
+  //Filters Button
+  filtersContainer: {
+    flexDirection: 'row',
+    paddingVertical: 7,
+    paddingHorizontal: 16,
+    marginRight: 10,
+    marginLeft: 5,
+    borderRadius: theme.BORDER_IMAGE,
+    shadowOffset: {width: 0, height: 2},
+    shadowColor: theme.PRIMARY_COLOR,
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: 3,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  filterCircleTheme: {
+    position: 'absolute',
+    height: 60,
+    width: 60,
+    bottom: -35,
+    right: 20,
+    backgroundColor: theme.LIGHT_BLUE,
+    borderRadius: theme.LARGE_BORDER_RADIUS,
+    zIndex: -99,
+  },
+  filterTitle: {
+    textAlign: 'center',
+    marginRight: 'auto',
+    fontSize: theme.FONT_SIZE_EXTRA_SMALL + 1,
+    fontWeight: theme.FONT_WEIGHT_NORMAL_,
+    letterSpacing: 0.8,
+    zIndex: 99,
+  },
 });
 
 export default styles;
