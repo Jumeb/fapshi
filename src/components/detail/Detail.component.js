@@ -25,7 +25,7 @@ const Details = props => {
           style={styles.personImage}
           imageStyle={styles.personImage}
         />
-        <Text style={styles.personInitials}>HR</Text>
+        <Text style={styles.personInitials}>JB</Text>
       </View>
       <View style={styles.dateContainer}>
         <Text style={styles.dateValue}>8 Dec, 22</Text>

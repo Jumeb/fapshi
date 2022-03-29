@@ -5,7 +5,6 @@ import theme from '../../utils/theme';
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    // justifyContent: 'center',
     backgroundColor: theme.WHITE_COLOR,
     marginTop: 30,
   },
@@ -13,31 +12,6 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'relative',
     paddingTop: 70,
-    // paddingBottom: 150,
-    // padding: theme.PAD_HR,
-  },
-  headerContainer: {
-    height: 180,
-    backgroundColor: theme.PRIMARY_COLOR_MONO,
-    position: 'absolute',
-  },
-  roundContainer: {
-    marginTop: -190,
-    marginLeft: -100,
-    height: theme.WIDTH_100 + 150,
-    width: theme.WIDTH_100 + 150,
-    borderRadius: theme.CIRCLE_BORDER_RADIUS + 400,
-    backgroundColor: theme.PRIMARY_COLOR,
-    justifyContent: 'flex-end',
-    overflow: 'hidden',
-  },
-  logoBackground: {
-    height: 350,
-    tintColor: theme.PRIMARY_COLOR,
-    resizeMode: 'center',
-    alignSelf: 'center',
-    marginLeft: 30,
-    marginBottom: -18,
   },
   chartContainer: {
     justifyContent: 'center',
@@ -90,7 +64,6 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     marginHorizontal: theme.PAD_HR,
-    // marginTop: 8,
     marginVertical: 18,
     marginBottom: 180,
     borderRadius: theme.BORDER_IMAGE + 6,
@@ -102,7 +75,6 @@ const styles = StyleSheet.create({
     elevation: 4,
     paddingVertical: 14,
     paddingHorizontal: 8,
-    // maxHeight: 340,
     overflow: 'hidden',
   },
 });

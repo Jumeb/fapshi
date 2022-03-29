@@ -10,6 +10,12 @@ import Detail from './detail/Detail.component';
 import TabBar from './tabbar/TabBar.component';
 import Filter from './buttons/FilterButtons.component';
 import Filters from './buttons/FilterButton.component';
+import NotifcationCard from './cards/notificationCard.component';
+import DataCard from './cards/dataCard.component';
+import Header from './header/header.component';
+import Button from './buttons/Button.component';
+import SwitchButton from './buttons/switchButton.component';
+import LanguageCard from './cards/language.component';
 
 export {
   Text,
@@ -24,4 +30,10 @@ export {
   TabBar,
   Filter,
   Filters,
+  DataCard,
+  NotifcationCard,
+  Header,
+  Button,
+  SwitchButton,
+  LanguageCard,
 };

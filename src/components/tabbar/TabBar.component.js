@@ -28,30 +28,6 @@ const TabBar = props => {
 
   return (
     <KeyboardAvoidingView style={styles.tabBar}>
-      {/* <TouchableOpacity style={styles.tabTabSelected}>
-        <Icons name="ios-home" size={20} color={theme.WHITE_COLOR} />
-        <Text style={styles.tabTabTextSelected}>HOME</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.tabTab}>
-        <Icons name="md-receipt-outline" size={20} color={theme.LIGHT_GREY} />
-        <Text style={styles.tabTabText}>ORDERS</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.tabTab}>
-        <Icons
-          name="ios-chatbubbles-sharp"
-          size={20}
-          color={theme.LIGHT_GREY}
-        />
-        <Text style={styles.tabTabText}>REVIEWS</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.tabTab}>
-        <Icons
-          name="person-circle-outline"
-          size={20}
-          color={theme.LIGHT_GREY}
-        />
-        <Text style={styles.tabTabText}>PROFILE</Text>
-      </TouchableOpacity> */}
       {state.routes.map(element => (
         <TabIcon
           element={element}

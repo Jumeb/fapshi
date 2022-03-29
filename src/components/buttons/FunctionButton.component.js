@@ -7,10 +7,13 @@ import theme from '../../utils/theme';
 import styles from './Buttons.style';
 
 const Function = props => {
-  const {navigation, icon, title, color} = props;
+  const {navigation, icon, title, color, onPress} = props;
 
   return (
-    <TouchableOpacity style={styles.funcContainer} activeOpacity={0.8}>
+    <TouchableOpacity
+      style={styles.funcContainer}
+      activeOpacity={0.8}
+      onPress={() => onPress()}>
       <View style={[styles.funcIcon, {backgroundColor: color}]}>
         <Icons name={icon} color={theme.WHITE_COLOR} size={12} />
       </View>

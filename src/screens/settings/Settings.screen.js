@@ -1,30 +1,117 @@
-import React from 'react';
-import {SafeAreaView, StatusBar, View, Image} from 'react-native';
+import React, {useState} from 'react';
+import {
+  SafeAreaView,
+  StatusBar,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import LinearGradient from 'react-native-linear-gradient';
+import Icons from 'react-native-vector-icons/Ionicons';
 
 import styles from './Settings.style';
-import {Text} from '../../components';
+import {Header, NavBar, SwitchButton, Text} from '../../components';
 import theme from '../../utils/theme';
 
 const Settings = props => {
-  const {i18n} = props;
+  const {i18n, navigation} = props;
+  const [notify, setNotify] = useState(false);
+  const [appNotify, setAppNotify] = useState(true);
 
+  const Notifications = () => {
+    setNotify(!notify);
+  };
+
+  const AppNotifications = () => {
+    setAppNotify(!appNotify);
+  };
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <StatusBar backgroundColor={theme.TRANSPARENT} />
-      <View style={styles.headerContainer}>
-        <LinearGradient
-          colors={[theme.PRIMARY_COLOR, theme.PRIMARY_COLOR_MONO]}
-          style={styles.roundContainer}>
-          <Image
-            style={styles.logoBackground}
-            imageStyle={styles.logoBackground}
-            source={require('../../utils/images/logo-full.png')}
+      <StatusBar backgroundColor={theme.PRIMARY_COLOR} />
+      <NavBar
+        screen={'Settings'}
+        show={true}
+        pop={false}
+        navigation={navigation}
+        search={false}
+        // setText={setText}
+      />
+      {/* <Header /> */}
+      <ScrollView
+        horizontal={false}
+        showsVerticalScrollIndicator={false}
+        style={styles.scrollView}>
+        <View style={styles.headerContainer}>
+          <Icons
+            name="ios-notifications-outline"
+            size={17}
+            color={theme.DARK_GREY}
           />
-        </LinearGradient>
-      </View>
+          <Text style={styles.headerTitle}>
+            {i18n.t('words.notifications')}
+          </Text>
+        </View>
+        <View style={styles.functionContainer}>
+          <Text style={styles.functionTitle}>
+            {i18n.t('words.notifications')}
+          </Text>
+          <SwitchButton invert={notify} onPress={() => Notifications()} />
+        </View>
+        <View style={styles.functionContainer}>
+          <Text style={styles.functionTitle}>
+            {i18n.t('phrases.appNotifications')}
+          </Text>
+          <SwitchButton invert={appNotify} onPress={() => AppNotifications()} />
+        </View>
+        <View style={styles.headerContainer}>
+          <Icons name="ios-create-outline" size={17} color={theme.DARK_GREY} />
+          <Text style={styles.headerTitle}>{i18n.t('words.more')}</Text>
+        </View>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.functionContainer}
+          onPress={() => navigation.navigate('Language')}>
+          <Text style={styles.functionTitle}>{i18n.t('words.language')}</Text>
+          <View>
+            <Icons
+              name="ios-chevron-forward"
+              size={18}
+              color={theme.LIGHT_GREY}
+            />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.8} style={styles.functionContainer}>
+          <Text style={styles.functionTitle}>{i18n.t('words.country')}</Text>
+          <View>
+            <Icons
+              name="ios-chevron-forward"
+              size={18}
+              color={theme.LIGHT_GREY}
+            />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.8} style={styles.functionContainer}>
+          <Text style={styles.functionTitle}>{i18n.t('phrases.rateUs')}</Text>
+          <View>
+            <Icons
+              name="ios-chevron-forward"
+              size={18}
+              color={theme.LIGHT_GREY}
+            />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.8} style={styles.functionContainer}>
+          <Text style={styles.functionTitle}>{i18n.t('words.share')}</Text>
+          <View>
+            <Icons
+              name="ios-chevron-forward"
+              size={18}
+              color={theme.LIGHT_GREY}
+            />
+          </View>
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 };

@@ -11,7 +11,15 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     position: 'relative',
-    paddingTop: 70,
+    paddingTop: 50,
+  },
+  selectTitle: {
+    color: theme.DARK_GREY,
+    fontSize: theme.FONT_SIZE_LARGE,
+    marginTop: 8,
+    marginHorizontal: theme.PAD_HR,
+    fontWeight: theme.FONT_WEIGHT_NORMAL_,
+    marginBottom: 10,
   },
 });
 

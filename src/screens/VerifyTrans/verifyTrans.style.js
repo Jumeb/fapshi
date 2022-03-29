@@ -11,7 +11,16 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     position: 'relative',
-    paddingTop: 70,
+    paddingTop: 60,
+  },
+  transTitle: {
+    textAlign: 'center',
+    fontWeight: theme.FONT_WEIGHT_NORMAL_,
+    color: theme.DARK_GREY,
+  },
+  transFrom: {},
+  transContainer: {
+    flexDirection: 'row',
   },
 });
 

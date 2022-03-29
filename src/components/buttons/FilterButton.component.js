@@ -6,7 +6,7 @@ import theme from '../../utils/theme';
 import styles from './Buttons.style';
 
 const Filter = props => {
-  const {title, active} = props;
+  const {title, active, yOffset} = props;
   return (
     <TouchableOpacity
       activeOpacity={0.8}

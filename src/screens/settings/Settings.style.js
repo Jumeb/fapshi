@@ -5,32 +5,41 @@ import theme from '../../utils/theme';
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    // justifyContent: 'center',
     backgroundColor: theme.WHITE_COLOR,
     marginTop: 30,
   },
+  scrollView: {
+    flex: 1,
+    position: 'relative',
+    paddingTop: 50,
+  },
   headerContainer: {
-    height: 180,
-    backgroundColor: theme.PRIMARY_COLOR_MONO,
-    position: 'absolute',
+    flexDirection: 'row',
+    marginTop: 20,
+    alignItems: 'center',
+    marginHorizontal: theme.PAD_HR,
+    paddingBottom: 5,
+    borderBottomWidth: 1.4,
+    borderBottomColor: theme.LIGHT_GREY + '66',
   },
-  roundContainer: {
-    marginTop: -190,
-    marginLeft: -100,
-    height: theme.WIDTH_100 + 150,
-    width: theme.WIDTH_100 + 150,
-    borderRadius: theme.CIRCLE_BORDER_RADIUS + 400,
-    backgroundColor: theme.PRIMARY_COLOR,
-    justifyContent: 'flex-end',
-    overflow: 'hidden',
+  headerTitle: {
+    marginLeft: 8,
+    fontSize: theme.FONT_SIZE_SMALL + 1,
+    color: theme.DARK_GREY,
+    letterSpacing: 0.3,
+    fontWeight: theme.FONT_WEIGHT_NORMAL_,
   },
-  logoBackground: {
-    height: 350,
-    tintColor: theme.PRIMARY_COLOR,
-    resizeMode: 'center',
-    alignSelf: 'center',
-    marginLeft: 30,
-    marginBottom: -18,
+  functionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: theme.PAD_HR,
+    marginTop: 9,
+    paddingVertical: 3,
+  },
+  functionTitle: {
+    fontSize: theme.FONT_SIZE_SMALL - 0.5,
+    fontWeight: theme.FONT_WEIGHT_NORMAL_,
   },
 });
 

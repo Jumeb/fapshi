@@ -28,21 +28,21 @@ const SquareInput = props => {
     if (value.length >= 1) {
       Animated.timing(animateTitle, {
         toValue: -21,
-        duration: 400,
+        duration: 270,
         useNativeDriver: true,
       }).start();
     }
     if (value.length < 1) {
       Animated.timing(animateTitle, {
         toValue: 25,
-        duration: 400,
+        duration: 270,
         useNativeDriver: true,
       }).start();
     }
     if (!error) {
       Animated.timing(animateError, {
         toValue: 21,
-        duration: 400,
+        duration: 270,
         useNativeDriver: true,
       }).start();
     }

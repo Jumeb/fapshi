@@ -6,6 +6,10 @@ import TransactionsScreen from './transactions/Transactions.screen';
 import SettingsScreen from './settings/Settings.screen';
 import NotificationsScreen from './notifications/Notifications.screen';
 import ProfileScreen from './Profile/Profile.screen';
+import LanguageScreen from './language/Language.screens';
+import SuccessScreen from './successScreen/Success.screen';
+import EnterCodeScreen from './enterCode/EnterCode.screen';
+import VerifyTransScreen from './VerifyTrans/verifyTrans.screen';
 
 export {
   SplashScreen,
@@ -16,4 +20,8 @@ export {
   SettingsScreen,
   ProfileScreen,
   NotificationsScreen,
+  LanguageScreen,
+  SuccessScreen,
+  EnterCodeScreen,
+  VerifyTransScreen,
 };

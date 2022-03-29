@@ -1,16 +1,19 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, StatusBar, View, Image, ScrollView} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import LinearGradient from 'react-native-linear-gradient';
-import {BarChart, LineChart} from 'react-native-chart-kit';
+import {LineChart} from 'react-native-chart-kit';
 
 import styles from './Transactions.style';
+import {scrolling} from '../../redux/actions/ScrollActions';
 import {Detail, Filter, Filters, NavBar, Text} from '../../components';
 import theme from '../../utils/theme';
 
 const Transaction = props => {
-  const {i18n, navigation} = props;
+  const {i18n, navigation, yOffset} = props;
+
+  const [text, setText] = useState('');
 
   const data = {
     labels: [
@@ -67,20 +70,17 @@ const Transaction = props => {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar backgroundColor={theme.PRIMARY_COLOR} />
-      <View style={styles.headerContainer}>
-        <LinearGradient
-          colors={[theme.PRIMARY_COLOR, theme.PRIMARY_COLOR_MONO]}
-          style={styles.roundContainer}>
-          <Image
-            style={styles.logoBackground}
-            imageStyle={styles.logoBackground}
-            source={require('../../utils/images/logo-full.png')}
-          />
-        </LinearGradient>
-      </View>
-      <NavBar screen={'Transactions'} pop={true} navigation={navigation} />
+      <NavBar
+        screen={'Transactions'}
+        show={true}
+        pop={true}
+        search={true}
+        navigation={navigation}
+        setText={setText}
+      />
       <ScrollView
         horizontal={false}
+        onScroll={e => props.scrolling(e)}
         showsVerticalScrollIndicator={false}
         style={styles.scrollView}>
         <ScrollView
@@ -109,11 +109,11 @@ const Transaction = props => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           style={styles.filterContainer2}>
-          <Filter title={i18n.t('words.all')} active={true} />
-          <Filter title={i18n.t('words.send')} />
-          <Filter title={i18n.t('phrases.topUp')} />
-          <Filter title={i18n.t('words.withdraw')} />
-          <Filter title={i18n.t('words.airtime')} />
+          <Filter yOffset={yOffset} title={i18n.t('words.all')} active={true} />
+          <Filter yOffset={yOffset} title={i18n.t('words.transfers')} />
+          <Filter yOffset={yOffset} title={i18n.t('phrases.topUp')} />
+          <Filter yOffset={yOffset} title={i18n.t('words.withdraw')} />
+          <Filter yOffset={yOffset} title={i18n.t('words.payments')} />
         </ScrollView>
         <View style={styles.detailsContainer}>
           <View style={styles.circleTheme} />
@@ -157,20 +157,41 @@ const Transaction = props => {
             color={theme.PURPLE_COLOR}
             navigation={navigation}
           />
+          <Detail
+            icon="ios-navigate"
+            color={theme.VIOLET_COLOR}
+            navigation={navigation}
+          />
+          <Detail
+            icon="ios-navigate"
+            color={theme.VIOLET_COLOR}
+            navigation={navigation}
+          />
+          <Detail
+            icon="ios-navigate"
+            color={theme.VIOLET_COLOR}
+            navigation={navigation}
+          />
+          <Detail
+            icon="ios-navigate"
+            color={theme.VIOLET_COLOR}
+            navigation={navigation}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-const mapStateToProps = ({i18n}) => {
+const mapStateToProps = ({i18n, scroll}) => {
   return {
     i18n: i18n.i18n,
+    yOffset: scroll.yOffset,
   };
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators({scrolling}, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Transaction);

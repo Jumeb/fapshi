@@ -109,6 +109,17 @@ const styles = StyleSheet.create({
     right: -18,
     backgroundColor: theme.LIGHT_BLUE,
     borderRadius: theme.LARGE_BORDER_RADIUS,
+    zIndex: -999,
+  },
+  circleThemeI: {
+    position: 'absolute',
+    height: 60,
+    width: 60,
+    bottom: -30,
+    right: -18,
+    backgroundColor: theme.LIGHT_BLUE + '99',
+    borderRadius: theme.LARGE_BORDER_RADIUS,
+    zIndex: -999,
   },
 
   // Filter Buttons
@@ -120,7 +131,7 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.TRANSPARENT,
   },
   filterText: {
-    color: theme.DARK_GREY,
+    color: theme.PRIMARY_COLOR,
     fontSize: theme.FONT_SIZE_SMALL,
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
   },
@@ -159,6 +170,82 @@ const styles = StyleSheet.create({
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
     letterSpacing: 0.8,
     zIndex: 99,
+  },
+
+  //    Button
+  buttonContainerI: {
+    borderWidth: 1.4,
+    borderColor: theme.PRIMARY_COLOR,
+    backgroundColor: theme.PRIMARY_COLOR,
+    borderRadius: theme.BORDER_IMAGE,
+    paddingHorizontal: 8,
+    paddingVertical: 7,
+    marginVertical: 5,
+    justifyContent: 'center',
+    flex: 1,
+    marginHorizontal: 7,
+    shadowOffset: {width: 0, height: 2},
+    shadowColor: theme.PRIMARY_COLOR,
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: 3,
+    overflow: 'hidden',
+  },
+  buttonContainer: {
+    borderWidth: 1.4,
+    borderColor: theme.PRIMARY_COLOR,
+    backgroundColor: theme.WHITE_COLOR,
+    borderRadius: theme.BORDER_IMAGE,
+    paddingHorizontal: 8,
+    paddingVertical: 7,
+    marginVertical: 5,
+    justifyContent: 'center',
+    flex: 1,
+    marginHorizontal: 7,
+    shadowOffset: {width: 0, height: 2},
+    shadowColor: theme.PRIMARY_COLOR,
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: 3,
+    overflow: 'hidden',
+  },
+  buttonTextI: {
+    fontSize: theme.FONT_SIZE_SMALL,
+    color: theme.WHITE_COLOR,
+    textAlign: 'center',
+  },
+  buttonText: {
+    fontSize: theme.FONT_SIZE_SMALL,
+    color: theme.PRIMARY_COLOR,
+    textAlign: 'center',
+  },
+
+  // Switch Button
+
+  switchButton: {
+    width: 30,
+    height: 12,
+    borderRadius: theme.CIRCLE_BORDER_RADIUS,
+  },
+  switch: {
+    height: 16.5,
+    width: 16.5,
+    marginTop: -2.5,
+    borderRadius: theme.CIRCLE_BORDER_RADIUS,
+    overflow: 'hidden',
+  },
+  switchContainerI: {
+    backgroundColor: theme.LIGHT_GREY + '77',
+  },
+  switchContainer: {
+    backgroundColor: theme.PRIMARY_COLOR + '77',
+  },
+  switchThemeI: {
+    backgroundColor: theme.LIGHT_GREY,
+  },
+  switchTheme: {
+    backgroundColor: theme.PRIMARY_COLOR,
+    marginLeft: 'auto',
   },
 });
 

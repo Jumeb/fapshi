@@ -14,6 +14,10 @@ import {
   SettingsScreen,
   NotificationsScreen,
   ProfileScreen,
+  LanguageScreen,
+  SuccessScreen,
+  EnterCodeScreen,
+  VerifyTransScreen,
 } from '../screens';
 import {connect} from 'react-redux';
 import {TabBar} from '../components';
@@ -34,6 +38,21 @@ let HomeStackScreen = () => {
       <Stack.Screen
         name="Transaction"
         component={TransactionsScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Verify Transaction"
+        component={VerifyTransScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Enter Code"
+        component={EnterCodeScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Success"
+        component={SuccessScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
@@ -70,6 +89,11 @@ let SettingsStackScreen = () => {
       <Stack.Screen
         name="Settings"
         component={SettingsScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Language"
+        component={LanguageScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

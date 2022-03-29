@@ -1,20 +1,48 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {
+  TouchableOpacity,
+  Platform,
+  UIManager,
+  LayoutAnimation,
+} from 'react-native';
 import {Text} from '..';
 import theme from '../../utils/theme';
 
 import styles from './Buttons.style';
 
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
 const Filter = props => {
-  const {title, active} = props;
+  LayoutAnimation.configureNext(
+    LayoutAnimation.create(
+      500,
+      LayoutAnimation.Types.linear,
+      LayoutAnimation.Properties.opacity,
+    ),
+  );
+
+  const {title, active, yOffset} = props;
   return (
     <TouchableOpacity
       activeOpacity={0.8}
       style={[
         styles.filterContainer,
-        active && {borderBottomColor: theme.PRIMARY_COLOR},
+        active && yOffset <= 94 && {borderBottomColor: theme.PRIMARY_COLOR},
+        active && yOffset > 94 && {borderBottomColor: theme.WHITE_COLOR},
       ]}>
-      <Text style={styles.filterText}>{title}</Text>
+      <Text
+        style={[
+          styles.filterText,
+          yOffset <= 94 && {color: theme.PRIMARY_COLOR},
+          yOffset > 94 && {color: theme.WHITE_COLOR},
+        ]}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };

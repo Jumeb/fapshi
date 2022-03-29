@@ -361,6 +361,7 @@ const SignIn = props => {
           <Text style={styles.optionAction}>{i18n.t('phrases.signUp')}</Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.circleThemeLog} />
     </View>
   );
 };
@@ -486,6 +487,7 @@ const SignUp = props => {
           <Text style={styles.optionAction}>{i18n.t('phrases.signIn')}</Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.circleThemeSign} />
     </View>
   );
 };

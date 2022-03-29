@@ -5,7 +5,7 @@ import theme from '../../utils/theme';
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: theme.LIGHT_BLUE,
+    backgroundColor: theme.WHITE_COLOR,
   },
   scrollContainer: {
     marginTop: -30,
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     marginVertical: 16,
     marginBottom: 26,
-    backgroundColor: theme.LIGHT_BLUE,
+    backgroundColor: theme.WHITE_COLOR,
     shadowOffset: {width: 0, height: 2},
     shadowColor: theme.DARK_GREY,
     shadowOpacity: 0.8,
@@ -79,12 +79,14 @@ const styles = StyleSheet.create({
     marginTop: 50,
     borderTopRightRadius: theme.CIRCLE_BORDER_RADIUS,
     borderBottomRightRadius: theme.CIRCLE_BORDER_RADIUS,
+    overflow: 'hidden',
   },
   signUpContainer: {
     marginLeft: 'auto',
     // marginBottom: 50,
     borderTopLeftRadius: theme.CIRCLE_BORDER_RADIUS,
     borderBottomLeftRadius: theme.CIRCLE_BORDER_RADIUS,
+    overflow: 'hidden',
   },
   levelUp: {
     position: 'absolute',
@@ -109,6 +111,26 @@ const styles = StyleSheet.create({
     color: theme.PRIMARY_COLOR,
     marginHorizontal: 4,
     fontWeight: theme.FONT_WEIGHT_BOLD,
+  },
+  circleThemeSign: {
+    position: 'absolute',
+    height: 500,
+    width: 500,
+    backgroundColor: theme.LIGHT_BLUE,
+    zIndex: -999,
+    borderRadius: theme.CIRCLE_BORDER_RADIUS + 200,
+    bottom: -150,
+    right: -190,
+  },
+  circleThemeLog: {
+    position: 'absolute',
+    height: 450,
+    width: 450,
+    backgroundColor: theme.LIGHT_BLUE,
+    zIndex: -999,
+    borderRadius: theme.CIRCLE_BORDER_RADIUS + 200,
+    bottom: -150,
+    left: -200,
   },
 });
 

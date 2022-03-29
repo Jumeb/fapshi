@@ -12,7 +12,14 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import Icons from 'react-native-vector-icons/Ionicons';
 
-import {Detail, FapCard, Filter, Function, Text} from '../../components';
+import {
+  Detail,
+  FapCard,
+  Filter,
+  Function,
+  Header,
+  Text,
+} from '../../components';
 import theme from '../../utils/theme';
 import styles from './Home.style';
 
@@ -21,17 +28,7 @@ const Home = props => {
   return (
     <SafeAreaView style={styles.mainConatiner}>
       <StatusBar backgroundColor={theme.TRANSPARENT} />
-      <View style={styles.headerContainer}>
-        <LinearGradient
-          colors={[theme.PRIMARY_COLOR, theme.PRIMARY_COLOR_MONO]}
-          style={styles.roundContainer}>
-          <Image
-            style={styles.logoBackground}
-            imageStyle={styles.logoBackground}
-            source={require('../../utils/images/logo-full.png')}
-          />
-        </LinearGradient>
-      </View>
+      <Header />
       <View style={styles.header}>
         <Text style={styles.title}>{i18n.t('phrases.myDashboard')}</Text>
       </View>
@@ -46,25 +43,28 @@ const Home = props => {
           style={styles.funcContainer}>
           <Function
             navigation={navigation}
-            title={i18n.t('words.send')}
+            title={i18n.t('words.transfer')}
             icon="ios-navigate"
             color={theme.VIOLET_COLOR}
+            onPress={() => navigation.navigate('Success')}
           />
           <Function
             navigation={navigation}
             title={i18n.t('phrases.topUp')}
             icon="ios-trending-up"
             color={theme.MINT_COLOR}
+            onPress={() => navigation.navigate('Enter Code')}
           />
           <Function
             navigation={navigation}
             title={i18n.t('words.withdraw')}
             icon="ios-cash"
             color={theme.GREEN_COLOR}
+            onPress={() => navigation.navigate('Verify Transaction')}
           />
           <Function
             navigation={navigation}
-            title={i18n.t('words.airtime')}
+            title={i18n.t('words.payment')}
             icon="ios-cellular"
             color={theme.PURPLE_COLOR}
           />
@@ -92,11 +92,11 @@ const Home = props => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           style={styles.filterContainer}>
-          <Filter title={i18n.t('words.all')} active={true} />
-          <Filter title={i18n.t('words.send')} />
-          <Filter title={i18n.t('phrases.topUp')} />
-          <Filter title={i18n.t('words.withdraw')} />
-          <Filter title={i18n.t('words.airtime')} />
+          <Filter yOffset={10} title={i18n.t('words.all')} active={true} />
+          <Filter yOffset={10} title={i18n.t('words.transfers')} />
+          <Filter yOffset={10} title={i18n.t('phrases.topUps')} />
+          <Filter yOffset={10} title={i18n.t('words.withdraws')} />
+          <Filter yOffset={10} title={i18n.t('words.payments')} />
         </ScrollView>
         <View style={styles.detailsContainer}>
           <View style={styles.circleTheme} />
