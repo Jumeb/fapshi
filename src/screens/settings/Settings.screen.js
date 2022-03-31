@@ -18,9 +18,24 @@ const Settings = props => {
   const {i18n, navigation} = props;
   const [notify, setNotify] = useState(false);
   const [appNotify, setAppNotify] = useState(true);
+  const [payouts, setPayouts] = useState(false);
+  const [payments, setPayments] = useState(false);
+  const [topUps, setTopUps] = useState(true);
 
   const Notifications = () => {
     setNotify(!notify);
+  };
+
+  const Payouts = () => {
+    setPayouts(!payouts);
+  };
+
+  const Payments = () => {
+    setPayments(!payments);
+  };
+
+  const TopUp = () => {
+    setTopUps(!topUps);
   };
 
   const AppNotifications = () => {
@@ -63,6 +78,26 @@ const Settings = props => {
             {i18n.t('phrases.appNotifications')}
           </Text>
           <SwitchButton invert={appNotify} onPress={() => AppNotifications()} />
+        </View>
+        <View style={styles.headerContainer}>
+          <Icons name="ios-mail-outline" size={17} color={theme.DARK_GREY} />
+          <Text style={styles.headerTitle}>
+            {i18n.t('phrases.emailNotifications')}
+          </Text>
+        </View>
+        <View style={styles.functionContainer}>
+          <Text style={styles.functionTitle}>
+            {i18n.t('phrases.successfullPayments')}
+          </Text>
+          <SwitchButton invert={payments} onPress={() => Payments()} />
+        </View>
+        <View style={styles.functionContainer}>
+          <Text style={styles.functionTitle}>{i18n.t('words.topUps')}</Text>
+          <SwitchButton invert={topUps} onPress={() => TopUp()} />
+        </View>
+        <View style={styles.functionContainer}>
+          <Text style={styles.functionTitle}>{i18n.t('words.payouts')}</Text>
+          <SwitchButton invert={payouts} onPress={() => Payouts()} />
         </View>
         <View style={styles.headerContainer}>
           <Icons name="ios-create-outline" size={17} color={theme.DARK_GREY} />

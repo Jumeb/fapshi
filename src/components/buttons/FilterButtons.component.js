@@ -32,15 +32,9 @@ const Filter = props => {
       activeOpacity={0.8}
       style={[
         styles.filterContainer,
-        active && yOffset <= 94 && {borderBottomColor: theme.PRIMARY_COLOR},
-        active && yOffset > 94 && {borderBottomColor: theme.WHITE_COLOR},
+        active && {borderBottomColor: theme.PRIMARY_COLOR},
       ]}>
-      <Text
-        style={[
-          styles.filterText,
-          yOffset <= 94 && {color: theme.PRIMARY_COLOR},
-          yOffset > 94 && {color: theme.WHITE_COLOR},
-        ]}>
+      <Text style={[styles.filterText, {color: theme.PRIMARY_COLOR}]}>
         {title}
       </Text>
     </TouchableOpacity>

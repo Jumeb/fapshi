@@ -18,6 +18,8 @@ import {
   SuccessScreen,
   EnterCodeScreen,
   VerifyTransScreen,
+  TransferScreen,
+  PayoutScreen,
 } from '../screens';
 import {connect} from 'react-redux';
 import {TabBar} from '../components';
@@ -41,8 +43,13 @@ let HomeStackScreen = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="Verify Transaction"
-        component={VerifyTransScreen}
+        name="Transfer"
+        component={TransferScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Payout"
+        component={PayoutScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen

@@ -16,6 +16,8 @@ import Header from './header/header.component';
 import Button from './buttons/Button.component';
 import SwitchButton from './buttons/switchButton.component';
 import LanguageCard from './cards/language.component';
+import Divider from './divider/divider.component';
+import RecentsCard from './cards/recent.component';
 
 export {
   Text,
@@ -36,4 +38,6 @@ export {
   Button,
   SwitchButton,
   LanguageCard,
+  Divider,
+  RecentsCard,
 };

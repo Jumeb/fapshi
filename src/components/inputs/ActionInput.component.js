@@ -17,7 +17,9 @@ const SquareInput = props => {
     setValue,
     error,
     errorMessage,
+    autoFocus,
     icon,
+    maxLength,
   } = props;
 
   const [animateTitle] = useState(new Animated.Value(0));
@@ -71,6 +73,8 @@ const SquareInput = props => {
         <TextInput
           placeholder={holder}
           keyboardType={type}
+          autoFocus={autoFocus}
+          maxLength={maxLength}
           autoCapitalize={capitalize}
           secureTextEntry={secureText}
           style={styles.inputText}

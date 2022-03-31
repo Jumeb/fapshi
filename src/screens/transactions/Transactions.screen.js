@@ -109,11 +109,11 @@ const Transaction = props => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           style={styles.filterContainer2}>
-          <Filter yOffset={yOffset} title={i18n.t('words.all')} active={true} />
-          <Filter yOffset={yOffset} title={i18n.t('words.transfers')} />
-          <Filter yOffset={yOffset} title={i18n.t('phrases.topUp')} />
-          <Filter yOffset={yOffset} title={i18n.t('words.withdraw')} />
-          <Filter yOffset={yOffset} title={i18n.t('words.payments')} />
+          <Filter title={i18n.t('words.all')} active={true} />
+          <Filter title={i18n.t('words.transfers')} />
+          <Filter title={i18n.t('phrases.topUp')} />
+          <Filter title={i18n.t('words.withdraw')} />
+          <Filter title={i18n.t('words.payments')} />
         </ScrollView>
         <View style={styles.detailsContainer}>
           <View style={styles.circleTheme} />

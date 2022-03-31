@@ -105,7 +105,7 @@ const Welcome = props => {
           </Animated.View>
         </View>
         <Animated.View style={[styles.actionContainer, animatedWelcome]}>
-          <Text style={styles.actionTitle}>Welcome</Text>
+          <Text style={styles.actionTitle}>{i18n.t('words.welcome')}</Text>
           <Text style={styles.actionText}>
             Enim nulla ea in nisi est tempor non sunt tempor laborum laborum
             tempor. Do sunt dolor et elit eu nostrud.

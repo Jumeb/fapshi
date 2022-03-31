@@ -15,6 +15,8 @@ const Profile = props => {
   const [tel, setTel] = useState('6781030599');
   const [email, setEmail] = useState('brice@gmail.com');
   const [edit, setEdit] = useState(false);
+  const [address, setAddress] = useState('Mile Four Nkwen');
+  const [country, setCountry] = useState('CAMEROON');
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -41,7 +43,16 @@ const Profile = props => {
           />
         </View> */}
         <DataCard
-          holder="Username"
+          holder={i18n.t('words.email')}
+          type="email-address"
+          capitalize="none"
+          secureText={false}
+          edit={edit}
+          value={email}
+          setValue={text => setEmail(text)}
+        />
+        <DataCard
+          holder={i18n.t('phrases.fullNames')}
           type="default"
           capitalize="words"
           secureText={false}
@@ -50,7 +61,7 @@ const Profile = props => {
           setValue={text => setName(text)}
         />
         <DataCard
-          holder="Phone no."
+          holder={i18n.t('phrases.phoneNumber')}
           type="phone-pad"
           capitalize="words"
           secureText={false}
@@ -59,21 +70,30 @@ const Profile = props => {
           setValue={text => setTel(text)}
         />
         <DataCard
-          holder="Email"
-          type="email-address"
+          holder={i18n.t('words.country')}
+          type="default"
+          capitalize="none"
+          secureText={false}
+          edit={false}
+          value={country}
+          setValue={text => setCountry(text)}
+        />
+        <DataCard
+          holder={i18n.t('phrases.streetAddress')}
+          type="default"
           capitalize="none"
           secureText={false}
           edit={edit}
-          value={email}
-          setValue={text => setEmail(text)}
+          value={address}
+          setValue={text => setAddress(text)}
         />
         <View style={styles.buttonContainer}>
           <Button
-            title="Edit Profile"
+            title={i18n.t('phrases.editProfile')}
             invert={false}
             onPress={() => setEdit(!edit)}
           />
-          <Button title="Save Changes" invert={true} />
+          <Button title={i18n.t('phrases.saveChanges')} invert={true} />
         </View>
       </ScrollView>
     </SafeAreaView>

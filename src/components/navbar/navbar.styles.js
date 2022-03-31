@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: theme.BORDER_IMAGE,
     backgroundColor: theme.TRANSPARENT,
+    zIndex: 10,
   },
   marginLeft: {
     marginLeft: 'auto',
@@ -51,6 +52,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.BORDER_IMAGE,
     backgroundColor: theme.TRANSPARENT,
     marginLeft: 'auto',
+    zIndex: 10,
   },
   searchBar: {
     fontSize: theme.FONT_SIZE_SMALL,

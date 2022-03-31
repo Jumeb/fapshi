@@ -9,7 +9,8 @@ import ProfileScreen from './Profile/Profile.screen';
 import LanguageScreen from './language/Language.screens';
 import SuccessScreen from './successScreen/Success.screen';
 import EnterCodeScreen from './enterCode/EnterCode.screen';
-import VerifyTransScreen from './VerifyTrans/verifyTrans.screen';
+import TransferScreen from './Transfer/transfer.screen';
+import PayoutScreen from './Payout/payout.screen';
 
 export {
   SplashScreen,
@@ -23,5 +24,6 @@ export {
   LanguageScreen,
   SuccessScreen,
   EnterCodeScreen,
-  VerifyTransScreen,
+  TransferScreen,
+  PayoutScreen,
 };

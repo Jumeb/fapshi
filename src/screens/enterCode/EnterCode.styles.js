@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
   titleContainer: {
-    marginTop: 20,
+    marginTop: 120,
   },
   title: {
     textAlign: 'center',
@@ -23,17 +23,27 @@ const styles = StyleSheet.create({
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
   },
   bubble: {
-    height: 10,
-    width: 10,
+    height: 15,
+    width: 15,
     borderRadius: theme.CIRCLE_BORDER_RADIUS,
     borderWidth: 1,
     borderColor: theme.LIGHT_GREY,
   },
+  filledBuble: {
+    backgroundColor: theme.LIGHT_GREY,
+  },
   bubbleContainer: {
     flexDirection: 'row',
-    marginHorizontal: 100,
-    justifyContent: 'space-around',
-    marginTop: 20,
+    marginHorizontal: 95,
+    justifyContent: 'space-between',
+    marginTop: 60,
+  },
+  hiddenInput: {
+    display: 'none',
+  },
+  buttonContainer: {
+    marginTop: 60,
+    marginHorizontal: theme.PAD_HR,
   },
 });
 

@@ -46,7 +46,7 @@ const Home = props => {
             title={i18n.t('words.transfer')}
             icon="ios-navigate"
             color={theme.VIOLET_COLOR}
-            onPress={() => navigation.navigate('Success')}
+            onPress={() => navigation.navigate('Transfer')}
           />
           <Function
             navigation={navigation}
@@ -60,7 +60,7 @@ const Home = props => {
             title={i18n.t('words.withdraw')}
             icon="ios-cash"
             color={theme.GREEN_COLOR}
-            onPress={() => navigation.navigate('Verify Transaction')}
+            onPress={() => navigation.navigate('Payout')}
           />
           <Function
             navigation={navigation}

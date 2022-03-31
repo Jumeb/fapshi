@@ -38,6 +38,10 @@ const Header = props => {
       ? i18n.t('words.languages')
       : screen.toString() === 'Verify Transaction'
       ? i18n.t('phrases.verifyTrans')
+      : screen.toString() === 'Transfer'
+      ? i18n.t('words.transfer')
+      : screen.toString() === 'Payout'
+      ? i18n.t('words.payout')
       : i18n.t('words.cart1');
 
   const animatedWidth = {

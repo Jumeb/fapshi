@@ -183,7 +183,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     justifyContent: 'center',
     flex: 1,
-    marginHorizontal: 7,
     shadowOffset: {width: 0, height: 2},
     shadowColor: theme.PRIMARY_COLOR,
     shadowOpacity: 0.8,
