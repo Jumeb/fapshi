@@ -37,10 +37,12 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginHorizontal: 6,
   },
-  notificationImage: {
+  notificationIcon: {
     height: 65,
     width: 65,
     borderRadius: theme.CIRCLE_BORDER_RADIUS + 100,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   notificationImageS: {
     height: 65,

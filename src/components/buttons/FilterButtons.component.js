@@ -26,9 +26,10 @@ const Filter = props => {
     ),
   );
 
-  const {title, active, yOffset} = props;
+  const {title, active, yOffset, onPress} = props;
   return (
     <TouchableOpacity
+      onPress={() => onPress()}
       activeOpacity={0.8}
       style={[
         styles.filterContainer,

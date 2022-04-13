@@ -18,7 +18,7 @@ class SplashScreen extends Component {
   constructor() {
     super();
     this.state = {
-      isNotFirstTime: false,
+      isFirstTime: true,
       upF: new Animated.Value(180),
       upA: new Animated.Value(150),
       upP: new Animated.Value(120),
@@ -114,6 +114,7 @@ class SplashScreen extends Component {
 
     Storage.load({key: 'USER'})
       .then(user => {
+        console.log(user);
         this.props.setUser(user);
       })
       .catch(err => {
@@ -129,38 +130,33 @@ class SplashScreen extends Component {
           this.props.setToken('');
         }
       });
+    Storage.load({key: 'HasPin'})
+      .then(pin => this.props.setPin(pin))
+      .catch(err => {
+        if (err) {
+          this.props.setPin(false);
+        }
+      });
 
-    // Storage.load({key: 'CART'})
-    //   .then(cart => {
-    //     this.props.addToCart(cart);
-    //   })
-    //   .catch(er => this.props.addToCart([]));
-
-    // Storage.load({key: 'FAVOURITES'})
-    //   .then(favourites => this.props.addToFavourites(favourites))
-    //   .catch(err => {
-    //     if (err) {
-    //       this.props.addToFavourites([]);
-    //     }
-    //   });
-
-    Storage.load({key: 'isNotFirstTime'})
+    Storage.load({key: 'isFirstTime'})
       .then(res => {
-        if (res) {
-          this.setState({isNotFirstTime: true});
+        if (res.value) {
+          console.log(res, this.state.isFirstTime);
+          this.setState({isFirstTime: true});
         } else {
-          this.setState({isNotFirstTime: false});
+          console.log(res, this.state.isFirstTime);
+          this.setState({isFirstTime: false});
         }
       })
       .catch(e => {
-        this.setState({isNotFirstTime: false});
-        Storage.storeInfo('isNotFirstTime', true);
+        this.setState({isFirstTime: true});
+        Storage.storeInfo('isFirstTime', {value: true});
       });
 
     setTimeout(() => {
-      // if (this.state.isNotFirstTime) {
-      //   return Actions.main();
-      // }
+      if (!this.state.isFirstTime) {
+        return this.props.navigation.navigate('Main Stack');
+      }
       this.props.navigation.navigate('Welcome');
     }, 4000);
   }

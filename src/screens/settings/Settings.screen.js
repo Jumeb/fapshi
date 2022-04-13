@@ -87,12 +87,12 @@ const Settings = props => {
         </View>
         <View style={styles.functionContainer}>
           <Text style={styles.functionTitle}>
-            {i18n.t('phrases.successfullPayments')}
+            {i18n.t('phrases.successfulPayments')}
           </Text>
           <SwitchButton invert={payments} onPress={() => Payments()} />
         </View>
         <View style={styles.functionContainer}>
-          <Text style={styles.functionTitle}>{i18n.t('words.topUps')}</Text>
+          <Text style={styles.functionTitle}>{i18n.t('phrases.topUps')}</Text>
           <SwitchButton invert={topUps} onPress={() => TopUp()} />
         </View>
         <View style={styles.functionContainer}>

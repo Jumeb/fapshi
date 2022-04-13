@@ -4,15 +4,14 @@ import theme from '../../utils/theme';
 
 const styles = StyleSheet.create({
   mainContainer: {
-    backgroundColor: theme.WHITE_COLOR,
-    margin: 0,
-    marginTop: theme.HEIGHT_100 * 0.4,
-    borderTopLeftRadius: theme.BORDER_IMAGE + 10,
-    borderTopRightRadius: theme.BORDER_IMAGE + 10,
+    margin: theme.PAD_HR,
+    justifyContent: 'center',
   },
   scrollView: {
-    paddingBottom: 10,
-    paddingTop: 20,
+    backgroundColor: theme.WHITE_COLOR,
+    margin: 0,
+    borderRadius: theme.BORDER_IMAGE + 10,
+    paddingVertical: 15,
   },
   transTitle: {
     textAlign: 'center',
@@ -82,6 +81,11 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     fontSize: theme.FONT_SIZE_EXTRA_SMALL - 1,
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
+  },
+  inputContainer: {
+    marginTop: 20,
+    paddingHorizontal: 5,
+    marginBottom: -15,
   },
 });
 

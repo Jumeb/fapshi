@@ -41,9 +41,45 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: theme.PAD_HR - 4,
     marginTop: 23,
+  },
+  changePasswordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: theme.PAD_HR,
+    marginVertical: 3,
+  },
+  passwordText: {
+    color: theme.DARK_GREY,
+  },
+  signOutButtonContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 40,
+  },
+  signOutButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: theme.WHITE_COLOR,
+    paddingVertical: 8,
+    paddingHorizontal: 6,
+    width: 100,
+    marginVertical: 6,
+    borderRadius: theme.BORDER_IMAGE,
+    shadowOffset: {width: 0, height: 2},
+    shadowColor: theme.DARK_GREY,
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  signOutButtonText: {
+    color: theme.PRIMARY_COLOR,
+    fontSize: theme.FONT_SIZE_SMALL,
   },
 });
 

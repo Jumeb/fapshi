@@ -1,22 +1,168 @@
-import React, {useState} from 'react';
-import {SafeAreaView, StatusBar, View, Image, ScrollView} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  SafeAreaView,
+  StatusBar,
+  View,
+  Image,
+  BackHandler,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import LinearGradient from 'react-native-linear-gradient';
+7;
+import Icons from 'react-native-vector-icons/Ionicons';
 
 import styles from './Profile.style';
-import {Button, DataCard, Header, NavBar, Text} from '../../components';
+import {
+  Button,
+  DataCard,
+  Header,
+  NavBar,
+  Notification,
+  Text,
+} from '../../components';
 import theme from '../../utils/theme';
+import {BASE_URL} from '../../utils';
+import {setUser, signOut} from '../../redux/actions/AuthActions';
+import {ChangePassword} from '../../section';
 
 const Profile = props => {
-  const {i18n, navigation} = props;
+  const {i18n, navigation, setUser, user, token} = props;
 
-  const [name, setName] = useState('Jume Brice');
-  const [tel, setTel] = useState('6781030599');
-  const [email, setEmail] = useState('brice@gmail.com');
+  const [name, setName] = useState('');
+  const [nameError, setNameError] = useState(false);
+  const [tel, setTel] = useState('');
+  const [telError, setTelError] = useState(false);
+  const [email, setEmail] = useState('');
   const [edit, setEdit] = useState(false);
-  const [address, setAddress] = useState('Mile Four Nkwen');
-  const [country, setCountry] = useState('CAMEROON');
+  const [address, setAddress] = useState('');
+  const [addressError, setAddressError] = useState(false);
+  const [country, setCountry] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [soLoading, setSOLoading] = useState(false);
+  const [configurePassword, setConfigurePassword] = useState(false);
+
+  const [notify, setNotify] = useState(false);
+  const [notifyMsg, setNotifyMsg] = useState({
+    msg: i18n.t('phrases.errorHandlingInput'),
+    type: 'danger',
+  });
+
+  useEffect(() => {
+    setName(user.fullname);
+    setEmail(user?.email);
+    setTel(user?.phone);
+    setAddress(user?.address);
+    setCountry(user?.country);
+  }, []);
+
+  const SignOut = () => {
+    setSOLoading(true);
+    setTimeout(() => {
+      BackHandler.exitApp();
+      props.signOut();
+    }, 4000);
+  };
+
+  const Authenticate = () => {
+    let hasError = false;
+    setLoading(true);
+
+    if (name && name.length < 5) {
+      hasError = true;
+      setNameError(true);
+    }
+
+    if (tel.length < 9) {
+      hasError = true;
+      setTelError(false);
+    }
+
+    if (address.length < 5) {
+      hasError = true;
+      setAddressError(true);
+    }
+
+    if (hasError) {
+      setNotifyMsg({
+        msg: i18n.t('phrases.invalidDataEntry'),
+        type: 'danger',
+      });
+      setNotify(true);
+      setLoading(false);
+      return;
+    }
+
+    const body = {
+      fullname: name,
+      phone: tel,
+      address,
+    };
+
+    let statusCode, responseJson;
+    fetch(`${BASE_URL}/user`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+        Host: 'api.fapshi.com',
+      },
+      body: JSON.stringify(body),
+    })
+      .then(res => {
+        statusCode = res.status;
+        responseJson = res.json();
+        return Promise.all([statusCode, responseJson]);
+      })
+      .then(res => {
+        setLoading(false);
+        statusCode = res[0];
+        responseJson = res[1];
+
+        if (statusCode === 200) {
+          setUser(responseJson);
+          setNotify(true);
+          setNotifyMsg({
+            type: 'success',
+            msg: i18n.t('phrases.profilUpdated'),
+          });
+
+          return setEdit(false);
+        }
+
+        if (statusCode === 400) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            msg: i18n.t('phrases.inValidEmailOrPassword'),
+          });
+          return false;
+        }
+
+        if (statusCode === 500) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            msg: i18n.t('phrases.unexpectedError'),
+          });
+          return false;
+        }
+      })
+      .catch(err => {
+        if (err) {
+          setLoading(false);
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: i18n.t('phrases.pleaseCheckInternet'),
+          });
+        }
+      });
+  };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -47,7 +193,7 @@ const Profile = props => {
           type="email-address"
           capitalize="none"
           secureText={false}
-          edit={edit}
+          edit={false}
           value={email}
           setValue={text => setEmail(text)}
         />
@@ -87,27 +233,61 @@ const Profile = props => {
           value={address}
           setValue={text => setAddress(text)}
         />
+        <TouchableOpacity
+          style={styles.changePasswordContainer}
+          activeOpacity={0.7}
+          onPress={() => setConfigurePassword(true)}>
+          <Text style={styles.passwordText}>
+            {i18n.t('phrases.changePassword')}
+          </Text>
+          <Icons name={'ios-eye-off'} size={16} color={theme.PRIMARY_COLOR} />
+        </TouchableOpacity>
         <View style={styles.buttonContainer}>
           <Button
             title={i18n.t('phrases.editProfile')}
             invert={false}
             onPress={() => setEdit(!edit)}
           />
-          <Button title={i18n.t('phrases.saveChanges')} invert={true} />
+          <Button
+            title={i18n.t('phrases.saveChanges')}
+            invert={true}
+            loading={loading}
+            onPress={() => Authenticate()}
+          />
+        </View>
+        <View style={styles.signOutButtonContainer}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.signOutButton}
+            onPress={() => SignOut()}>
+            <Text style={styles.signOutButtonText}>Sign out</Text>
+            {soLoading ? (
+              <ActivityIndicator color={theme.PRIMARY_COLOR} size={'small'} />
+            ) : (
+              <Icons name={'ios-power'} size={16} color={theme.PRIMARY_COLOR} />
+            )}
+          </TouchableOpacity>
         </View>
       </ScrollView>
+      <Notification notify={notify} setNotify={setNotify} info={notifyMsg} />
+      <ChangePassword
+        configurePassword={configurePassword}
+        setConfigurePassword={setConfigurePassword}
+      />
     </SafeAreaView>
   );
 };
 
-const mapStateToProps = ({i18n}) => {
+const mapStateToProps = ({i18n, auth}) => {
   return {
     i18n: i18n.i18n,
+    user: auth.user,
+    token: auth.token,
   };
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators({setUser, signOut}, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

@@ -4,6 +4,7 @@ import {
   ScrollView,
   StatusBar,
   Animated,
+  ActivityIndicator,
   View,
   TouchableOpacity,
 } from 'react-native';
@@ -12,8 +13,9 @@ import {bindActionCreators} from 'redux';
 
 import {SquareInput, Text, SubmitButton, Notification} from '../../components';
 import styles from './Action.style';
-import {setAction} from '../../redux/actions/AuthActions';
-import {AuthMail} from '../../utils';
+import {setAction, setUser, setToken} from '../../redux/actions/AuthActions';
+import {AuthMail, BASE_URL} from '../../utils';
+import theme from '../../utils/theme';
 
 const ActionS = props => {
   const {i18n, modal, navigation} = props;
@@ -238,6 +240,7 @@ const ActionS = props => {
             setNotify={setNotify}
             setNotifyMsg={setNotifyMsg}
             navigation={navigation}
+            _props={props}
           />
         </Animated.View>
         <Animated.View style={[styles.levelUp, animatedSignIn]}>
@@ -247,6 +250,7 @@ const ActionS = props => {
             setNotify={setNotify}
             setNotifyMsg={setNotifyMsg}
             navigation={navigation}
+            _props={props}
           />
         </Animated.View>
       </ScrollView>
@@ -266,18 +270,17 @@ const mapStateToProps = ({i18n, auth}) => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({setAction}, dispatch);
+  return bindActionCreators({setAction, setUser, setToken}, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActionS);
 
 const SignIn = props => {
-  const {i18n, SetAction, setNotifyMsg, setNotify, navigation} = props;
+  const {i18n, SetAction, setNotifyMsg, setNotify, navigation, _props} = props;
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
-
   const [loading, setLoading] = useState(false);
 
   const Switch = () => {
@@ -288,7 +291,7 @@ const SignIn = props => {
     let hasError = false;
     setLoading(true);
 
-    if (!AuthMail(email)) {
+    if (!AuthMail(email.trim())) {
       hasError = true;
       setEmailError(true);
     }
@@ -304,10 +307,67 @@ const SignIn = props => {
         type: 'danger',
       });
       setNotify(true);
+      setLoading(false);
       return;
     }
 
-    navigation.navigate('Main Stack');
+    const body = {
+      password,
+      email: email.trim(),
+    };
+
+    let statusCode, responseJson;
+    fetch(`${BASE_URL}/auth/signin`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then(res => {
+        statusCode = res.status;
+        responseJson = res.json();
+        return Promise.all([statusCode, responseJson]);
+      })
+      .then(res => {
+        setLoading(false);
+        statusCode = res[0];
+        responseJson = res[1];
+
+        if (statusCode === 200) {
+          _props.setUser(responseJson);
+          return navigation.navigate('Main Stack');
+        }
+
+        if (statusCode === 400) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            msg: i18n.t('phrases.inValidEmailOrPassword'),
+          });
+          return false;
+        }
+
+        if (statusCode === 500) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            msg: i18n.t('phrases.unexpectedError'),
+          });
+          return false;
+        }
+      })
+      .catch(err => {
+        if (err) {
+          setLoading(false);
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: i18n.t('phrases.pleaseCheckInternet'),
+          });
+        }
+      });
   };
 
   return (
@@ -342,6 +402,7 @@ const SignIn = props => {
         />
       </View>
       <SubmitButton
+        loading={loading}
         title={i18n.t('phrases.signIn')}
         onPress={() => Authenticate()}
       />

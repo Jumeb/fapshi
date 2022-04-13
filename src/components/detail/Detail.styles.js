@@ -59,8 +59,26 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   dateValue: {
-    fontSize: theme.FONT_SIZE_SMALL,
+    alignSelf: 'baseline',
+    fontSize: theme.FONT_SIZE_EXTRA_SMALL - 1,
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
+  },
+  status: {
+    position: 'absolute',
+    color: theme.WHITE_COLOR,
+    fontSize: theme.FONT_SIZE_EXTRA_SMALL - 2,
+    top: -5,
+    left: -5,
+    transform: [{rotateZ: '-20deg'}],
+    padding: 2,
+    paddingHorizontal: 4,
+    borderRadius: theme.BORDER_IMAGE,
+  },
+  statusFailed: {
+    backgroundColor: theme.DANGER_COLOR,
+  },
+  statusSuccess: {
+    backgroundColor: theme.GREEN_COLOR,
   },
 });
 

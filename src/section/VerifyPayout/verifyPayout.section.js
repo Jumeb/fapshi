@@ -1,15 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, ScrollView} from 'react-native';
 import {bindActionCreators} from 'redux';
 import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
 
 import styles from './verifyPayout.style';
-import {Button, Text, Divider} from '../../components';
+import {Button, Text, Divider, SquareInput} from '../../components';
 import theme from '../../utils/theme';
 
 const VerifyPayout = props => {
   const {i18n, verify, setVerify, navigation} = props;
+  const [pin, setPin] = useState('');
+  const [pinError, setPinError] = useState(false);
 
   return (
     <Modal
@@ -22,10 +24,7 @@ const VerifyPayout = props => {
       swipeDirection={'down'}
       onBackdropPress={() => setVerify(false)}
       onBackButtonPress={() => setVerify(false)}>
-      <ScrollView
-        horizontal={false}
-        showsVerticalScrollIndicator={false}
-        style={styles.scrollView}>
+      <View style={styles.scrollView}>
         <Text style={styles.transTitle}>{i18n.t('phrases.confirmPayout')}</Text>
         <Text style={styles.transFrom}>{i18n.t('phrases.transferFrom')}</Text>
         <View style={styles.transContainer}>
@@ -59,6 +58,22 @@ const VerifyPayout = props => {
             </Text>
             <Text style={styles.amountValue}>XAF 5,300</Text>
           </View>
+          <View style={styles.inputContainer}>
+            <SquareInput
+              title={i18n.t('words.pin')}
+              holder={'1xys4'}
+              type={'default'}
+              capitalize={'none'}
+              secure={true}
+              value={pin}
+              maxLength={5}
+              setValue={text => setPin(text)}
+              errorMessage={i18n.t('phrases.pinInvalid')}
+              error={pinError}
+              toggleError={() => setPinError(false)}
+              icon={'ios-cash'}
+            />
+          </View>
           <View style={styles.amountContainer}>
             <Button
               title={i18n.t('words.payout') + ' XAF 5,300'}
@@ -67,7 +82,7 @@ const VerifyPayout = props => {
             />
           </View>
         </View>
-      </ScrollView>
+      </View>
     </Modal>
   );
 };

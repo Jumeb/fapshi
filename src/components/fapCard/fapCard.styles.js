@@ -76,6 +76,25 @@ const styles = StyleSheet.create({
   expiresText: {
     fontSize: theme.FONT_SIZE_EXTRA_SMALL,
   },
+  pinContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+  },
+  pinButton: {
+    flexDirection: 'row',
+    backgroundColor: theme.WHITE_COLOR,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    minWidth: 75,
+    paddingHorizontal: 7,
+    borderRadius: theme.BORDER_IMAGE,
+    paddingVertical: 4,
+  },
+  pinText: {
+    fontSize: theme.FONT_SIZE_SMALL,
+    color: theme.PRIMARY_COLOR,
+  },
 });
 
 export default styles;

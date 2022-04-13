@@ -2,7 +2,6 @@ import {Storage} from '../../utils';
 import {
   SET_USER,
   SET_TOKEN,
-  RESET,
   ENTRY,
   SET_CHEFS,
   SET_ITEMS,
@@ -11,18 +10,15 @@ import {
   SET_ORDERS,
   SIGNOUT,
   ACTION,
+  SET_PIN,
 } from '../types';
 
 const INITIAL_STATE = {
   actionType: '',
   token: '',
   user: {},
-  chefs: [],
   firstTime: true,
-  items: [],
-  locations: [],
-  orders: [],
-  wallet: {},
+  hasPin: false,
 };
 
 const AuthReducer = (state = INITIAL_STATE, action) => {
@@ -32,47 +28,37 @@ const AuthReducer = (state = INITIAL_STATE, action) => {
       return {...state, actionType};
     case SET_USER:
       const user = action.payload;
+      Storage.storeInfo('isFirstTime', {value: false});
       Storage.storeInfo('USER', user);
+      if (user && user.accessToken) {
+        Storage.storeInfo('TOKEN', user.accessToken);
+        return {...state, user: {...user}, token: user.accessToken};
+      }
+      if (user && user?.hasPin) {
+        Storage.storeInfo('HasPin', {value: hasPin});
+        return {...state, user: {...user}, hasPin: user?.hasSetPin};
+      }
       return {...state, user: {...user}};
-    case SET_CHEFS:
-      const chefs = action.payload;
-      return {...state, chefs: [...chefs]};
-    case SET_ITEMS:
-      const items = action.payload;
-      return {...state, items};
+    case SET_PIN:
+      const hasPin = action.payload;
+      Storage.storeInfo('HasPin', {value: hasPin});
+      return {...state, hasPin};
     case SET_TOKEN:
       const token = action.payload;
       Storage.storeInfo('TOKEN', token);
       return {...state, token};
-    case SET_LOCATIONS:
-      const locations = action.payload;
-      return {...state, locations};
-    case SET_ORDERS:
-      const orders = action.payload;
-      return {...state, orders};
-    case SET_WALLET:
-      const wallet = action.payload;
-      return {...state, wallet};
     case ENTRY:
       return {...state, firstTime: false};
     case SIGNOUT:
-      Storage.storeInfo('isNotFirstTime', false);
+      Storage.storeInfo('isFirstTime', {value: true});
       // Storage.remove({key: 'isNotFirstTime'});
-      Storage.remove({key: 'TOKEN'});
       Storage.remove({key: 'USER'});
-      Storage.remove({key: 'FAVOURITES'});
-      Storage.remove({key: 'CART'});
+      Storage.remove({key: 'TOKEN'});
+      Storage.remove({key: 'HasPin'});
       return {
         ...state,
         user: {},
         token: '',
-        bakerId: '',
-        chefs: [],
-        firstTime: true,
-        items: [],
-        locations: [],
-        orders: [],
-        wallet: {},
       };
     default:
       return state;
