@@ -10,12 +10,14 @@ import {
   Divider,
   FapCard,
   NavBar,
+  Notification,
   RecentsCard,
   SquareInput,
   Text,
 } from '../../components';
 import theme from '../../utils/theme';
 import {VerifyTrans} from '../../section';
+import {AuthMail, AuthNumber} from '../../utils';
 
 const Transfer = props => {
   const {i18n, navigation} = props;
@@ -26,6 +28,53 @@ const Transfer = props => {
   const [note, setNote] = useState('');
   const [noteError, setNoteError] = useState(false);
   const [verify, setVerify] = useState(false);
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const [notify, setNotify] = useState(false);
+  const [notifyMsg, setNotifyMsg] = useState({
+    msg: i18n.t('phrases.errorHandlingInput'),
+    type: 'danger',
+  });
+
+  const Authenticate = () => {};
+
+  const ShowSummary = () => {
+    let hasError = false;
+
+    if (!AuthMail(email.trim())) {
+      hasError = true;
+      setEmailError(true);
+    }
+
+    if (note.length < 5) {
+      hasError = true;
+      setNoteError(true);
+    }
+
+    if (!AuthNumber(amount)) {
+      hasError = true;
+      setAmountError(true);
+    }
+
+    if (hasError) {
+      setNotifyMsg({
+        msg: i18n.t('phrases.invalidDataEntry'),
+        type: 'danger',
+      });
+      setNotify(true);
+      setLoading(false);
+      return;
+    }
+    const body = {
+      amount,
+      note,
+      email,
+    };
+    setData(body);
+    setVerify(true);
+  };
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar backgroundColor={theme.PRIMARY_COLOR} />
@@ -109,7 +158,7 @@ const Transfer = props => {
           <Button
             title={i18n.t('words.transfer')}
             invert={true}
-            onPress={() => setVerify(true)}
+            onPress={() => ShowSummary()}
           />
         </View>
       </ScrollView>
@@ -117,7 +166,9 @@ const Transfer = props => {
         verify={verify}
         setVerify={setVerify}
         navigation={navigation}
+        summary={data}
       />
+      <Notification notify={notify} setNotify={setNotify} info={notifyMsg} />
     </SafeAreaView>
   );
 };

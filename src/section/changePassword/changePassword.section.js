@@ -35,7 +35,6 @@ const ChangePassword = props => {
   const Authenticate = () => {
     let hasError = false;
     setLoading(true);
-    console.log(token);
 
     if (password.length < 5) {
       hasError = true;
@@ -93,7 +92,6 @@ const ChangePassword = props => {
         setLoading(false);
         statusCode = res[0];
         responseJson = res[1];
-        console.log(res);
         setLoading(false);
 
         if (statusCode === 200) {
@@ -113,7 +111,7 @@ const ChangePassword = props => {
           setNotifyMsg({
             type: 'error',
             title: 'Unexpected Error',
-            msg: i18n.t('phrases.passwordHasBeenCreated'),
+            msg: i18n.t('phrases.authenticationError'),
           });
           setTimeout(() => {
             setConfigurePassword(false);

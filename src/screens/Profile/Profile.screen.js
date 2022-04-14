@@ -233,15 +233,15 @@ const Profile = props => {
           value={address}
           setValue={text => setAddress(text)}
         />
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.changePasswordContainer}
-          activeOpacity={0.7}
+          activeOpacity={0.8}
           onPress={() => setConfigurePassword(true)}>
           <Text style={styles.passwordText}>
             {i18n.t('phrases.changePassword')}
           </Text>
           <Icons name={'ios-eye-off'} size={16} color={theme.PRIMARY_COLOR} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <View style={styles.buttonContainer}>
           <Button
             title={i18n.t('phrases.editProfile')}
@@ -259,8 +259,19 @@ const Profile = props => {
           <TouchableOpacity
             activeOpacity={0.8}
             style={styles.signOutButton}
+            onPress={() => setConfigurePassword(true)}>
+            <Text style={styles.signOutButtonText}>
+              {i18n.t('phrases.changePassword')}
+            </Text>
+            <Icons name={'ios-eye-off'} size={16} color={theme.PRIMARY_COLOR} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.signOutButton}
             onPress={() => SignOut()}>
-            <Text style={styles.signOutButtonText}>Sign out</Text>
+            <Text style={styles.signOutButtonText}>
+              {i18n.t('phrases.signOut')}
+            </Text>
             {soLoading ? (
               <ActivityIndicator color={theme.PRIMARY_COLOR} size={'small'} />
             ) : (

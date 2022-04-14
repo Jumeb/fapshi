@@ -64,6 +64,7 @@ export default {
     successful: 'Successful',
     confirm: 'Confirm',
     failed: 'Failed',
+    note: 'Note',
   },
   phrases: {
     signUp: 'Sign Up',
@@ -132,5 +133,10 @@ export default {
     youAreAboutToChange:
       'you are about to change your password and it will be used as from the next login.',
     passwordUpdatedSuccess: 'Password updated successfully.',
+    authenticationError: 'Authentication error.',
+    signOut: 'Sign out',
+    transferSuccessful: 'Transfer successful',
+    transferFailed: 'Transfer failed',
+    insufficientFunds: 'Insufficient funds.',
   },
 };

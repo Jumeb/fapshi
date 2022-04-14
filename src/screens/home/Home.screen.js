@@ -242,17 +242,17 @@ const Home = props => {
           style={styles.funcContainer}>
           <Function
             navigation={navigation}
-            title={i18n.t('words.transfer')}
-            icon="ios-swap-vertical"
-            color={theme.VIOLET_COLOR}
-            onPress={() => navigation.navigate('Transfer')}
-          />
-          <Function
-            navigation={navigation}
             title={i18n.t('phrases.topUp')}
             icon="ios-trending-up"
             color={theme.MINT_COLOR}
             onPress={() => navigation.navigate('Enter Code')}
+          />
+          <Function
+            navigation={navigation}
+            title={i18n.t('words.transfer')}
+            icon="ios-swap-vertical"
+            color={theme.VIOLET_COLOR}
+            onPress={() => navigation.navigate('Transfer')}
           />
           <Function
             navigation={navigation}

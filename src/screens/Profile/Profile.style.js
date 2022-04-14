@@ -60,15 +60,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 40,
+    flexDirection: 'row',
   },
   signOutButton: {
+    marginHorizontal: 8,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: theme.WHITE_COLOR,
     paddingVertical: 8,
     paddingHorizontal: 6,
-    width: 100,
+    maxWidth: 160,
     marginVertical: 6,
     borderRadius: theme.BORDER_IMAGE,
     shadowOffset: {width: 0, height: 2},
@@ -80,6 +82,7 @@ const styles = StyleSheet.create({
   signOutButtonText: {
     color: theme.PRIMARY_COLOR,
     fontSize: theme.FONT_SIZE_SMALL,
+    marginRight: 8,
   },
 });
 
