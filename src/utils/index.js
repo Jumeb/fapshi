@@ -6,6 +6,7 @@ import languages from './languages';
 import KSeparator from './kSeparator';
 import searchMsg from './searchMsg';
 import AuthNumber from './authNumber';
+import Hyphenator from './Hyphenator';
 
 export {
   BASE_URL,
@@ -16,4 +17,5 @@ export {
   KSeparator,
   searchMsg,
   AuthNumber,
+  Hyphenator,
 };

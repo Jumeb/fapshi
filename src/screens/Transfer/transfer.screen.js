@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {ScrollView, SafeAreaView, View, StatusBar} from 'react-native';
+import {
+  ScrollView,
+  SafeAreaView,
+  View,
+  StatusBar,
+  TouchableOpacity,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import Icons from 'react-native-vector-icons/Ionicons';
@@ -16,7 +22,7 @@ import {
   Text,
 } from '../../components';
 import theme from '../../utils/theme';
-import {VerifyTrans} from '../../section';
+import {AddTransfer, VerifyTrans} from '../../section';
 import {AuthMail, AuthNumber} from '../../utils';
 
 const Transfer = props => {
@@ -28,6 +34,7 @@ const Transfer = props => {
   const [note, setNote] = useState('');
   const [noteError, setNoteError] = useState(false);
   const [verify, setVerify] = useState(false);
+  const [add, setAdd] = useState(false);
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -36,8 +43,6 @@ const Transfer = props => {
     msg: i18n.t('phrases.errorHandlingInput'),
     type: 'danger',
   });
-
-  const Authenticate = () => {};
 
   const ShowSummary = () => {
     let hasError = false;
@@ -52,7 +57,7 @@ const Transfer = props => {
       setNoteError(true);
     }
 
-    if (!AuthNumber(amount)) {
+    if (!AuthNumber(amount) || amount.length < 1) {
       hasError = true;
       setAmountError(true);
     }
@@ -111,7 +116,7 @@ const Transfer = props => {
           <SquareInput
             title={i18n.t('words.amount')}
             holder={'5000'}
-            type={'phone-pad'}
+            type={'numeric'}
             capitalize={'none'}
             secure={false}
             value={amount}
@@ -147,12 +152,15 @@ const Transfer = props => {
           <RecentsCard />
           <RecentsCard />
           <RecentsCard />
-          <View style={styles.addContainer}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => setAdd(true)}
+            style={styles.addContainer}>
             <View style={styles.addImageContainer}>
               <Icons name={'ios-add'} color={theme.PRIMARY_COLOR} size={35} />
             </View>
             <Text style={styles.addName}>{i18n.t('words.add')}</Text>
-          </View>
+          </TouchableOpacity>
         </ScrollView>
         <View style={styles.buttonContainer}>
           <Button
@@ -168,6 +176,7 @@ const Transfer = props => {
         navigation={navigation}
         summary={data}
       />
+      <AddTransfer add={add} setAdd={setAdd} i18n={i18n} />
       <Notification notify={notify} setNotify={setNotify} info={notifyMsg} />
     </SafeAreaView>
   );

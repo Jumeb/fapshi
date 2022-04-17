@@ -77,6 +77,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
   },
+  operatorContainer: {
+    paddingHorizontal: theme.PAD_HR,
+    paddingVertical: 5,
+  },
 });
 
 export default styles;

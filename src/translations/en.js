@@ -65,6 +65,8 @@ export default {
     confirm: 'Confirm',
     failed: 'Failed',
     note: 'Note',
+    free: 'Free',
+    cancel: 'Cancel',
   },
   phrases: {
     signUp: 'Sign Up',
@@ -138,5 +140,14 @@ export default {
     transferSuccessful: 'Transfer successful',
     transferFailed: 'Transfer failed',
     insufficientFunds: 'Insufficient funds.',
+    operatorNotActive: 'Sorry, operator coming soon.',
+    telInvalid: 'Phone number invalid',
+    amountInvalid: 'Amount invalid',
+    personName: "Person's name",
+    personNumber: "Person's number",
+    nameTooShort: 'Name too short',
+    phoneInvalid: 'Phone number invalid',
+    addPayoutContact: 'Add payout contact',
+    addTransferContact: 'Add transfer contact',
   },
 };

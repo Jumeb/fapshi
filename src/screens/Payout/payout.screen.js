@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {ScrollView, SafeAreaView, View, StatusBar} from 'react-native';
+import {
+  ScrollView,
+  SafeAreaView,
+  View,
+  StatusBar,
+  TouchableOpacity,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import Icons from 'react-native-vector-icons/Ionicons';
@@ -10,22 +16,73 @@ import {
   Divider,
   FapCard,
   NavBar,
+  Notification,
+  Operator,
   RecentsCard,
   SquareInput,
   Text,
 } from '../../components';
 import theme from '../../utils/theme';
-import {VerifyPayout, VerifyTrans} from '../../section';
+import {AddPayout, VerifyPayout, VerifyTrans} from '../../section';
+import {AuthMail, AuthNumber} from '../../utils';
 
 const Payout = props => {
   const {i18n, navigation} = props;
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState(false);
   const [amount, setAmount] = useState('');
   const [amountError, setAmountError] = useState(false);
-  const [note, setNote] = useState('');
-  const [noteError, setNoteError] = useState(false);
+  const [tel, setTel] = useState('');
+  const [add, setAdd] = useState(false);
+  const [telError, setTelError] = useState(false);
   const [verify, setVerify] = useState(false);
+  const [operator, setOperator] = useState('mtn');
+  const [data, setData] = useState({});
+  const [notify, setNotify] = useState(false);
+  const [notifyMsg, setNotifyMsg] = useState({
+    msg: i18n.t('phrases.errorHandlingInput'),
+    type: 'danger',
+  });
+
+  const ShowSummary = () => {
+    let hasError = false;
+
+    if (!AuthNumber(amount) || amount.length < 1) {
+      hasError = true;
+      setAmountError(true);
+    }
+
+    if (!AuthNumber(tel) || tel.length < 2) {
+      hasError = true;
+      setTelError(true);
+    }
+
+    if (hasError) {
+      setNotifyMsg({
+        msg: i18n.t('phrases.invalidDataEntry'),
+        type: 'danger',
+      });
+      setNotify(true);
+      return;
+    }
+    const body = {
+      amount,
+      tel,
+    };
+    setData(body);
+    setVerify(true);
+  };
+
+  const SetOperator = oper => {
+    if (oper.toLowerCase() === 'mtn') {
+      setOperator(oper);
+      return;
+    }
+    setNotifyMsg({
+      msg: i18n.t('phrases.operatorNotActive'),
+      type: 'danger',
+    });
+    setNotify(true);
+    return;
+  };
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar backgroundColor={theme.PRIMARY_COLOR} />
@@ -45,6 +102,18 @@ const Payout = props => {
         </View>
         <Divider />
         <Text style={styles.originText}>{i18n.t('words.to')}</Text>
+        <ScrollView horizontal={true} style={styles.operatorContainer}>
+          <Operator
+            operator={operator}
+            value={'mtn'}
+            setOperator={() => SetOperator('mtn')}
+          />
+          <Operator
+            operator={operator}
+            value={'orange_money'}
+            setOperator={() => SetOperator('orange_money')}
+          />
+        </ScrollView>
         <View style={styles.detailsContainer}>
           {/* <SquareInput
             title={i18n.t('words.email')}
@@ -65,17 +134,17 @@ const Payout = props => {
             type={'phone-pad'}
             capitalize={'none'}
             secure={false}
-            value={note}
-            setValue={text => setNote(text)}
-            errorMessage={i18n.t('phrases.noteInvalid')}
-            error={noteError}
-            toggleError={() => setNoteError(false)}
+            value={tel}
+            setValue={text => setTel(text)}
+            errorMessage={i18n.t('phrases.telInvalid')}
+            error={telError}
+            toggleError={() => setTelError(false)}
             icon={'ios-phone-portrait'}
           />
           <SquareInput
             title={i18n.t('words.amount')}
             holder={'5000'}
-            type={'phone-pad'}
+            type={'numeric'}
             capitalize={'none'}
             secure={false}
             value={amount}
@@ -98,18 +167,21 @@ const Payout = props => {
           <RecentsCard />
           <RecentsCard />
           <RecentsCard />
-          <View style={styles.addContainer}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => setAdd(true)}
+            style={styles.addContainer}>
             <View style={styles.addImageContainer}>
               <Icons name={'ios-add'} color={theme.PRIMARY_COLOR} size={35} />
             </View>
             <Text style={styles.addName}>{i18n.t('words.add')}</Text>
-          </View>
+          </TouchableOpacity>
         </ScrollView>
         <View style={styles.buttonContainer}>
           <Button
             title={i18n.t('words.payout')}
             invert={true}
-            onPress={() => setVerify(true)}
+            onPress={() => ShowSummary()}
           />
         </View>
       </ScrollView>
@@ -117,7 +189,11 @@ const Payout = props => {
         verify={verify}
         setVerify={setVerify}
         navigation={navigation}
+        data={data}
+        operator={operator}
       />
+      <Notification notify={notify} setNotify={setNotify} info={notifyMsg} />
+      <AddPayout add={add} setAdd={setAdd} i18n={i18n} />
     </SafeAreaView>
   );
 };

@@ -18,6 +18,7 @@ import SwitchButton from './buttons/switchButton.component';
 import LanguageCard from './cards/language.component';
 import Divider from './divider/divider.component';
 import RecentsCard from './cards/recent.component';
+import Operator from './operator/operator.component';
 
 export {
   Text,
@@ -40,4 +41,5 @@ export {
   LanguageCard,
   Divider,
   RecentsCard,
+  Operator,
 };

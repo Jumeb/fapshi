@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {SafeAreaView, StatusBar, View, Image, ScrollView} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -9,11 +9,198 @@ import styles from './Transactions.style';
 import {scrolling} from '../../redux/actions/ScrollActions';
 import {Detail, Filter, Filters, NavBar, Text} from '../../components';
 import theme from '../../utils/theme';
+import {BASE_URL} from '../../utils';
 
 const Transaction = props => {
-  const {i18n, navigation, yOffset} = props;
+  const {i18n, navigation, yOffset, token, user} = props;
 
   const [text, setText] = useState('');
+  const [balLoading, setBalLoading] = useState(false);
+  const [balance, setBalance] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [transfers, setTransfers] = useState([]);
+  const [topups, setTopups] = useState([]);
+  const [payouts, setPayouts] = useState([]);
+
+  const [notify, setNotify] = useState(false);
+  const [notifyMsg, setNotifyMsg] = useState({
+    msg: i18n.t('phrases.errorHandlingInput'),
+    type: 'danger',
+  });
+
+  useEffect(() => {
+    fetchBalance();
+    fetchTransfer();
+    fetchPayouts();
+    fetchTopUps();
+  }, []);
+
+  const fetchTopUps = () => {
+    let statusCode, responseJson;
+
+    fetch(`${BASE_URL}/topup`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+        Host: 'api.fapshi.com',
+      },
+    })
+      .then(res => {
+        statusCode = res.status;
+        responseJson = res.json();
+        return Promise.all([statusCode, responseJson]);
+      })
+      .then(res => {
+        setBalLoading(false);
+        statusCode = res[0];
+        responseJson = res[1];
+
+        if (statusCode === 200) {
+          setTopups(responseJson);
+        }
+
+        if (statusCode === 401) {
+        }
+      })
+      .catch(err => {
+        if (err) {
+          setBalLoading(false);
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: i18n.t('phrases.pleaseCheckInternet'),
+          });
+        }
+      });
+  };
+
+  const fetchPayouts = () => {
+    let statusCode, responseJson;
+
+    fetch(`${BASE_URL}/cashout`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+        Host: 'api.fapshi.com',
+      },
+    })
+      .then(res => {
+        statusCode = res.status;
+        responseJson = res.json();
+        return Promise.all([statusCode, responseJson]);
+      })
+      .then(res => {
+        setBalLoading(false);
+        statusCode = res[0];
+        responseJson = res[1];
+
+        if (statusCode === 200) {
+          setPayouts(responseJson);
+        }
+
+        if (statusCode === 401) {
+        }
+      })
+      .catch(err => {
+        if (err) {
+          setBalLoading(false);
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: i18n.t('phrases.pleaseCheckInternet'),
+          });
+        }
+      });
+  };
+
+  const fetchTransfer = () => {
+    let statusCode, responseJson;
+
+    fetch(`${BASE_URL}/transfer`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+        Host: 'api.fapshi.com',
+      },
+    })
+      .then(res => {
+        statusCode = res.status;
+        responseJson = res.json();
+        return Promise.all([statusCode, responseJson]);
+      })
+      .then(res => {
+        setBalLoading(false);
+        statusCode = res[0];
+        responseJson = res[1];
+
+        if (statusCode === 200) {
+          setTransfers(responseJson);
+        }
+
+        if (statusCode === 401) {
+        }
+      })
+      .catch(err => {
+        if (err) {
+          setBalLoading(false);
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: i18n.t('phrases.pleaseCheckInternet'),
+          });
+        }
+      });
+  };
+
+  const fetchBalance = () => {
+    let statusCode, responseJson;
+
+    fetch(`${BASE_URL}/getbalance`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+        Host: 'api.fapshi.com',
+      },
+    })
+      .then(res => {
+        statusCode = res.status;
+        responseJson = res.json();
+        return Promise.all([statusCode, responseJson]);
+      })
+      .then(res => {
+        setBalLoading(false);
+        statusCode = res[0];
+        responseJson = res[1];
+        if (statusCode === 200) {
+          setBalance(responseJson.balance);
+        }
+
+        if (statusCode === 401) {
+        }
+      })
+      .catch(err => {
+        if (err) {
+          setBalLoading(false);
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: i18n.t('phrases.pleaseCheckInternet'),
+          });
+        }
+      });
+  };
 
   const data = {
     labels: [
@@ -109,84 +296,101 @@ const Transaction = props => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           style={styles.filterContainer2}>
-          <Filter title={i18n.t('words.all')} active={true} />
-          <Filter title={i18n.t('words.transfers')} />
-          <Filter title={i18n.t('phrases.topUp')} />
-          <Filter title={i18n.t('words.withdraw')} />
-          <Filter title={i18n.t('words.payments')} />
+          <Filter
+            yOffset={10}
+            title={i18n.t('words.transfers')}
+            active={activeIndex === 0}
+            onPress={() => setActiveIndex(0)}
+          />
+          <Filter
+            yOffset={10}
+            title={i18n.t('phrases.topUps')}
+            active={activeIndex === 1}
+            onPress={() => setActiveIndex(1)}
+          />
+          <Filter
+            yOffset={10}
+            title={i18n.t('words.payouts')}
+            active={activeIndex === 2}
+            onPress={() => setActiveIndex(2)}
+          />
+          <Filter
+            yOffset={10}
+            title={i18n.t('words.payments')}
+            active={activeIndex === 3}
+            onPress={() => setActiveIndex(3)}
+          />
         </ScrollView>
         <View style={styles.detailsContainer}>
           <View style={styles.circleTheme} />
-          <Detail
-            icon="ios-cash"
-            color={theme.GREEN_COLOR}
-            navigation={navigation}
-          />
-          <Detail
-            icon="ios-cellular"
-            color={theme.PURPLE_COLOR}
-            navigation={navigation}
-          />
-          <Detail
-            icon="ios-navigate"
-            color={theme.VIOLET_COLOR}
-            navigation={navigation}
-          />
-          <Detail
-            icon="ios-navigate"
-            color={theme.VIOLET_COLOR}
-            navigation={navigation}
-          />
-          <Detail
-            icon="ios-trending-up"
-            color={theme.MINT_COLOR}
-            navigation={navigation}
-          />
-          <Detail
-            icon="ios-cellular"
-            color={theme.PURPLE_COLOR}
-            navigation={navigation}
-          />
-          <Detail
-            icon="ios-cellular"
-            color={theme.PURPLE_COLOR}
-            navigation={navigation}
-          />
-          <Detail
-            icon="ios-cellular"
-            color={theme.PURPLE_COLOR}
-            navigation={navigation}
-          />
-          <Detail
-            icon="ios-navigate"
-            color={theme.VIOLET_COLOR}
-            navigation={navigation}
-          />
-          <Detail
-            icon="ios-navigate"
-            color={theme.VIOLET_COLOR}
-            navigation={navigation}
-          />
-          <Detail
-            icon="ios-navigate"
-            color={theme.VIOLET_COLOR}
-            navigation={navigation}
-          />
-          <Detail
-            icon="ios-navigate"
-            color={theme.VIOLET_COLOR}
-            navigation={navigation}
-          />
+          {activeIndex === 0 &&
+            transfers.map((transfer, index) => (
+              <Detail
+                key={index}
+                icon={
+                  transfer.type === 'receive'
+                    ? 'ios-arrow-down'
+                    : 'ios-arrow-up'
+                }
+                color={theme.VIOLET_COLOR}
+                navigation={navigation}
+                data={transfer}
+              />
+            ))}
+          {activeIndex === 1 &&
+            topups.map((topup, index) => (
+              <Detail
+                key={index}
+                icon={'ios-trending-up'}
+                color={
+                  topup.status.toLowerCase() === 'successful'
+                    ? theme.MINT_COLOR
+                    : theme.DANGER_COLOR
+                }
+                navigation={navigation}
+                data={topup}
+              />
+            ))}
+          {activeIndex === 2 &&
+            payouts.map((payout, index) => (
+              <Detail
+                key={index}
+                icon={'ios-cash'}
+                color={
+                  payout.status.toLowerCase() === 'successful'
+                    ? theme.GREEN_COLOR
+                    : theme.DANGER_COLOR
+                }
+                navigation={navigation}
+                data={payout}
+              />
+            ))}
+          {activeIndex === 3 &&
+            transfers.map((transfer, index) => (
+              <Detail
+                key={index}
+                icon={
+                  transfer.type === 'receive'
+                    ? 'ios-arrow-down'
+                    : 'ios-arrow-up'
+                }
+                color={theme.VIOLET_COLOR}
+                navigation={navigation}
+                data={transfer}
+              />
+            ))}
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-const mapStateToProps = ({i18n, scroll}) => {
+const mapStateToProps = ({i18n, scroll, auth}) => {
   return {
     i18n: i18n.i18n,
     yOffset: scroll.yOffset,
+    user: auth.user,
+    token: auth.token,
   };
 };
 
