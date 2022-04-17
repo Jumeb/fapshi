@@ -40,6 +40,8 @@ const Header = props => {
       ? i18n.t('phrases.verifyTrans')
       : screen.toString() === 'Transfer'
       ? i18n.t('words.transfer')
+      : screen.toString() === 'Topup'
+      ? i18n.t('phrases.topUp')
       : screen.toString() === 'Payout'
       ? i18n.t('words.payout')
       : i18n.t('words.cart1');

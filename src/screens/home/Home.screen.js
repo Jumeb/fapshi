@@ -44,6 +44,7 @@ const Home = props => {
   });
 
   useEffect(() => {
+    console.log(user);
     if (hasPin) {
       setConfigurePin(true);
     }
@@ -245,7 +246,7 @@ const Home = props => {
             title={i18n.t('phrases.topUp')}
             icon="ios-trending-up"
             color={theme.MINT_COLOR}
-            onPress={() => navigation.navigate('Enter Code')}
+            onPress={() => navigation.navigate('Topup')}
           />
           <Function
             navigation={navigation}

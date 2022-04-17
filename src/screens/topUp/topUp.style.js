@@ -1,0 +1,118 @@
+import {StyleSheet} from 'react-native';
+
+import theme from '../../utils/theme';
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    marginTop: 30,
+    backgroundColor: theme.WHITE_COLOR,
+  },
+  scrollview: {
+    flex: 1,
+    position: 'relative',
+    paddingTop: 60,
+  },
+  operatorContainer: {
+    flex: 1,
+    position: 'relative',
+    marginHorizontal: 8,
+    marginVertical: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: theme.BORDER_IMAGE,
+    shadowOffset: {width: 0, height: 2},
+    shadowColor: theme.LIGHT_GREY,
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: 3,
+    backgroundColor: theme.WHITE_COLOR,
+  },
+  operatorButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  operatorButtonText: {
+    color: theme.DARK_GREY,
+    fontSize: theme.FONT_SIZE_SMALL + 2,
+  },
+  operatorImage: {
+    height: 40,
+    width: 60,
+  },
+  operatorDetail: {
+    color: theme.PRIMARY_COLOR,
+    backgroundColor: theme.PRIMARY_COLOR_MONO + '99',
+    paddingHorizontal: 8,
+    paddingVertical: 1,
+    fontSize: theme.FONT_SIZE_EXTRA_SMALL,
+    borderRadius: theme.BORDER_IMAGE,
+    fontWeight: theme.FONT_WEIGHT_NORMAL_,
+  },
+  operatorDetailNot: {
+    color: theme.DANGER_COLOR,
+    backgroundColor: theme.DANGER_COLOR + '77',
+    paddingHorizontal: 8,
+    paddingVertical: 1,
+    fontSize: theme.FONT_SIZE_EXTRA_SMALL,
+    borderRadius: theme.BORDER_IMAGE,
+    fontWeight: theme.FONT_WEIGHT_NORMAL_,
+  },
+  isOperator: {
+    fontSize: theme.FONT_SIZE_LARGE - 2.5,
+    color: theme.DARK_GREY,
+    fontWeight: theme.FONT_WEIGHT_NORMAL_,
+    textAlign: 'center',
+    // margin: 8,
+  },
+  loadingLang: {
+    // marginLeft: 12,
+    fontSize: theme.FONT_SIZE_SMALL,
+    color: theme.LIGHT_GREY,
+  },
+  loadingContainer: {
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    marginVertical: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    marginHorizontal: 8,
+    borderRadius: theme.BORDER_IMAGE,
+    backgroundColor: theme.WHITE_COLOR,
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    shadowColor: theme.PRIMARY_COLOR,
+    elevation: 3,
+  },
+  topUpButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  topUpButton: {
+    marginHorizontal: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: theme.WHITE_COLOR,
+    paddingVertical: 4,
+    paddingHorizontal: 5,
+    maxWidth: 160,
+    marginVertical: 6,
+    borderRadius: theme.BORDER_IMAGE,
+    shadowOffset: {width: 0, height: 2},
+    shadowColor: theme.DARK_GREY,
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  topUpButtonText: {
+    color: theme.PRIMARY_COLOR,
+    fontSize: theme.FONT_SIZE_SMALL,
+    marginRight: 8,
+  },
+});
+
+export default styles;

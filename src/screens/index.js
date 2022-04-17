@@ -11,6 +11,7 @@ import SuccessScreen from './successScreen/Success.screen';
 import EnterCodeScreen from './enterCode/EnterCode.screen';
 import TransferScreen from './Transfer/transfer.screen';
 import PayoutScreen from './Payout/payout.screen';
+import TopUpScreen from './topUp/topUp.screen';
 
 export {
   SplashScreen,
@@ -26,4 +27,5 @@ export {
   EnterCodeScreen,
   TransferScreen,
   PayoutScreen,
+  TopUpScreen,
 };

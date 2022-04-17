@@ -67,6 +67,7 @@ export default {
     note: 'Note',
     free: 'Free',
     cancel: 'Cancel',
+    set: 'Set',
   },
   phrases: {
     signUp: 'Sign Up',
@@ -149,5 +150,7 @@ export default {
     phoneInvalid: 'Phone number invalid',
     addPayoutContact: 'Add payout contact',
     addTransferContact: 'Add transfer contact',
+    notSet: 'Not set',
+    setTop: 'Set Number',
   },
 };
