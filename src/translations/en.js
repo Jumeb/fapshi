@@ -68,6 +68,10 @@ export default {
     free: 'Free',
     cancel: 'Cancel',
     set: 'Set',
+    edit: 'Edit',
+    or: 'OR',
+    charges: 'Charges',
+    code: 'Code',
   },
   phrases: {
     signUp: 'Sign Up',
@@ -152,5 +156,22 @@ export default {
     addTransferContact: 'Add transfer contact',
     notSet: 'Not set',
     setTop: 'Set Number',
+    sorryTokenExpired: 'Sorry, token expired.',
+    activeNumber: 'Active number',
+    addNumber: 'Add number',
+    youWillReceiveAPrompt:
+      'You will be prompted to enter your code by FAPSHI to validate your topup.',
+    dial126: 'Dial *126#',
+    pleaseEnterTheFive:
+      'please, enter the five (5) digit code sent to this number',
+    confirmNumber: 'Confirm number',
+    numberConfirmed: 'Number confirmed',
+    topUpNumberExist: 'Top up number already added.',
+    confirmPassword: 'Confirm password',
+    emailAlreadyExist: 'Email exist already',
+    userNameTaken: 'Username already taken',
+    pleaseEnterTheCode: 'Please enter the code sent to this email',
+    emailConfirmed: 'Your email has been confirmed',
+    confirmEmail: 'Confirm email',
   },
 };

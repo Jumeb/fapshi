@@ -12,6 +12,7 @@ import EnterCodeScreen from './enterCode/EnterCode.screen';
 import TransferScreen from './Transfer/transfer.screen';
 import PayoutScreen from './Payout/payout.screen';
 import TopUpScreen from './topUp/topUp.screen';
+import TopUpNotificationScreen from './topUpNotificationScreen/topUpNotification.screen';
 
 export {
   SplashScreen,
@@ -28,4 +29,5 @@ export {
   TransferScreen,
   PayoutScreen,
   TopUpScreen,
+  TopUpNotificationScreen,
 };

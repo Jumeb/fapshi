@@ -14,7 +14,10 @@ const Button = props => {
       style={invert ? styles.buttonContainerI : styles.buttonContainer}
       activeOpacity={0.8}>
       {loading ? (
-        <ActivityIndicator size={'small'} color={theme.WHITE_COLOR} />
+        <ActivityIndicator
+          size={'small'}
+          color={invert ? theme.WHITE_COLOR : theme.PRIMARY_COLOR}
+        />
       ) : (
         <Text style={invert ? styles.buttonTextI : styles.buttonText}>
           {title}

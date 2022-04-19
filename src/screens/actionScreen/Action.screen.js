@@ -2,9 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
   Animated,
-  ActivityIndicator,
+  Linking,
   View,
   TouchableOpacity,
 } from 'react-native';
@@ -14,8 +13,8 @@ import {bindActionCreators} from 'redux';
 import {SquareInput, Text, SubmitButton, Notification} from '../../components';
 import styles from './Action.style';
 import {setAction, setUser, setToken} from '../../redux/actions/AuthActions';
-import {AuthMail, BASE_URL} from '../../utils';
-import theme from '../../utils/theme';
+import {AuthMail, BASE_URL, PasswordAuth} from '../../utils';
+import {ConfirmEmail} from '../../section';
 
 const ActionS = props => {
   const {i18n, modal, navigation} = props;
@@ -214,10 +213,6 @@ const ActionS = props => {
     ],
   };
 
-  const animatedOpacity = {
-    opacity: opacity,
-    transform: [{scale: opacity}],
-  };
   const animatedSignIn = {
     transform: [{translateX: signIn}],
   };
@@ -282,6 +277,21 @@ const SignIn = props => {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [loading, setLoading] = useState(false);
+  let url = 'https://dashboard.fapshi.com/forgot-password';
+
+  const changePassword = () => {
+    if (url) {
+      Linking.canOpenURL(url)
+        .then(supported => {
+          if (!supported) {
+            return;
+          } else {
+            return Linking.openURL(url);
+          }
+        })
+        .catch(err => console.error('An error occurred', err));
+    }
+  };
 
   const Switch = () => {
     SetAction('signUp');
@@ -406,7 +416,9 @@ const SignIn = props => {
         title={i18n.t('phrases.signIn')}
         onPress={() => Authenticate()}
       />
-      <TouchableOpacity style={styles.optionContainer}>
+      <TouchableOpacity
+        style={styles.optionContainer}
+        onPress={() => changePassword()}>
         <Text style={styles.optionTextSmall}>
           {i18n.t('phrases.forgotPassword')}
         </Text>
@@ -428,7 +440,7 @@ const SignIn = props => {
 };
 
 const SignUp = props => {
-  const {i18n, SetAction, setNotify, setNotifyMsg, navigation} = props;
+  const {i18n, SetAction, setNotify, setNotifyMsg} = props;
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState(false);
   const [email, setEmail] = useState('');
@@ -437,7 +449,10 @@ const SignUp = props => {
   const [numberError, setNumberError] = useState(false);
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
+  const [conPassword, setConPassword] = useState('');
+  const [conPasswordError, setConPasswordError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [confirm, setConfirm] = useState(false);
 
   const Switch = () => {
     SetAction('signIn');
@@ -452,7 +467,7 @@ const SignUp = props => {
       setNameError(true);
     }
 
-    if (!AuthMail(email)) {
+    if (!AuthMail(email.trim())) {
       hasError = true;
       setEmailError(true);
     }
@@ -462,9 +477,27 @@ const SignUp = props => {
       setNumberError(true);
     }
 
-    if (password.length < 5) {
+    if (password.length < 6) {
       hasError = true;
       setPasswordError(true);
+    }
+
+    if (conPassword.length < 6) {
+      setConPasswordError(true);
+      hasError = true;
+      setLoading(false);
+    }
+
+    if (password !== conPassword) {
+      setConPasswordError(true);
+      setPasswordError(true);
+      setLoading(false);
+      setNotify(true);
+      setNotifyMsg({
+        type: 'danger',
+        msg: 'Please check your passwords.',
+      });
+      return false;
     }
 
     if (hasError) {
@@ -476,7 +509,79 @@ const SignUp = props => {
       return;
     }
 
-    navigation.navigate('Main Stack');
+    if (!PasswordAuth(password)[0]) {
+      let finalCheck = PasswordAuth(password);
+      setConPasswordError(true);
+      setPasswordError(true);
+      setNotify(true);
+      setNotifyMsg({
+        type: 'danger',
+        msg: finalCheck[1],
+      });
+      setLoading(false);
+      return false;
+    }
+
+    const body = {
+      username: name,
+      password,
+      phone: number,
+      email: email.trim(),
+    };
+
+    let statusCode, responseJson;
+    fetch(`${BASE_URL}/auth/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then(res => {
+        statusCode = res.status;
+        responseJson = res.json();
+        return Promise.all([statusCode, responseJson]);
+      })
+      .then(res => {
+        setLoading(false);
+        statusCode = res[0];
+        responseJson = res[1];
+
+        if (statusCode === 201) {
+          setConfirm(true);
+        }
+
+        if (statusCode === 400) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            msg:
+              responseJson.message.toLowerCase() === 'email already exist'
+                ? i18n.t('phrases.emailAlreadyExist')
+                : i18n.t('phrases.userNameTaken'),
+          });
+          return false;
+        }
+
+        if (statusCode === 500) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            msg: i18n.t('phrases.unexpectedError'),
+          });
+          return false;
+        }
+      })
+      .catch(err => {
+        if (err) {
+          setLoading(false);
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            msg: i18n.t('phrases.pleaseCheckInternet'),
+          });
+        }
+      });
   };
 
   return (
@@ -535,10 +640,24 @@ const SignUp = props => {
           toggleError={() => setPasswordError(false)}
           icon={'ios-lock-closed'}
         />
+        <SquareInput
+          title={i18n.t('phrases.confirmPassword')}
+          holder={'*******'}
+          type={'default'}
+          capitalize={'none'}
+          secure={true}
+          value={conPassword}
+          setValue={text => setConPassword(text)}
+          errorMessage={i18n.t('phrases.weakPassword')}
+          error={conPasswordError}
+          toggleError={() => setConPasswordError(false)}
+          icon={'ios-lock-closed'}
+        />
       </View>
       <SubmitButton
         title={i18n.t('phrases.signUp')}
         onPress={() => Authenticate()}
+        loading={loading}
       />
       <View style={styles.optionContainer}>
         <Text style={styles.optionText}>
@@ -549,6 +668,12 @@ const SignUp = props => {
         </TouchableOpacity>
       </View>
       <View style={styles.circleThemeSign} />
+      <ConfirmEmail
+        confirm={confirm}
+        setConfirm={setConfirm}
+        username={name}
+        email={email}
+      />
     </View>
   );
 };

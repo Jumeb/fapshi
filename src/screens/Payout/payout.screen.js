@@ -24,7 +24,7 @@ import {
 } from '../../components';
 import theme from '../../utils/theme';
 import {AddPayout, VerifyPayout, VerifyTrans} from '../../section';
-import {AuthMail, AuthNumber} from '../../utils';
+import {AuthMail, AuthMTN, AuthNumber, AuthOrange} from '../../utils';
 
 const Payout = props => {
   const {i18n, navigation} = props;
@@ -50,9 +50,19 @@ const Payout = props => {
       setAmountError(true);
     }
 
-    if (!AuthNumber(tel) || tel.length < 2) {
-      hasError = true;
-      setTelError(true);
+    if (operator.toLowerCase() === 'mtn') {
+      console.log(123);
+      if (!AuthMTN(tel)) {
+        hasError = true;
+        setTelError(true);
+      }
+    }
+
+    if (operator.toLowerCase() === 'orange_money') {
+      if (!AuthOrange(tel)) {
+        hasError = true;
+        setTelError(true);
+      }
     }
 
     if (hasError) {

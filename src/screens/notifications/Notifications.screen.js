@@ -1,22 +1,21 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, StatusBar, View, Image, ScrollView} from 'react-native';
+import {
+  SafeAreaView,
+  StatusBar,
+  ScrollView,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import LinearGradient from 'react-native-linear-gradient';
 
 import styles from './Notifications.style';
-import {
-  Header,
-  NavBar,
-  NotifcationCard,
-  Notification,
-  Text,
-} from '../../components';
+import {NavBar, NotifcationCard, Notification} from '../../components';
 import theme from '../../utils/theme';
 import {BASE_URL} from '../../utils';
 
 const Notifications = props => {
-  const {i18n, navigation, user, token} = props;
+  const {i18n, navigation, token} = props;
   const [text, setText] = useState('');
   const [notifs, setNotifs] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -32,6 +31,7 @@ const Notifications = props => {
 
   const fetchNotifications = () => {
     let statusCode, responseJson;
+    setLoading(true);
 
     fetch(`${BASE_URL}/notif`, {
       method: 'GET',
@@ -51,7 +51,6 @@ const Notifications = props => {
         setLoading(false);
         statusCode = res[0];
         responseJson = res[1];
-        console.log(res, 'hahaha');
 
         if (statusCode === 200) {
           setNotifs(responseJson);
@@ -86,21 +85,26 @@ const Notifications = props => {
         navigation={navigation}
         setText={setText}
       />
-      <ScrollView
-        style={styles.scrollView}
-        horizontal={false}
-        showsVerticalScrollIndicator={false}>
-        {notifs.map((notif, index) => (
-          <NotifcationCard
-            key={index}
-            i18n={i18n}
-            notif={notif}
-            receive={true}
-            index={index}
-            last={index + 1 === notifs.length ? true : false}
-          />
-        ))}
-        {/* <NotifcationCard i18n={i18n} receive={true} index={1} />
+      {loading ? (
+        <View style={styles.centralize}>
+          <ActivityIndicator size="large" color={theme.PRIMARY_COLOR} />
+        </View>
+      ) : (
+        <ScrollView
+          style={styles.scrollView}
+          horizontal={false}
+          showsVerticalScrollIndicator={false}>
+          {notifs.map((notif, index) => (
+            <NotifcationCard
+              key={index}
+              i18n={i18n}
+              notif={notif}
+              receive={true}
+              index={index}
+              last={index + 1 === notifs.length ? true : false}
+            />
+          ))}
+          {/* <NotifcationCard i18n={i18n} receive={true} index={1} />
         <NotifcationCard i18n={i18n} sent={true} index={2} />
         <NotifcationCard i18n={i18n} sent={true} index={3} />
         <NotifcationCard i18n={i18n} pending={true} index={4} />
@@ -113,7 +117,8 @@ const Notifications = props => {
         <NotifcationCard i18n={i18n} sent={true} index={11} />
         <NotifcationCard i18n={i18n} receive={true} index={12} />
         <NotifcationCard i18n={i18n} receive={true} last={true} index={13} /> */}
-      </ScrollView>
+        </ScrollView>
+      )}
       <Notification notify={notify} setNotify={setNotify} info={notifyMsg} />
     </SafeAreaView>
   );

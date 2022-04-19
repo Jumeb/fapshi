@@ -4,18 +4,16 @@ import {bindActionCreators} from 'redux';
 import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
 
-import styles from './setPin.style';
+import styles from './confirmNumber.style';
 import {Button, Text, SquareInput, Notification} from '../../components';
 import theme from '../../utils/theme';
-import {BASE_URL} from '../../utils';
+import {BASE_URL, Hyphenator} from '../../utils';
 
-const SetPin = props => {
-  const {i18n, configurePin, setConfigurePin, navigation, user, token} = props;
+const ConfirmNumber = props => {
+  const {i18n, confirm, setConfirm, user, token, number, oper} = props;
 
-  const [pin, setPin] = useState('');
-  const [conPin, setConPin] = useState('');
-  const [pinError, setPinError] = useState(false);
-  const [conPinError, setConPinError] = useState(false);
+  const [code, setCode] = useState('');
+  const [codeError, setCodeError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [notify, setNotify] = useState(false);
   const [notifyMsg, setNotifyMsg] = useState({
@@ -27,20 +25,9 @@ const SetPin = props => {
     let hasError = false;
     setLoading(true);
 
-    if (pin.length < 5) {
+    if (code.length < 5) {
       hasError = true;
-      setPinError(true);
-    }
-
-    if (conPin.length < 5) {
-      hasError = true;
-      setConPinError(true);
-    }
-
-    if (pin !== conPin) {
-      hasError = true;
-      setPinError(true);
-      setConPinError(true);
+      setCodeError(true);
     }
 
     if (hasError) {
@@ -54,11 +41,11 @@ const SetPin = props => {
     }
 
     const body = {
-      pin,
+      code,
     };
 
     let statusCode, responseJson;
-    fetch(`${BASE_URL}/addpin`, {
+    fetch(`${BASE_URL}/verifytopup/${oper}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -85,10 +72,10 @@ const SetPin = props => {
           setNotifyMsg({
             type: 'success',
             title: 'Unexpected Error',
-            msg: i18n.t('phrases.pinCreatedSuccess'),
+            msg: i18n.t('phrases.numberConfirmed'),
           });
           setTimeout(() => {
-            setConfigurePin(false);
+            setConfirm(false);
           }, 2500);
         }
 
@@ -97,10 +84,10 @@ const SetPin = props => {
           setNotifyMsg({
             type: 'success',
             title: 'Unexpected Error',
-            msg: i18n.t('phrases.pinHasBeenCreated'),
+            msg: i18n.t('phrases.unexpectedError'),
           });
           setTimeout(() => {
-            setConfigurePin(false);
+            setConfirm(false);
           }, 2500);
         }
       })
@@ -119,49 +106,35 @@ const SetPin = props => {
 
   return (
     <Modal
-      isVisible={configurePin}
+      isVisible={confirm}
       style={styles.mainContainer}
       animationInTiming={500}
       animationOutTiming={400}
       backdropOpacity={0.7}
       backdropColor={theme.PRIMARY_COLOR}
       swipeDirection={['down', 'up']}
-      onSwipeComplete={() => setConfigurePin(false)}
-      onBackdropPress={() => setConfigurePin(false)}
-      onBackButtonPress={() => setConfigurePin(false)}>
+      onSwipeComplete={() => setConfirm(false)}
+      onBackdropPress={() => setConfirm(false)}
+      onBackButtonPress={() => setConfirm(false)}>
       <View style={styles.scrollView}>
-        <Text style={styles.pinTitle}>{i18n.t('phrases.setPin')}</Text>
-        <Text style={styles.pinReason}>
+        <Text style={styles.codeTitle}>{i18n.t('phrases.confirmNumber')}</Text>
+        <Text style={styles.codeReason}>
           {i18n.t('words.hello')} {user.username},{' '}
-          {i18n.t('phrases.pleaseYouNeedToSet')}.
+          {i18n.t('phrases.pleaseEnterTheFive')} {Hyphenator(number || 0)} .
         </Text>
-        <View style={styles.pinContainer}>
+        <View style={styles.codeContainer}>
           <SquareInput
-            title={i18n.t('words.pin')}
-            holder={'*****'}
+            title={i18n.t('words.code')}
+            holder={'1x3is'}
             type={'default'}
             capitalize={'none'}
-            secure={true}
-            value={pin}
-            setValue={text => setPin(text)}
+            secure={false}
+            value={code}
+            setValue={text => setCode(text)}
             maxLength={5}
-            errorMessage={i18n.t('phrases.pinTooShort')}
-            error={pinError}
-            toggleError={() => setPinError(false)}
-            icon={'ios-create'}
-          />
-          <SquareInput
-            title={i18n.t('phrases.confirmPin')}
-            holder={'*****'}
-            type={'default'}
-            capitalize={'none'}
-            secure={true}
-            value={conPin}
-            maxLength={5}
-            setValue={text => setConPin(text)}
-            errorMessage={i18n.t('phrases.pinsDoNotMatch')}
-            error={conPinError}
-            toggleError={() => setConPinError(false)}
+            errorMessage={i18n.t('phrases.codeTooShort')}
+            error={codeError}
+            toggleError={() => setCodeError(false)}
             icon={'ios-create'}
           />
           <View style={styles.buttonContainer}>
@@ -191,4 +164,4 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators({}, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SetPin);
+export default connect(mapStateToProps, mapDispatchToProps)(ConfirmNumber);

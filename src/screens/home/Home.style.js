@@ -13,6 +13,11 @@ const styles = StyleSheet.create({
     position: 'relative',
     paddingTop: 150,
   },
+  centralize: {
+    height: theme.HEIGHT_100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   title: {
     fontSize: theme.FONT_SIZE_LARGE,
     fontWeight: theme.FONT_WEIGHT_BOLD,

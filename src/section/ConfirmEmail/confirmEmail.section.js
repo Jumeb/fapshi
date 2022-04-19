@@ -1,21 +1,22 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {bindActionCreators} from 'redux';
 import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
 
-import styles from './setPin.style';
+import styles from './confirmEmail.style';
 import {Button, Text, SquareInput, Notification} from '../../components';
 import theme from '../../utils/theme';
-import {BASE_URL} from '../../utils';
+import {AuthMail, BASE_URL} from '../../utils';
+import {setAction} from '../../redux/actions/AuthActions';
 
-const SetPin = props => {
-  const {i18n, configurePin, setConfigurePin, navigation, user, token} = props;
+const ConfirmEmail = props => {
+  const {i18n, confirm, setConfirm, username, email} = props;
 
-  const [pin, setPin] = useState('');
-  const [conPin, setConPin] = useState('');
-  const [pinError, setPinError] = useState(false);
-  const [conPinError, setConPinError] = useState(false);
+  const [code, setCode] = useState('');
+  const [codeError, setCodeError] = useState(false);
+  const [_email, setEmail] = useState(email);
+  const [emailError, setEmailError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [notify, setNotify] = useState(false);
   const [notifyMsg, setNotifyMsg] = useState({
@@ -23,24 +24,22 @@ const SetPin = props => {
     type: 'danger',
   });
 
+  useEffect(() => {
+    setEmail(email);
+  }, []);
+
   const Authenticate = () => {
     let hasError = false;
     setLoading(true);
 
-    if (pin.length < 5) {
+    if (code.length < 5) {
       hasError = true;
-      setPinError(true);
+      setCodeError(true);
     }
 
-    if (conPin.length < 5) {
+    if (!AuthMail(_email.trim())) {
       hasError = true;
-      setConPinError(true);
-    }
-
-    if (pin !== conPin) {
-      hasError = true;
-      setPinError(true);
-      setConPinError(true);
+      setEmailError(true);
     }
 
     if (hasError) {
@@ -54,16 +53,16 @@ const SetPin = props => {
     }
 
     const body = {
-      pin,
+      email: _email,
+      code,
     };
 
     let statusCode, responseJson;
-    fetch(`${BASE_URL}/addpin`, {
+    fetch(`${BASE_URL}/auth/confirmemail`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'x-access-token': token,
         Host: 'api.fapshi.com',
       },
       body: JSON.stringify(body),
@@ -77,7 +76,6 @@ const SetPin = props => {
         setLoading(false);
         statusCode = res[0];
         responseJson = res[1];
-        console.log(res);
         setLoading(false);
 
         if (statusCode === 200) {
@@ -85,10 +83,11 @@ const SetPin = props => {
           setNotifyMsg({
             type: 'success',
             title: 'Unexpected Error',
-            msg: i18n.t('phrases.pinCreatedSuccess'),
+            msg: i18n.t('phrases.emailConfirmed'),
           });
           setTimeout(() => {
-            setConfigurePin(false);
+            setConfirm(false);
+            props.setAction('signIn');
           }, 2500);
         }
 
@@ -97,10 +96,10 @@ const SetPin = props => {
           setNotifyMsg({
             type: 'success',
             title: 'Unexpected Error',
-            msg: i18n.t('phrases.pinHasBeenCreated'),
+            msg: i18n.t('phrases.unexpectedError'),
           });
           setTimeout(() => {
-            setConfigurePin(false);
+            setConfirm(false);
           }, 2500);
         }
       })
@@ -119,49 +118,47 @@ const SetPin = props => {
 
   return (
     <Modal
-      isVisible={configurePin}
+      isVisible={confirm}
       style={styles.mainContainer}
       animationInTiming={500}
       animationOutTiming={400}
-      backdropOpacity={0.7}
+      backdropOpacity={0.6}
       backdropColor={theme.PRIMARY_COLOR}
       swipeDirection={['down', 'up']}
-      onSwipeComplete={() => setConfigurePin(false)}
-      onBackdropPress={() => setConfigurePin(false)}
-      onBackButtonPress={() => setConfigurePin(false)}>
+      onSwipeComplete={() => setConfirm(false)}
+      onBackdropPress={() => setConfirm(false)}
+      onBackButtonPress={() => setConfirm(false)}>
       <View style={styles.scrollView}>
-        <Text style={styles.pinTitle}>{i18n.t('phrases.setPin')}</Text>
-        <Text style={styles.pinReason}>
-          {i18n.t('words.hello')} {user.username},{' '}
-          {i18n.t('phrases.pleaseYouNeedToSet')}.
+        <Text style={styles.codeTitle}>{i18n.t('phrases.confirmEmail')}</Text>
+        <Text style={styles.codeReason}>
+          {i18n.t('words.hello')} {username},{' '}
+          {i18n.t('phrases.pleaseEnterTheCode')} {email} .
         </Text>
-        <View style={styles.pinContainer}>
+        <View style={styles.codeContainer}>
           <SquareInput
-            title={i18n.t('words.pin')}
-            holder={'*****'}
-            type={'default'}
+            title={i18n.t('words.email')}
+            holder={'jondoe@yahoo.fr'}
+            type={'email-address'}
             capitalize={'none'}
-            secure={true}
-            value={pin}
-            setValue={text => setPin(text)}
-            maxLength={5}
-            errorMessage={i18n.t('phrases.pinTooShort')}
-            error={pinError}
-            toggleError={() => setPinError(false)}
-            icon={'ios-create'}
+            secure={false}
+            value={_email}
+            setValue={text => setEmail(text)}
+            errorMessage={i18n.t('phrases.emailTooShort')}
+            error={emailError}
+            toggleError={() => setEmailError(false)}
+            icon={'ios-mail'}
           />
           <SquareInput
-            title={i18n.t('phrases.confirmPin')}
-            holder={'*****'}
+            title={i18n.t('words.code')}
+            holder={'1x3is'}
             type={'default'}
             capitalize={'none'}
-            secure={true}
-            value={conPin}
-            maxLength={5}
-            setValue={text => setConPin(text)}
-            errorMessage={i18n.t('phrases.pinsDoNotMatch')}
-            error={conPinError}
-            toggleError={() => setConPinError(false)}
+            secure={false}
+            value={code}
+            setValue={text => setCode(text)}
+            errorMessage={i18n.t('phrases.codeTooShort')}
+            error={codeError}
+            toggleError={() => setCodeError(false)}
             icon={'ios-create'}
           />
           <View style={styles.buttonContainer}>
@@ -188,7 +185,7 @@ const mapStateToProps = ({i18n, auth}) => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators({setAction}, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SetPin);
+export default connect(mapStateToProps, mapDispatchToProps)(ConfirmEmail);

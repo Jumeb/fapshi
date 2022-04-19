@@ -57,7 +57,7 @@ const Settings = props => {
         horizontal={false}
         showsVerticalScrollIndicator={false}
         style={styles.scrollView}>
-        <View style={styles.headerContainer}>
+        {/* <View style={styles.headerContainer}>
           <Icons
             name="ios-notifications-outline"
             size={17}
@@ -98,7 +98,7 @@ const Settings = props => {
         <View style={styles.functionContainer}>
           <Text style={styles.functionTitle}>{i18n.t('words.payouts')}</Text>
           <SwitchButton invert={payouts} onPress={() => Payouts()} />
-        </View>
+        </View> */}
         <View style={styles.headerContainer}>
           <Icons name="ios-create-outline" size={17} color={theme.DARK_GREY} />
           <Text style={styles.headerTitle}>{i18n.t('words.more')}</Text>

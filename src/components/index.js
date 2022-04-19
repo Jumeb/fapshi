@@ -19,6 +19,7 @@ import LanguageCard from './cards/language.component';
 import Divider from './divider/divider.component';
 import RecentsCard from './cards/recent.component';
 import Operator from './operator/operator.component';
+import ValidityNotification from './notification/valNotification.component';
 
 export {
   Text,
@@ -42,4 +43,5 @@ export {
   Divider,
   RecentsCard,
   Operator,
+  ValidityNotification,
 };

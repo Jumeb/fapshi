@@ -3,7 +3,7 @@ import {
   SafeAreaView,
   View,
   StatusBar,
-  Image,
+  ActivityIndicator,
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
@@ -20,7 +20,9 @@ import {
   Header,
   Notification,
   Text,
+  ValidityNotification,
 } from '../../components';
+import {signOut, setAction} from '../../redux/actions/AuthActions';
 import theme from '../../utils/theme';
 import styles from './Home.style';
 import {SetPin} from '../../section';
@@ -36,18 +38,23 @@ const Home = props => {
   const [transfers, setTransfers] = useState([]);
   const [topups, setTopups] = useState([]);
   const [payouts, setPayouts] = useState([]);
+  const [tranLoading, setTransLoading] = useState(false);
+  const [payLoading, setPayLoading] = useState(false);
+  const [topLoading, setTopLoading] = useState(false);
+  const [valLoading, setValLoading] = useState(false);
+  const [validity, setValidity] = useState(false);
 
   const [notify, setNotify] = useState(false);
   const [notifyMsg, setNotifyMsg] = useState({
     msg: i18n.t('phrases.errorHandlingInput'),
-    type: 'danger',
+    type: 'success',
   });
 
   useEffect(() => {
-    console.log(user);
     if (hasPin) {
       setConfigurePin(true);
     }
+    fetchValidity();
     fetchBalance();
     fetchTransfer();
     fetchPayouts();
@@ -56,6 +63,7 @@ const Home = props => {
 
   const fetchTopUps = () => {
     let statusCode, responseJson;
+    setTopLoading(true);
 
     fetch(`${BASE_URL}/topup`, {
       method: 'GET',
@@ -72,7 +80,7 @@ const Home = props => {
         return Promise.all([statusCode, responseJson]);
       })
       .then(res => {
-        setBalLoading(false);
+        setTopLoading(false);
         statusCode = res[0];
         responseJson = res[1];
 
@@ -85,7 +93,7 @@ const Home = props => {
       })
       .catch(err => {
         if (err) {
-          setBalLoading(false);
+          setTopLoading(false);
           setNotify(true);
           setNotifyMsg({
             type: 'error',
@@ -98,6 +106,7 @@ const Home = props => {
 
   const fetchPayouts = () => {
     let statusCode, responseJson;
+    setPayLoading(true);
 
     fetch(`${BASE_URL}/cashout`, {
       method: 'GET',
@@ -114,7 +123,7 @@ const Home = props => {
         return Promise.all([statusCode, responseJson]);
       })
       .then(res => {
-        setBalLoading(false);
+        setPayLoading(false);
         statusCode = res[0];
         responseJson = res[1];
 
@@ -127,7 +136,7 @@ const Home = props => {
       })
       .catch(err => {
         if (err) {
-          setBalLoading(false);
+          setPayLoading(false);
           setNotify(true);
           setNotifyMsg({
             type: 'error',
@@ -140,6 +149,7 @@ const Home = props => {
 
   const fetchTransfer = () => {
     let statusCode, responseJson;
+    setTransLoading(true);
 
     fetch(`${BASE_URL}/transfer`, {
       method: 'GET',
@@ -156,7 +166,7 @@ const Home = props => {
         return Promise.all([statusCode, responseJson]);
       })
       .then(res => {
-        setBalLoading(false);
+        setTransLoading(false);
         statusCode = res[0];
         responseJson = res[1];
 
@@ -169,7 +179,7 @@ const Home = props => {
       })
       .catch(err => {
         if (err) {
-          setBalLoading(false);
+          setTransLoading(false);
           setNotify(true);
           setNotifyMsg({
             type: 'error',
@@ -182,6 +192,7 @@ const Home = props => {
 
   const fetchBalance = () => {
     let statusCode, responseJson;
+    setBalLoading(true);
 
     fetch(`${BASE_URL}/getbalance`, {
       method: 'GET',
@@ -221,165 +232,234 @@ const Home = props => {
       });
   };
 
+  const fetchValidity = () => {
+    let statusCode, responseJson;
+
+    fetch(`${BASE_URL}/token`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+        Host: 'api.fapshi.com',
+      },
+    })
+      .then(res => {
+        statusCode = res.status;
+        responseJson = res.json();
+        return Promise.all([statusCode, responseJson]);
+      })
+      .then(res => {
+        statusCode = res[0];
+        responseJson = res[1];
+
+        if (statusCode === 200) {
+          return;
+        }
+
+        if (statusCode === 401) {
+          setValidity(true);
+          setTimeout(() => {
+            setNotifyMsg({
+              type: 'success',
+              msg: i18n.t('phrases.sorryTokenExpired'),
+            });
+            setTimeout(() => {
+              props.signOut();
+              props.setAction('signIn');
+              navigation.navigate('Action');
+            }, 1000);
+          }, 1000);
+        }
+      })
+      .catch(err => {
+        if (err) {
+          return;
+          // console.log(err);
+          // setNotify(true);
+          // setNotifyMsg({
+          //   type: 'error',
+          //   title: 'Unexpected Error',
+          //   msg: i18n.t('phrases.pleaseCheckInternet'),
+          // });
+        }
+      });
+  };
+
   return (
     <SafeAreaView style={styles.mainConatiner}>
-      <StatusBar backgroundColor={theme.TRANSPARENT} />
+      <StatusBar backgroundColor={theme.PRIMARY_COLOR} />
       <Header />
       <View style={styles.header}>
         <Text style={styles.title}>{i18n.t('phrases.myDashboard')}</Text>
       </View>
-      <ScrollView
-        horizontal={false}
-        showsVerticalScrollIndicator={false}
-        style={styles.scrollView}>
-        <FapCard
-          setPin={setConfigurePin}
-          loading={balLoading}
-          balance={balance}
-        />
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={styles.funcContainer}>
-          <Function
-            navigation={navigation}
-            title={i18n.t('phrases.topUp')}
-            icon="ios-trending-up"
-            color={theme.MINT_COLOR}
-            onPress={() => navigation.navigate('Topup')}
-          />
-          <Function
-            navigation={navigation}
-            title={i18n.t('words.transfer')}
-            icon="ios-swap-vertical"
-            color={theme.VIOLET_COLOR}
-            onPress={() => navigation.navigate('Transfer')}
-          />
-          <Function
-            navigation={navigation}
-            title={i18n.t('words.payout')}
-            icon="ios-cash"
-            color={theme.GREEN_COLOR}
-            onPress={() => navigation.navigate('Payout')}
-          />
-          <Function
-            navigation={navigation}
-            title={i18n.t('words.payment')}
-            icon="ios-cellular"
-            color={theme.PURPLE_COLOR}
-          />
-        </ScrollView>
-        <View style={styles.dateContainer}>
-          <Text style={styles.dateTitle}>{i18n.t('words.transactions')}</Text>
-          <LinearGradient
-            style={styles.button}
-            colors={[theme.VIOLET_COLOR + 'af', theme.PRIMARY_COLOR]}
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 1}}>
-            <TouchableOpacity
-              style={styles.detailButton}
-              onPress={() => navigation.navigate('Transaction')}>
-              <Text style={styles.detailText}>{i18n.t('phrases.viewAll')}</Text>
-              <Icons
-                name="ios-document-text"
-                color={theme.WHITE_COLOR}
-                size={16}
-              />
-            </TouchableOpacity>
-          </LinearGradient>
+      {tranLoading ? (
+        <View style={styles.centralize}>
+          <ActivityIndicator size="large" color={theme.PRIMARY_COLOR} />
         </View>
+      ) : (
         <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={styles.filterContainer}>
-          {/* <Filter yOffset={10} title={i18n.t('words.all')} active={true} /> */}
-          <Filter
-            yOffset={10}
-            title={i18n.t('words.transfers')}
-            active={activeIndex === 0}
-            onPress={() => setActiveIndex(0)}
+          horizontal={false}
+          showsVerticalScrollIndicator={false}
+          style={styles.scrollView}>
+          <FapCard
+            setPin={setConfigurePin}
+            loading={balLoading}
+            balance={balance}
           />
-          <Filter
-            yOffset={10}
-            title={i18n.t('phrases.topUps')}
-            active={activeIndex === 1}
-            onPress={() => setActiveIndex(1)}
-          />
-          <Filter
-            yOffset={10}
-            title={i18n.t('words.payouts')}
-            active={activeIndex === 2}
-            onPress={() => setActiveIndex(2)}
-          />
-          <Filter
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={styles.funcContainer}>
+            <Function
+              navigation={navigation}
+              title={i18n.t('phrases.topUp')}
+              icon="ios-trending-up"
+              color={theme.MINT_COLOR}
+              onPress={() => navigation.navigate('Topup')}
+            />
+            <Function
+              navigation={navigation}
+              title={i18n.t('words.transfer')}
+              icon="ios-swap-vertical"
+              color={theme.VIOLET_COLOR}
+              onPress={() => navigation.navigate('Transfer')}
+            />
+            <Function
+              navigation={navigation}
+              title={i18n.t('words.payout')}
+              icon="ios-cash"
+              color={theme.GREEN_COLOR}
+              onPress={() => navigation.navigate('Payout')}
+            />
+            {/* <Function
+              navigation={navigation}
+              title={i18n.t('words.payment')}
+              icon="ios-cellular"
+              color={theme.PURPLE_COLOR}
+            /> */}
+          </ScrollView>
+          <View style={styles.dateContainer}>
+            <Text style={styles.dateTitle}>{i18n.t('words.transactions')}</Text>
+            <LinearGradient
+              style={styles.button}
+              colors={[theme.VIOLET_COLOR + 'af', theme.PRIMARY_COLOR]}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 1}}>
+              <TouchableOpacity
+                style={styles.detailButton}
+                onPress={() => navigation.navigate('Transaction')}>
+                <Text style={styles.detailText}>
+                  {i18n.t('phrases.viewAll')}
+                </Text>
+                <Icons
+                  name="ios-document-text"
+                  color={theme.WHITE_COLOR}
+                  size={16}
+                />
+              </TouchableOpacity>
+            </LinearGradient>
+          </View>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={styles.filterContainer}>
+            <Filter
+              yOffset={10}
+              title={i18n.t('words.transfers')}
+              active={activeIndex === 0}
+              onPress={() => setActiveIndex(0)}
+            />
+            <Filter
+              yOffset={10}
+              title={i18n.t('phrases.topUps')}
+              active={activeIndex === 1}
+              onPress={() => setActiveIndex(1)}
+            />
+            <Filter
+              yOffset={10}
+              title={i18n.t('words.payouts')}
+              active={activeIndex === 2}
+              onPress={() => setActiveIndex(2)}
+            />
+            {/* <Filter
             yOffset={10}
             title={i18n.t('words.payments')}
             active={activeIndex === 3}
             onPress={() => setActiveIndex(3)}
-          />
+          /> */}
+          </ScrollView>
+          <View style={styles.detailsContainer}>
+            <View style={styles.circleTheme} />
+            {activeIndex === 0 &&
+              !tranLoading &&
+              transfers.map((transfer, index) => (
+                <Detail
+                  key={index}
+                  icon={
+                    transfer.type === 'receive'
+                      ? 'ios-arrow-down'
+                      : 'ios-arrow-up'
+                  }
+                  color={theme.VIOLET_COLOR}
+                  navigation={navigation}
+                  data={transfer}
+                />
+              ))}
+            {activeIndex === 1 &&
+              !topLoading &&
+              topups.map((topup, index) => (
+                <Detail
+                  key={index}
+                  icon={'ios-trending-up'}
+                  color={
+                    topup.status.toLowerCase() === 'successful'
+                      ? theme.MINT_COLOR
+                      : theme.DANGER_COLOR
+                  }
+                  navigation={navigation}
+                  data={topup}
+                />
+              ))}
+            {activeIndex === 2 &&
+              !payLoading &&
+              payouts.map((payout, index) => (
+                <Detail
+                  key={index}
+                  icon={'ios-cash'}
+                  color={
+                    payout.status.toLowerCase() === 'successful'
+                      ? theme.GREEN_COLOR
+                      : theme.DANGER_COLOR
+                  }
+                  navigation={navigation}
+                  data={payout}
+                />
+              ))}
+            {activeIndex === 3 &&
+              transfers.map((transfer, index) => (
+                <Detail
+                  key={index}
+                  icon={
+                    transfer.type === 'receive'
+                      ? 'ios-arrow-down'
+                      : 'ios-arrow-up'
+                  }
+                  color={theme.VIOLET_COLOR}
+                  navigation={navigation}
+                  data={transfer}
+                />
+              ))}
+          </View>
         </ScrollView>
-        <View style={styles.detailsContainer}>
-          <View style={styles.circleTheme} />
-          {activeIndex === 0 &&
-            transfers.map((transfer, index) => (
-              <Detail
-                key={index}
-                icon={
-                  transfer.type === 'receive'
-                    ? 'ios-arrow-down'
-                    : 'ios-arrow-up'
-                }
-                color={theme.VIOLET_COLOR}
-                navigation={navigation}
-                data={transfer}
-              />
-            ))}
-          {activeIndex === 1 &&
-            topups.map((topup, index) => (
-              <Detail
-                key={index}
-                icon={'ios-trending-up'}
-                color={
-                  topup.status.toLowerCase() === 'successful'
-                    ? theme.MINT_COLOR
-                    : theme.DANGER_COLOR
-                }
-                navigation={navigation}
-                data={topup}
-              />
-            ))}
-          {activeIndex === 2 &&
-            payouts.map((payout, index) => (
-              <Detail
-                key={index}
-                icon={'ios-cash'}
-                color={
-                  payout.status.toLowerCase() === 'successful'
-                    ? theme.GREEN_COLOR
-                    : theme.DANGER_COLOR
-                }
-                navigation={navigation}
-                data={payout}
-              />
-            ))}
-          {activeIndex === 3 &&
-            transfers.map((transfer, index) => (
-              <Detail
-                key={index}
-                icon={
-                  transfer.type === 'receive'
-                    ? 'ios-arrow-down'
-                    : 'ios-arrow-up'
-                }
-                color={theme.VIOLET_COLOR}
-                navigation={navigation}
-                data={transfer}
-              />
-            ))}
-        </View>
-      </ScrollView>
+      )}
       <SetPin configurePin={configurePin} setConfigurePin={setConfigurePin} />
       <Notification notify={notify} setNotify={setNotify} info={notifyMsg} />
+      <ValidityNotification
+        validity={validity}
+        setValidity={setValidity}
+        info={notifyMsg}
+      />
     </SafeAreaView>
   );
 };
@@ -394,7 +474,7 @@ const mapStateToProps = ({i18n, auth}) => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators({setAction, signOut}, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

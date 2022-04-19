@@ -13,7 +13,14 @@ import {
   Notification,
 } from '../../components';
 import theme from '../../utils/theme';
-import {AuthNumber, BASE_URL, Hyphenator, KSeparator} from '../../utils';
+import {
+  AuthMTN,
+  AuthNumber,
+  AuthOrange,
+  BASE_URL,
+  Hyphenator,
+  KSeparator,
+} from '../../utils';
 
 const VerifyPayout = props => {
   const {i18n, verify, setVerify, navigation, data, operator, user, token} =
@@ -38,8 +45,16 @@ const VerifyPayout = props => {
       setPinError(true);
     }
 
-    if (!AuthNumber(tel) || tel.length < 5) {
-      hasError = true;
+    if (operator.toLowerCase() === 'mtn') {
+      if (!AuthMTN(tel)) {
+        hasError = true;
+      }
+    }
+
+    if (operator.toLowerCase() === 'orange_money') {
+      if (!AuthOrange(tel)) {
+        hasError = true;
+      }
     }
 
     if (!AuthNumber(amount) || amount.length < 2) {

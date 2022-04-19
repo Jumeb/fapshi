@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-7;
 import Icons from 'react-native-vector-icons/Ionicons';
 
 import styles from './Profile.style';

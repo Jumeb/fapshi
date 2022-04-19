@@ -21,6 +21,7 @@ import {
   TransferScreen,
   PayoutScreen,
   TopUpScreen,
+  TopUpNotificationScreen,
 } from '../screens';
 import {connect} from 'react-redux';
 import {TabBar} from '../components';
@@ -61,6 +62,11 @@ let HomeStackScreen = () => {
       <Stack.Screen
         name="Topup"
         component={TopUpScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Topup Notifcation"
+        component={TopUpNotificationScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen

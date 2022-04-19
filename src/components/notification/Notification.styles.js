@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     bottom: 0,
   },
+
   notifyContainer: {
     marginHorizontal: 8,
     marginVertical: 8,
@@ -34,6 +35,29 @@ const styles = StyleSheet.create({
   },
   danger: {
     backgroundColor: theme.DANGER_COLOR,
+  },
+
+  // Validity
+  mainContainer2: {
+    margin: 0,
+    backgroundColor: theme.TRANSPARENT,
+    justifyContent: 'center',
+  },
+
+  validityContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    marginHorizontal: theme.PAD_HR + 40,
+    marginVertical: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 18,
+    borderRadius: theme.BORDER_IMAGE,
+  },
+  validityText: {
+    color: theme.WHITE_COLOR,
+    fontSize: theme.FONT_SIZE_SMALL,
+    textAlign: 'center',
   },
 });
 

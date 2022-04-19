@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.WHITE_COLOR,
   },
   scrollContainer: {
-    marginTop: -30,
+    marginTop: -105,
   },
   formContainer: {
     marginBottom: 15,
@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
   actContainer: {
     paddingHorizontal: theme.PAD_HR + 6,
     paddingVertical: 20,
-    marginVertical: 16,
-    marginBottom: 26,
+    marginTop: 50,
+    marginBottom: 60,
     backgroundColor: theme.WHITE_COLOR,
     shadowOffset: {width: 0, height: 2},
     shadowColor: theme.DARK_GREY,
@@ -76,14 +76,13 @@ const styles = StyleSheet.create({
   },
   signInContainer: {
     marginRight: 'auto',
-    marginTop: 50,
+    marginTop: 125,
     borderTopRightRadius: theme.CIRCLE_BORDER_RADIUS,
     borderBottomRightRadius: theme.CIRCLE_BORDER_RADIUS,
     overflow: 'hidden',
   },
   signUpContainer: {
     marginLeft: 'auto',
-    // marginBottom: 50,
     borderTopLeftRadius: theme.CIRCLE_BORDER_RADIUS,
     borderBottomLeftRadius: theme.CIRCLE_BORDER_RADIUS,
     overflow: 'hidden',

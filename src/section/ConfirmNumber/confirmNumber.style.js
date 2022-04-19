@@ -13,12 +13,12 @@ const styles = StyleSheet.create({
     borderRadius: theme.BORDER_IMAGE + 10,
     paddingVertical: 15,
   },
-  pinTitle: {
+  codeTitle: {
     textAlign: 'center',
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
     color: theme.DARK_GREY,
   },
-  pinReason: {
+  codeReason: {
     fontSize: theme.FONT_SIZE_EXTRA_SMALL,
     marginHorizontal: theme.PAD_HR,
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     marginHorizontal: theme.PAD_HR,
     marginTop: 8,
   },
-  pinContainer: {
+  codeContainer: {
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginVertical: 5,
@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
+    marginHorizontal: -5,
   },
 });
 

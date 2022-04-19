@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
     margin: theme.PAD_HR,
-    // marginBottom: 40,
   },
   amountContainer: {
     flexDirection: 'row',

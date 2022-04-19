@@ -5,8 +5,9 @@ import AuthMail from './auth';
 import languages from './languages';
 import KSeparator from './kSeparator';
 import searchMsg from './searchMsg';
-import AuthNumber from './authNumber';
+import {AuthNumber, AuthMTN, AuthOrange} from './authNumber';
 import Hyphenator from './Hyphenator';
+import PasswordAuth from './password.auth';
 
 export {
   BASE_URL,
@@ -18,4 +19,7 @@ export {
   searchMsg,
   AuthNumber,
   Hyphenator,
+  AuthMTN,
+  AuthOrange,
+  PasswordAuth,
 };

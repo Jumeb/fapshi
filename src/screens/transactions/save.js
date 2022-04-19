@@ -3,23 +3,21 @@ import {
   SafeAreaView,
   StatusBar,
   View,
-  Image,
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import LinearGradient from 'react-native-linear-gradient';
 import {LineChart} from 'react-native-chart-kit';
 
 import styles from './Transactions.style';
 import {scrolling} from '../../redux/actions/ScrollActions';
-import {Detail, Filter, Filters, NavBar, Text} from '../../components';
+import {Detail, Filter, Filters, NavBar, Notification} from '../../components';
 import theme from '../../utils/theme';
 import {BASE_URL} from '../../utils';
 
 const Transaction = props => {
-  const {i18n, navigation, yOffset, token, user} = props;
+  const {i18n, navigation, token} = props;
 
   const [text, setText] = useState('');
   const [balLoading, setBalLoading] = useState(false);
@@ -216,57 +214,57 @@ const Transaction = props => {
       });
   };
 
-  const data = {
-    labels: [
-      i18n.t('words.monday').substr(0, 3),
-      i18n.t('words.tuesday').substr(0, 3),
-      i18n.t('words.wednesday').substr(0, 3),
-      i18n.t('words.thursday').substr(0, 3),
-      i18n.t('words.friday').substr(0, 3),
-      i18n.t('words.saturday').substr(0, 3),
-      i18n.t('words.sunday').substr(0, 3),
-    ],
-    datasets: [
-      {
-        data: [25, 45, 28, 102, 40, 20, 110],
-        color: (opacity = 1) => theme.MINT_COLOR,
-        strokeWidth: 2,
-      },
-      {
-        data: [5, 10, 4, 80, 34, 15, 50],
-        color: (opacity = 1) => theme.VIOLET_COLOR,
-        strokeWidth: 2,
-      },
-      {
-        data: [2, 20, 14, 10, 6, 0, 10],
-        color: (opacity = 1) => theme.GREEN_COLOR,
-        strokeWidth: 2,
-      },
-      {
-        data: [3, 2, 1, 5, 10, 0.5, 10],
-        color: (opacity = 1) => theme.PURPLE_COLOR,
-        strokeWidth: 2,
-      },
-    ],
-    legend: [
-      i18n.t('phrases.topUps'),
-      i18n.t('words.sent'),
-      i18n.t('words.withdraws'),
-      i18n.t('words.airtime'),
-    ],
-  };
-  const chartConfig = {
-    backgroundGradientFrom: theme.WHITE_COLOR,
-    backgroundGradientFromOpacity: 1,
-    backgroundGradientTo: theme.WHITE_COLOR,
-    backgroundGradientToOpacity: 1,
-    decimalPlaces: 0,
-    color: (opacity = 1) => theme.PRIMARY_COLOR_MONO,
-    style: styles.chartStyle,
-    strokeWidth: 2,
-    barPercentage: 0.5,
-    useShadowColorFromDataset: false,
-  };
+  // const data = {
+  //   labels: [
+  //     i18n.t('words.monday').substr(0, 3),
+  //     i18n.t('words.tuesday').substr(0, 3),
+  //     i18n.t('words.wednesday').substr(0, 3),
+  //     i18n.t('words.thursday').substr(0, 3),
+  //     i18n.t('words.friday').substr(0, 3),
+  //     i18n.t('words.saturday').substr(0, 3),
+  //     i18n.t('words.sunday').substr(0, 3),
+  //   ],
+  //   datasets: [
+  //     {
+  //       data: [25, 45, 28, 102, 40, 20, 110],
+  //       color: (opacity = 1) => theme.MINT_COLOR,
+  //       strokeWidth: 2,
+  //     },
+  //     {
+  //       data: [5, 10, 4, 80, 34, 15, 50],
+  //       color: (opacity = 1) => theme.VIOLET_COLOR,
+  //       strokeWidth: 2,
+  //     },
+  //     {
+  //       data: [2, 20, 14, 10, 6, 0, 10],
+  //       color: (opacity = 1) => theme.GREEN_COLOR,
+  //       strokeWidth: 2,
+  //     },
+  //     {
+  //       data: [3, 2, 1, 5, 10, 0.5, 10],
+  //       color: (opacity = 1) => theme.PURPLE_COLOR,
+  //       strokeWidth: 2,
+  //     },
+  //   ],
+  //   legend: [
+  //     i18n.t('phrases.topUps'),
+  //     i18n.t('words.sent'),
+  //     i18n.t('words.withdraws'),
+  //     i18n.t('words.airtime'),
+  //   ],
+  // };
+  // const chartConfig = {
+  //   backgroundGradientFrom: theme.WHITE_COLOR,
+  //   backgroundGradientFromOpacity: 1,
+  //   backgroundGradientTo: theme.WHITE_COLOR,
+  //   backgroundGradientToOpacity: 1,
+  //   decimalPlaces: 0,
+  //   color: (opacity = 1) => theme.PRIMARY_COLOR_MONO,
+  //   style: styles.chartStyle,
+  //   strokeWidth: 2,
+  //   barPercentage: 0.5,
+  //   useShadowColorFromDataset: false,
+  // };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -279,17 +277,12 @@ const Transaction = props => {
         navigation={navigation}
         setText={setText}
       />
-      {tranLoading ? (
-        <View style={styles.centralize}>
-          <ActivityIndicator size="large" color={theme.PRIMARY_COLOR} />
-        </View>
-      ) : (
-        <ScrollView
-          horizontal={false}
-          onScroll={e => props.scrolling(e)}
-          showsVerticalScrollIndicator={false}
-          style={styles.scrollView}>
-          {/* <ScrollView
+      <ScrollView
+        horizontal={false}
+        onScroll={e => props.scrolling(e)}
+        showsVerticalScrollIndicator={false}
+        style={styles.scrollView}>
+        {/* <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           style={styles.filterContainer}>
@@ -311,39 +304,39 @@ const Transaction = props => {
           bezier
           style={styles.chartInnerStyle}
         /> */}
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            style={styles.filterContainer2}>
-            <Filter
-              yOffset={10}
-              title={i18n.t('words.transfers')}
-              active={activeIndex === 0}
-              onPress={() => setActiveIndex(0)}
-            />
-            <Filter
-              yOffset={10}
-              title={i18n.t('phrases.topUps')}
-              active={activeIndex === 1}
-              onPress={() => setActiveIndex(1)}
-            />
-            <Filter
-              yOffset={10}
-              title={i18n.t('words.payouts')}
-              active={activeIndex === 2}
-              onPress={() => setActiveIndex(2)}
-            />
-            {/* <Filter
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={styles.filterContainer2}>
+          <Filter
+            yOffset={10}
+            title={i18n.t('words.transfers')}
+            active={activeIndex === 0}
+            onPress={() => setActiveIndex(0)}
+          />
+          <Filter
+            yOffset={10}
+            title={i18n.t('phrases.topUps')}
+            active={activeIndex === 1}
+            onPress={() => setActiveIndex(1)}
+          />
+          {/* <Filter
+            yOffset={10}
+            title={i18n.t('words.payouts')}
+            active={activeIndex === 2}
+            onPress={() => setActiveIndex(2)}
+          /> */}
+          {/* <Filter
             yOffset={10}
             title={i18n.t('words.payments')}
             active={activeIndex === 3}
             onPress={() => setActiveIndex(3)}
           /> */}
-          </ScrollView>
-          <View style={styles.detailsContainer}>
-            <View style={styles.circleTheme} />
-            {activeIndex === 0 &&
-              transfers.map((transfer, index) => (
+        </ScrollView>
+        <View style={styles.detailsContainer}>
+          <View style={styles.circleTheme} />
+          {activeIndex === 0 && !tranLoading
+            ? transfers.map((transfer, index) => (
                 <Detail
                   key={index}
                   icon={
@@ -355,9 +348,12 @@ const Transaction = props => {
                   navigation={navigation}
                   data={transfer}
                 />
-              ))}
-            {activeIndex === 1 &&
-              topups.map((topup, index) => (
+              ))
+            : activeIndex === 0 && (
+                <ActivityIndicator size="small" color={theme.PRIMARY_COLOR} />
+              )}
+          {activeIndex === 1 && !topLoading
+            ? topups.map((topup, index) => (
                 <Detail
                   key={index}
                   icon={'ios-trending-up'}
@@ -369,9 +365,12 @@ const Transaction = props => {
                   navigation={navigation}
                   data={topup}
                 />
-              ))}
-            {activeIndex === 2 &&
-              payouts.map((payout, index) => (
+              ))
+            : activeIndex === 1 && (
+                <ActivityIndicator size="small" color={theme.PRIMARY_COLOR} />
+              )}
+          {activeIndex === 2 && !payLoading
+            ? payouts.map((payout, index) => (
                 <Detail
                   key={index}
                   icon={'ios-cash'}
@@ -383,24 +382,27 @@ const Transaction = props => {
                   navigation={navigation}
                   data={payout}
                 />
-              ))}
-            {activeIndex === 3 &&
-              transfers.map((transfer, index) => (
-                <Detail
-                  key={index}
-                  icon={
-                    transfer.type === 'receive'
-                      ? 'ios-arrow-down'
-                      : 'ios-arrow-up'
-                  }
-                  color={theme.VIOLET_COLOR}
-                  navigation={navigation}
-                  data={transfer}
-                />
-              ))}
-          </View>
-        </ScrollView>
-      )}
+              ))
+            : activeIndex === 2 && (
+                <ActivityIndicator size="small" color={theme.PRIMARY_COLOR} />
+              )}
+          {activeIndex === 3 &&
+            transfers.map((transfer, index) => (
+              <Detail
+                key={index}
+                icon={
+                  transfer.type === 'receive'
+                    ? 'ios-arrow-down'
+                    : 'ios-arrow-up'
+                }
+                color={theme.VIOLET_COLOR}
+                navigation={navigation}
+                data={transfer}
+              />
+            ))}
+        </View>
+      </ScrollView>
+      <Notification notify={notify} setNotify={setNotify} info={notifyMsg} />
     </SafeAreaView>
   );
 };

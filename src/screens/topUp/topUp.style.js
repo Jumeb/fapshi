@@ -13,6 +13,11 @@ const styles = StyleSheet.create({
     position: 'relative',
     paddingTop: 60,
   },
+  centralize: {
+    height: theme.HEIGHT_100 - 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   operatorContainer: {
     flex: 1,
     position: 'relative',
@@ -63,8 +68,9 @@ const styles = StyleSheet.create({
     fontSize: theme.FONT_SIZE_LARGE - 2.5,
     color: theme.DARK_GREY,
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
-    textAlign: 'center',
+    // textAlign: 'center',
     // margin: 8,
+    marginBottom: 35,
   },
   loadingLang: {
     // marginLeft: 12,
@@ -72,12 +78,11 @@ const styles = StyleSheet.create({
     color: theme.LIGHT_GREY,
   },
   loadingContainer: {
-    alignItems: 'flex-start',
+    // alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 10,
     paddingVertical: 12,
-    paddingHorizontal: 10,
-    marginHorizontal: 8,
+    marginHorizontal: theme.PAD_HR,
     borderRadius: theme.BORDER_IMAGE,
     backgroundColor: theme.WHITE_COLOR,
     shadowOffset: {width: 0, height: 2},
@@ -87,31 +92,37 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   topUpButtonContainer: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    width: '100%',
-  },
-  topUpButton: {
-    marginHorizontal: 8,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: theme.WHITE_COLOR,
-    paddingVertical: 4,
-    paddingHorizontal: 5,
-    maxWidth: 160,
-    marginVertical: 6,
-    borderRadius: theme.BORDER_IMAGE,
-    shadowOffset: {width: 0, height: 2},
-    shadowColor: theme.DARK_GREY,
-    shadowOpacity: 1,
-    shadowRadius: 8,
-    elevation: 3,
+    paddingHorizontal: theme.PAD_HR - 8,
+    // marginTop: 23,
   },
-  topUpButtonText: {
-    color: theme.PRIMARY_COLOR,
-    fontSize: theme.FONT_SIZE_SMALL,
-    marginRight: 8,
+  topUpContainer: {
+    marginHorizontal: theme.PAD_HR,
+  },
+  amountContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 5,
+  },
+  amountText: {
+    fontSize: theme.FONT_SIZE_SMALL - 2,
+    fontWeight: theme.FONT_WEIGHT_NORMAL_,
+  },
+  amountValue: {
+    fontSize: theme.FONT_SIZE_SMALL - 2,
+    fontWeight: theme.FONT_WEIGHT_BOLD,
+    color: theme.DARK_GREY,
+  },
+  amountTotal: {
+    fontSize: theme.FONT_SIZE_SMALL - 2,
+    fontWeight: theme.FONT_WEIGHT_NORMAL_,
+    textTransform: 'uppercase',
+  },
+  inputContainer: {
+    marginTop: 20,
   },
 });
 
