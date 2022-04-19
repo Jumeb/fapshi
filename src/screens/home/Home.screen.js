@@ -51,7 +51,7 @@ const Home = props => {
   });
 
   useEffect(() => {
-    if (hasPin) {
+    if (!hasPin) {
       setConfigurePin(true);
     }
     fetchValidity();

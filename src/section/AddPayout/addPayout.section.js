@@ -5,6 +5,10 @@ import Modal from 'react-native-modal';
 import styles from './addPayout.styles';
 import {Button, SquareInput, Text} from '../../components';
 import theme from '../../utils/theme';
+import {addPayout} from '../../redux/actions/ContactActions';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {AuthMTN, AuthOrange} from '../../utils';
 
 const AddPayout = props => {
   const {i18n, add, setAdd} = props;
@@ -12,6 +16,31 @@ const AddPayout = props => {
   const [nameError, setNameError] = useState(false);
   const [number, setNumber] = useState('');
   const [numberError, setNumberError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const Authenticate = () => {
+    let hasError = false;
+    setLoading(true);
+
+    if (name.length < 4) {
+      hasError = true;
+      setNameError(true);
+    }
+
+    if (!AuthMTN(number) && !AuthOrange(number)) {
+      hasError = true;
+      setNumberError(true);
+    }
+    if (hasError) {
+      setLoading(false);
+      return;
+    }
+    setLoading(false);
+    props.addPayout(name, number);
+    setAdd(false);
+    setName('');
+    setNumber('');
+  };
 
   return (
     <Modal
@@ -69,7 +98,11 @@ const AddPayout = props => {
           icon={'ios-phone-portrait'}
         />
         <View style={styles.cashoutButtonContainer}>
-          <Button title={i18n.t('words.add')} />
+          <Button
+            title={i18n.t('words.add')}
+            loading={loading}
+            onPress={() => Authenticate()}
+          />
           <Button
             title={i18n.t('words.cancel')}
             invert={true}
@@ -81,4 +114,8 @@ const AddPayout = props => {
   );
 };
 
-export default AddPayout;
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({addPayout}, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(AddPayout);

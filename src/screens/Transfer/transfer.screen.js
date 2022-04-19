@@ -24,9 +24,10 @@ import {
 import theme from '../../utils/theme';
 import {AddTransfer, VerifyTrans} from '../../section';
 import {AuthMail, AuthNumber} from '../../utils';
+import {removeTransfer} from '../../redux/actions/ContactActions';
 
 const Transfer = props => {
-  const {i18n, navigation} = props;
+  const {i18n, navigation, transfers} = props;
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [amount, setAmount] = useState('');
@@ -78,6 +79,10 @@ const Transfer = props => {
     };
     setData(body);
     setVerify(true);
+  };
+
+  const SetTransfer = info => {
+    setEmail(info.email);
   };
 
   return (
@@ -146,21 +151,41 @@ const Transfer = props => {
           style={styles.horizontalScroll}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
-          <RecentsCard />
-          <RecentsCard />
-          <RecentsCard />
-          <RecentsCard />
-          <RecentsCard />
-          <RecentsCard />
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => setAdd(true)}
-            style={styles.addContainer}>
-            <View style={styles.addImageContainer}>
-              <Icons name={'ios-add'} color={theme.PRIMARY_COLOR} size={35} />
-            </View>
-            <Text style={styles.addName}>{i18n.t('words.add')}</Text>
-          </TouchableOpacity>
+          {transfers && transfers.length <= 5 && (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => setAdd(true)}
+              style={styles.addContainer}>
+              <View style={styles.addImageContainer}>
+                <Icons name={'ios-add'} color={theme.PRIMARY_COLOR} size={35} />
+              </View>
+              <Text style={styles.addName}>{i18n.t('words.add')}</Text>
+            </TouchableOpacity>
+          )}
+
+          {transfers.map((transfer, index) => (
+            <RecentsCard
+              key={index}
+              data={transfer}
+              active={email}
+              onPress={() => SetTransfer(transfer)}
+            />
+          ))}
+          {transfers && transfers.length >= 1 && (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => props.removeTransfer()}
+              style={styles.addContainer}>
+              <View style={styles.addImageContainer}>
+                <Icons
+                  name={'ios-remove'}
+                  color={theme.PRIMARY_COLOR}
+                  size={35}
+                />
+              </View>
+              <Text style={styles.addName}>{i18n.t('words.add')}</Text>
+            </TouchableOpacity>
+          )}
         </ScrollView>
         <View style={styles.buttonContainer}>
           <Button
@@ -182,14 +207,15 @@ const Transfer = props => {
   );
 };
 
-const mapStateToProps = ({i18n}) => {
+const mapStateToProps = ({i18n, contacts}) => {
   return {
     i18n: i18n.i18n,
+    transfers: contacts.transfers,
   };
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators({removeTransfer}, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Transfer);

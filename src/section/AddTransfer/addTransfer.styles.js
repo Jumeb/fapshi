@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
     color: theme.DARK_GREY,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   transferContainer: {
     paddingHorizontal: theme.PAD_HR,

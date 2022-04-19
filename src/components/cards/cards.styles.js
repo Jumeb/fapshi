@@ -175,6 +175,9 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
   },
+  activePayout: {
+    backgroundColor: theme.PRIMARY_COLOR,
+  },
   recentImage: {
     height: 45,
     width: 45,

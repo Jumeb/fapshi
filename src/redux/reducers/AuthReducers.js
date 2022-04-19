@@ -1,17 +1,5 @@
 import {Storage} from '../../utils';
-import {
-  SET_USER,
-  SET_TOKEN,
-  ENTRY,
-  SET_CHEFS,
-  SET_ITEMS,
-  SET_LOCATIONS,
-  SET_WALLET,
-  SET_ORDERS,
-  SIGNOUT,
-  ACTION,
-  SET_PIN,
-} from '../types';
+import {SET_USER, SET_TOKEN, ENTRY, SIGNOUT, ACTION, SET_PIN} from '../types';
 
 const INITIAL_STATE = {
   actionType: '',
@@ -34,7 +22,7 @@ const AuthReducer = (state = INITIAL_STATE, action) => {
         Storage.storeInfo('TOKEN', user.accessToken);
         return {...state, user: {...user}, token: user.accessToken};
       }
-      if (user && user?.hasPin) {
+      if (user && user?.hasSetPin) {
         Storage.storeInfo('HasPin', {value: hasPin});
         return {...state, user: {...user}, hasPin: user?.hasSetPin};
       }

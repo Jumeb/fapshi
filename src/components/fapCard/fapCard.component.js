@@ -41,7 +41,7 @@ const FapCard = props => {
               {user && user?.email && user?.email.substr(15)}
             </Text>
           </View>
-          {hasPin && (
+          {!hasPin && (
             <TouchableOpacity
               style={styles.pinButton}
               onPress={() => setPin(true)}>

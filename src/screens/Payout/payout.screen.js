@@ -23,11 +23,12 @@ import {
   Text,
 } from '../../components';
 import theme from '../../utils/theme';
-import {AddPayout, VerifyPayout, VerifyTrans} from '../../section';
-import {AuthMail, AuthMTN, AuthNumber, AuthOrange} from '../../utils';
+import {AddPayout, VerifyPayout} from '../../section';
+import {AuthMTN, AuthNumber, AuthOrange} from '../../utils';
+import {removePayout} from '../../redux/actions/ContactActions';
 
 const Payout = props => {
-  const {i18n, navigation} = props;
+  const {i18n, navigation, payouts} = props;
   const [amount, setAmount] = useState('');
   const [amountError, setAmountError] = useState(false);
   const [tel, setTel] = useState('');
@@ -93,6 +94,11 @@ const Payout = props => {
     setNotify(true);
     return;
   };
+
+  const SetPayout = info => {
+    setTel(info.number);
+  };
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <StatusBar backgroundColor={theme.PRIMARY_COLOR} />
@@ -171,21 +177,40 @@ const Payout = props => {
           style={styles.horizontalScroll}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
-          <RecentsCard />
-          <RecentsCard />
-          <RecentsCard />
-          <RecentsCard />
-          <RecentsCard />
-          <RecentsCard />
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => setAdd(true)}
-            style={styles.addContainer}>
-            <View style={styles.addImageContainer}>
-              <Icons name={'ios-add'} color={theme.PRIMARY_COLOR} size={35} />
-            </View>
-            <Text style={styles.addName}>{i18n.t('words.add')}</Text>
-          </TouchableOpacity>
+          {payouts && payouts.length <= 5 && (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => setAdd(true)}
+              style={styles.addContainer}>
+              <View style={styles.addImageContainer}>
+                <Icons name={'ios-add'} color={theme.PRIMARY_COLOR} size={35} />
+              </View>
+              <Text style={styles.addName}>{i18n.t('words.add')}</Text>
+            </TouchableOpacity>
+          )}
+          {payouts.map((payout, index) => (
+            <RecentsCard
+              key={index}
+              data={payout}
+              active={tel}
+              onPress={() => SetPayout(payout)}
+            />
+          ))}
+          {payouts && payouts.length >= 1 && (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => props.removePayout()}
+              style={styles.addContainer}>
+              <View style={styles.addImageContainer}>
+                <Icons
+                  name={'ios-remove'}
+                  color={theme.PRIMARY_COLOR}
+                  size={35}
+                />
+              </View>
+              <Text style={styles.addName}>{i18n.t('words.pop')}</Text>
+            </TouchableOpacity>
+          )}
         </ScrollView>
         <View style={styles.buttonContainer}>
           <Button
@@ -208,14 +233,15 @@ const Payout = props => {
   );
 };
 
-const mapStateToProps = ({i18n}) => {
+const mapStateToProps = ({i18n, contacts}) => {
   return {
     i18n: i18n.i18n,
+    payouts: contacts.payouts,
   };
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators({removePayout}, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Payout);

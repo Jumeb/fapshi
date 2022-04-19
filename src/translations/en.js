@@ -72,6 +72,7 @@ export default {
     or: 'OR',
     charges: 'Charges',
     code: 'Code',
+    pop: 'Pop',
   },
   phrases: {
     signUp: 'Sign Up',

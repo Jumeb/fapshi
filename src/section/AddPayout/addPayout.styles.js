@@ -10,8 +10,8 @@ const styles = StyleSheet.create({
   cashoutText: {
     textAlign: 'center',
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
-    marginBottom: 10,
     color: theme.DARK_GREY,
+    marginBottom: 20,
   },
   cashoutContainer: {
     paddingHorizontal: theme.PAD_HR,

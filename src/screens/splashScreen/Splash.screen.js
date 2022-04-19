@@ -6,7 +6,8 @@ import * as RNLocalize from 'react-native-localize';
 
 import styles from './Splash.style';
 import {setLanguage} from '../../redux/actions/TranslationAction';
-import {setUser, setToken} from '../../redux/actions/AuthActions';
+import {setUser, setToken, setPin} from '../../redux/actions/AuthActions';
+import {setPayouts, setTransfers} from '../../redux/actions/ContactActions';
 // import {Text} from '../../components';
 // import {addToCart} from '../../redux/actions/CartAction';
 // import {addToFavourites} from '../../redux/actions/FavouritesActions';
@@ -114,12 +115,33 @@ class SplashScreen extends Component {
 
     Storage.load({key: 'USER'})
       .then(user => {
-        console.log(user);
         this.props.setUser(user);
       })
       .catch(err => {
         if (err) {
           this.props.setUser({});
+        }
+      });
+
+    Storage.load({key: 'PAYOUTS'})
+      .then(payouts => {
+        this.props.setPayouts(payouts);
+      })
+      .catch(err => {
+        if (err) {
+          this.props.setPayouts([]);
+        }
+      });
+
+    // // Storage.remove({key: 'PAYOUTS'});
+
+    Storage.load({key: 'TRANSFERS'})
+      .then(transfers => {
+        this.props.setTransfers(transfers);
+      })
+      .catch(err => {
+        if (err) {
+          this.props.setTransfers([]);
         }
       });
 
@@ -141,10 +163,8 @@ class SplashScreen extends Component {
     Storage.load({key: 'isFirstTime'})
       .then(res => {
         if (res.value) {
-          console.log(res, this.state.isFirstTime);
           this.setState({isFirstTime: true});
         } else {
-          console.log(res, this.state.isFirstTime);
           this.setState({isFirstTime: false});
         }
       })
@@ -279,7 +299,10 @@ const mapStateToProps = ({i18n, auth}) => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({setLanguage, setUser, setToken}, dispatch);
+  return bindActionCreators(
+    {setLanguage, setUser, setToken, setPayouts, setTransfers, setPin},
+    dispatch,
+  );
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen);

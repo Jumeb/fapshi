@@ -1,10 +1,14 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import Modal from 'react-native-modal';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import styles from './addTransfer.styles';
 import {Button, SquareInput, Text} from '../../components';
 import theme from '../../utils/theme';
+import {addTransfer} from '../../redux/actions/ContactActions';
+import {AuthMail} from '../../utils';
 
 const AddTransfer = props => {
   const {i18n, add, setAdd} = props;
@@ -12,6 +16,31 @@ const AddTransfer = props => {
   const [nameError, setNameError] = useState(false);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const Authenticate = () => {
+    let hasError = false;
+    setLoading(true);
+
+    if (name.length < 4) {
+      hasError = true;
+      setNameError(true);
+    }
+
+    if (!AuthMail(email)) {
+      hasError = true;
+      setEmailError(true);
+    }
+    if (hasError) {
+      setLoading(false);
+      return;
+    }
+    setLoading(false);
+    props.addTransfer(name, email);
+    setAdd(false);
+    setName('');
+    setEmail('');
+  };
 
   return (
     <Modal
@@ -56,8 +85,8 @@ const AddTransfer = props => {
           icon={'ios-person'}
         />
         <SquareInput
-          title={i18n.t('phrases.personNumber')}
-          holder={'6-xxxxxxx'}
+          title={i18n.t('words.email')}
+          holder={'janedoe@yahoo.fr'}
           type={'email-address'}
           capitalize={'none'}
           secure={false}
@@ -66,10 +95,14 @@ const AddTransfer = props => {
           errorMessage={i18n.t('phrases.phoneInvalid')}
           error={emailError}
           toggleError={() => setEmailError(false)}
-          icon={'ios-envelope'}
+          icon={'ios-mail'}
         />
         <View style={styles.transferButtonContainer}>
-          <Button title={i18n.t('words.add')} />
+          <Button
+            title={i18n.t('words.add')}
+            loading={loading}
+            onPress={() => Authenticate()}
+          />
           <Button
             title={i18n.t('words.cancel')}
             invert={true}
@@ -81,4 +114,8 @@ const AddTransfer = props => {
   );
 };
 
-export default AddTransfer;
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({addTransfer}, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(AddTransfer);
