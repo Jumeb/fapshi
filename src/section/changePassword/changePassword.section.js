@@ -191,12 +191,14 @@ const ChangePassword = props => {
             toggleError={() => setConPasswordError(false)}
             icon={'ios-create'}
           />
-          <Button
-            title={i18n.t('words.confirm')}
-            invert={true}
-            onPress={() => Authenticate()}
-            loading={loading}
-          />
+          <View style={styles.buttonContainer}>
+            <Button
+              title={i18n.t('words.confirm')}
+              invert={true}
+              onPress={() => Authenticate()}
+              loading={loading}
+            />
+          </View>
         </View>
       </View>
       <Notification notify={notify} setNotify={setNotify} info={notifyMsg} />

@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.WHITE_COLOR,
     paddingVertical: 8,
     paddingHorizontal: 6,
-    maxWidth: 160,
+    maxWidth: 200,
     marginVertical: 6,
     borderRadius: theme.BORDER_IMAGE,
     shadowOffset: {width: 0, height: 2},

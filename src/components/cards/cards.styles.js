@@ -106,6 +106,25 @@ const styles = StyleSheet.create({
     bottom: -70,
     right: -40,
   },
+  deleteButton: {
+    position: 'absolute',
+    bottom: 4.5,
+    right: 10,
+    color: theme.DARK_OVERLAYS,
+    fontSize: theme.FONT_SIZE_EXTRA_SMALL - 1,
+    fontWeight: theme.FONT_WEIGHT_NORMAL_,
+    height: 35,
+    width: 35,
+    borderRadius: theme.CIRCLE_BORDER_RADIUS + 100,
+    backgroundColor: theme.WHITE_COLOR,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowOffset: {width: 0, height: 2},
+    shadowColor: theme.PRIMARY_COLOR,
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
 
   // Data Card
   dataCardContainer: {

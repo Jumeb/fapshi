@@ -19,6 +19,7 @@ import {
   Function,
   Header,
   Notification,
+  RefreshButton,
   Text,
   ValidityNotification,
 } from '../../components';
@@ -41,7 +42,7 @@ const Home = props => {
   const [tranLoading, setTransLoading] = useState(false);
   const [payLoading, setPayLoading] = useState(false);
   const [topLoading, setTopLoading] = useState(false);
-  const [valLoading, setValLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [validity, setValidity] = useState(false);
 
   const [notify, setNotify] = useState(false);
@@ -174,7 +175,12 @@ const Home = props => {
           setTransfers(responseJson);
         }
 
-        if (statusCode === 401) {
+        if (statusCode !== 200) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            msg: i18n.t('phrases.anErrorOccured'),
+          });
         }
       })
       .catch(err => {
@@ -233,7 +239,8 @@ const Home = props => {
   };
 
   const fetchValidity = () => {
-    let statusCode, responseJson;
+    let statusCode;
+    setLoading(true);
 
     fetch(`${BASE_URL}/token`, {
       method: 'GET',
@@ -246,13 +253,11 @@ const Home = props => {
     })
       .then(res => {
         statusCode = res.status;
-        responseJson = res.json();
-        return Promise.all([statusCode, responseJson]);
+        return Promise.all([statusCode]);
       })
       .then(res => {
         statusCode = res[0];
-        responseJson = res[1];
-
+        setLoading(false);
         if (statusCode === 200) {
           return;
         }
@@ -274,6 +279,7 @@ const Home = props => {
       })
       .catch(err => {
         if (err) {
+          setLoading(false);
           return;
           // console.log(err);
           // setNotify(true);
@@ -293,7 +299,7 @@ const Home = props => {
       <View style={styles.header}>
         <Text style={styles.title}>{i18n.t('phrases.myDashboard')}</Text>
       </View>
-      {tranLoading ? (
+      {loading ? (
         <View style={styles.centralize}>
           <ActivityIndicator size="large" color={theme.PRIMARY_COLOR} />
         </View>
@@ -390,52 +396,90 @@ const Home = props => {
           /> */}
           </ScrollView>
           <View style={styles.detailsContainer}>
-            <View style={styles.circleTheme} />
-            {activeIndex === 0 &&
-              !tranLoading &&
-              transfers.map((transfer, index) => (
-                <Detail
-                  key={index}
-                  icon={
-                    transfer.type === 'receive'
-                      ? 'ios-arrow-down'
-                      : 'ios-arrow-up'
-                  }
-                  color={theme.VIOLET_COLOR}
-                  navigation={navigation}
-                  data={transfer}
-                />
-              ))}
-            {activeIndex === 1 &&
-              !topLoading &&
-              topups.map((topup, index) => (
-                <Detail
-                  key={index}
-                  icon={'ios-trending-up'}
-                  color={
-                    topup.status.toLowerCase() === 'successful'
-                      ? theme.MINT_COLOR
-                      : theme.DANGER_COLOR
-                  }
-                  navigation={navigation}
-                  data={topup}
-                />
-              ))}
-            {activeIndex === 2 &&
-              !payLoading &&
-              payouts.map((payout, index) => (
-                <Detail
-                  key={index}
-                  icon={'ios-cash'}
-                  color={
-                    payout.status.toLowerCase() === 'successful'
-                      ? theme.GREEN_COLOR
-                      : theme.DANGER_COLOR
-                  }
-                  navigation={navigation}
-                  data={payout}
-                />
-              ))}
+            {!tranLoading && !balLoading && !payLoading && (
+              <View style={styles.circleTheme} />
+            )}
+            {activeIndex === 0 && transfers && transfers.length >= 1
+              ? transfers.map((transfer, index) => (
+                  <Detail
+                    key={index}
+                    icon={
+                      transfer.type === 'receive'
+                        ? 'ios-arrow-down'
+                        : 'ios-arrow-up'
+                    }
+                    color={theme.VIOLET_COLOR}
+                    navigation={navigation}
+                    data={transfer}
+                  />
+                ))
+              : activeIndex === 0 &&
+                (!tranLoading ? (
+                  <RefreshButton
+                    i18n={i18n}
+                    info={i18n.t('phrases.noTransfers')}
+                    onPress={() => fetchTransfer()}
+                  />
+                ) : (
+                  <ActivityIndicator
+                    size={'small'}
+                    color={theme.PRIMARY_COLOR}
+                  />
+                ))}
+            {activeIndex === 1 && payouts && payouts.length >= 1
+              ? topups.map((topup, index) => (
+                  <Detail
+                    key={index}
+                    icon={'ios-trending-up'}
+                    color={
+                      topup.status.toLowerCase() === 'successful'
+                        ? theme.MINT_COLOR
+                        : theme.DANGER_COLOR
+                    }
+                    navigation={navigation}
+                    data={topup}
+                  />
+                ))
+              : activeIndex === 1 &&
+                (!topLoading ? (
+                  <RefreshButton
+                    i18n={i18n}
+                    info={i18n.t('phrases.noTopups')}
+                    onPress={() => fetchTopUps()}
+                  />
+                ) : (
+                  <ActivityIndicator
+                    size={'small'}
+                    color={theme.PRIMARY_COLOR}
+                  />
+                ))}
+            {activeIndex === 2 && payouts && payouts.length >= 1
+              ? payouts.map((payout, index) => (
+                  <Detail
+                    key={index}
+                    icon={'ios-cash'}
+                    color={
+                      payout.status.toLowerCase() === 'successful'
+                        ? theme.GREEN_COLOR
+                        : theme.DANGER_COLOR
+                    }
+                    navigation={navigation}
+                    data={payout}
+                  />
+                ))
+              : activeIndex === 2 &&
+                (!payLoading ? (
+                  <RefreshButton
+                    i18n={i18n}
+                    info={i18n.t('phrases.noPayouts')}
+                    onPress={() => fetchPayouts()}
+                  />
+                ) : (
+                  <ActivityIndicator
+                    size={'small'}
+                    color={theme.PRIMARY_COLOR}
+                  />
+                ))}
             {activeIndex === 3 &&
               transfers.map((transfer, index) => (
                 <Detail

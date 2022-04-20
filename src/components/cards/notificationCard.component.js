@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Image, TouchableOpacity} from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
 
@@ -7,6 +7,7 @@ import {Text} from '..';
 import {searchMsg} from '../../utils';
 import Moment from 'react-moment';
 import theme from '../../utils/theme';
+import {ConfirmDelete} from '../../section';
 
 let text1 = '';
 let text2 = '';
@@ -14,7 +15,7 @@ let text3 = '';
 let text4 = '';
 
 const NotifcationCard = props => {
-  const {receive, sent, pending, pay, i18n, last, index, notif} = props;
+  const {pending, pay, i18n, last, index, notif, setInfo, setConfirm} = props;
   let cashOutIndex, receiveIndex, fromIndex, xafIndex, icon;
   cashOutIndex = searchMsg('cashout', notif.message);
   receiveIndex = searchMsg('received', notif.message);
@@ -50,6 +51,11 @@ const NotifcationCard = props => {
     text3 = 'to James Bond is';
     text4 = i18n.t('words.pending');
   }
+
+  const Authenticate = data => {
+    setConfirm(true);
+    setInfo(data);
+  };
   useEffect(() => {}, []);
 
   return (
@@ -82,6 +88,12 @@ const NotifcationCard = props => {
       <View
         style={index % 2 === 1 ? styles.circleTheme : styles.circleThemeUp}
       />
+      <TouchableOpacity
+        style={styles.deleteButton}
+        activeOpacity={0.8}
+        onPress={() => Authenticate(notif)}>
+        <Icons name="ios-trash" size={14} color={theme.DANGER_COLOR} />
+      </TouchableOpacity>
     </View>
   );
 };

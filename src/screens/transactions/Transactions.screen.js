@@ -14,7 +14,14 @@ import {LineChart} from 'react-native-chart-kit';
 
 import styles from './Transactions.style';
 import {scrolling} from '../../redux/actions/ScrollActions';
-import {Detail, Filter, Filters, NavBar, Text} from '../../components';
+import {
+  Detail,
+  Filter,
+  Filters,
+  NavBar,
+  RefreshButton,
+  Text,
+} from '../../components';
 import theme from '../../utils/theme';
 import {BASE_URL} from '../../utils';
 
@@ -341,49 +348,90 @@ const Transaction = props => {
           /> */}
           </ScrollView>
           <View style={styles.detailsContainer}>
-            <View style={styles.circleTheme} />
-            {activeIndex === 0 &&
-              transfers.map((transfer, index) => (
-                <Detail
-                  key={index}
-                  icon={
-                    transfer.type === 'receive'
-                      ? 'ios-arrow-down'
-                      : 'ios-arrow-up'
-                  }
-                  color={theme.VIOLET_COLOR}
-                  navigation={navigation}
-                  data={transfer}
-                />
-              ))}
-            {activeIndex === 1 &&
-              topups.map((topup, index) => (
-                <Detail
-                  key={index}
-                  icon={'ios-trending-up'}
-                  color={
-                    topup.status.toLowerCase() === 'successful'
-                      ? theme.MINT_COLOR
-                      : theme.DANGER_COLOR
-                  }
-                  navigation={navigation}
-                  data={topup}
-                />
-              ))}
-            {activeIndex === 2 &&
-              payouts.map((payout, index) => (
-                <Detail
-                  key={index}
-                  icon={'ios-cash'}
-                  color={
-                    payout.status.toLowerCase() === 'successful'
-                      ? theme.GREEN_COLOR
-                      : theme.DANGER_COLOR
-                  }
-                  navigation={navigation}
-                  data={payout}
-                />
-              ))}
+            {!tranLoading && !balLoading && !payLoading && (
+              <View style={styles.circleTheme} />
+            )}
+            {activeIndex === 0 && transfers && transfers.length >= 1
+              ? transfers.map((transfer, index) => (
+                  <Detail
+                    key={index}
+                    icon={
+                      transfer.type === 'receive'
+                        ? 'ios-arrow-down'
+                        : 'ios-arrow-up'
+                    }
+                    color={theme.VIOLET_COLOR}
+                    navigation={navigation}
+                    data={transfer}
+                  />
+                ))
+              : activeIndex === 0 &&
+                (!tranLoading ? (
+                  <RefreshButton
+                    i18n={i18n}
+                    info={i18n.t('phrases.noTransfers')}
+                    onPress={() => fetchTransfer()}
+                  />
+                ) : (
+                  <ActivityIndicator
+                    size={'small'}
+                    color={theme.PRIMARY_COLOR}
+                  />
+                ))}
+            {activeIndex === 1 && payouts && payouts.length >= 1
+              ? topups.map((topup, index) => (
+                  <Detail
+                    key={index}
+                    icon={'ios-trending-up'}
+                    color={
+                      topup.status.toLowerCase() === 'successful'
+                        ? theme.MINT_COLOR
+                        : theme.DANGER_COLOR
+                    }
+                    navigation={navigation}
+                    data={topup}
+                  />
+                ))
+              : activeIndex === 1 &&
+                (!topLoading ? (
+                  <RefreshButton
+                    i18n={i18n}
+                    info={i18n.t('phrases.noTopups')}
+                    onPress={() => fetchTopUps()}
+                  />
+                ) : (
+                  <ActivityIndicator
+                    size={'small'}
+                    color={theme.PRIMARY_COLOR}
+                  />
+                ))}
+            {activeIndex === 2 && payouts && payouts.length >= 1
+              ? payouts.map((payout, index) => (
+                  <Detail
+                    key={index}
+                    icon={'ios-cash'}
+                    color={
+                      payout.status.toLowerCase() === 'successful'
+                        ? theme.GREEN_COLOR
+                        : theme.DANGER_COLOR
+                    }
+                    navigation={navigation}
+                    data={payout}
+                  />
+                ))
+              : activeIndex === 2 &&
+                (!payLoading ? (
+                  <RefreshButton
+                    i18n={i18n}
+                    info={i18n.t('phrases.noPayouts')}
+                    onPress={() => fetchPayouts()}
+                  />
+                ) : (
+                  <ActivityIndicator
+                    size={'small'}
+                    color={theme.PRIMARY_COLOR}
+                  />
+                ))}
             {activeIndex === 3 &&
               transfers.map((transfer, index) => (
                 <Detail

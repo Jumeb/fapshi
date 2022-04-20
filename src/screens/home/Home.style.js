@@ -27,10 +27,9 @@ const styles = StyleSheet.create({
   },
   header: {
     position: 'absolute',
-    left: '50%',
-    transform: [{translateX: -50}],
     marginTop: 20,
     marginBottom: 80,
+    width: theme.WIDTH_100,
     // zIndex: 999,
   },
   funcContainer: {

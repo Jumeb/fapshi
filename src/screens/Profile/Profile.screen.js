@@ -248,7 +248,7 @@ const Profile = props => {
             onPress={() => setEdit(!edit)}
           />
           <Button
-            title={i18n.t('phrases.saveChanges')}
+            title={i18n.t('words.save')}
             invert={true}
             loading={loading}
             onPress={() => Authenticate()}

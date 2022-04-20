@@ -249,6 +249,38 @@ const styles = StyleSheet.create({
     backgroundColor: theme.PRIMARY_COLOR,
     marginLeft: 'auto',
   },
+
+  //  Refresh button
+  refreshButtonContainer: {
+    height: theme.HEIGHT_100 - 140,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  refreshButton: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  refreshImage: {
+    height: 40,
+    resizeMode: 'contain',
+    tintColor: theme.PRIMARY_COLOR,
+  },
+  refreshText: {
+    fontSize: theme.FONT_SIZE_SMALL,
+    color: theme.DARK_GREY,
+    fontWeight: theme.FONT_WEIGHT_NORMAL_,
+    marginTop: -10,
+  },
+  refreshInfoText: {
+    fontSize: theme.FONT_SIZE_SMALL,
+    color: theme.DARK_GREY,
+    fontWeight: theme.FONT_WEIGHT_NORMAL_,
+    marginBottom: 20,
+    marginTop: 10,
+    textAlign: 'center',
+  },
 });
 
 export default styles;
