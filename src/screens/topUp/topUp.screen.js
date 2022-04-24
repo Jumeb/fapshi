@@ -77,7 +77,7 @@ const TopUp = props => {
 
   useEffect(() => {
     fetchTopupAccs();
-  }, []);
+  }, [accs]);
 
   const fetchTopupAccs = () => {
     let statusCode, responseJson;
@@ -105,8 +105,13 @@ const TopUp = props => {
         if (statusCode === 200) {
           setAccs(responseJson);
         }
-
-        if (statusCode === 401) {
+        if (statusCode !== 200) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: responseJson.message,
+          });
         }
       })
       .catch(err => {

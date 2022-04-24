@@ -7,8 +7,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.WHITE_COLOR,
   },
-  scrollContainer: {
-    marginTop: -105,
+  contentContainer: {
+    marginTop: 'auto',
+    marginBottom: 'auto',
   },
   formContainer: {
     marginBottom: 15,
@@ -33,50 +34,20 @@ const styles = StyleSheet.create({
     fontWeight: theme.FONT_WEIGHT_BOLD,
     marginBottom: 35,
   },
-  topBannerContainer: {
-    position: 'relative',
-    backgroundColor: theme.PRIMARY_COLOR_MONO + '99',
-    opacity: 5,
-    height: 190,
-    width: 190,
-    borderRadius: 100,
-    left: 25,
-    marginLeft: 'auto',
+  logoContainer: {
     justifyContent: 'center',
-    alignItems: 'center',
+    marginBottom: -30,
   },
-  topBannerBold: {
-    backgroundColor: theme.PRIMARY_COLOR,
-    height: 165,
-    width: 165,
-    borderRadius: 100,
-    marginRight: 68,
-    marginTop: 28,
+  appLogo: {
+    resizeMode: 'contain',
+    height: 100,
+    width: 100,
+    tintColor: theme.PRIMARY_COLOR,
+    alignSelf: 'center',
   },
-  bottomBannerContainer: {
-    position: 'absolute',
-    backgroundColor: theme.PRIMARY_COLOR_MONO + '99',
-    opacity: 5,
-    bottom: -20,
-    height: 190,
-    width: 190,
-    borderRadius: 100,
-    left: -25,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  bottomBannerBold: {
-    backgroundColor: theme.PRIMARY_COLOR,
-    height: 165,
-    width: 165,
-    borderRadius: 100,
-    marginLeft: 68,
-    marginBottom: 28,
-    // marginLeft: 10,
-  },
+
   signInContainer: {
     marginRight: 'auto',
-    marginTop: 125,
     borderTopRightRadius: theme.CIRCLE_BORDER_RADIUS,
     borderBottomRightRadius: theme.CIRCLE_BORDER_RADIUS,
     overflow: 'hidden',
@@ -89,7 +60,7 @@ const styles = StyleSheet.create({
   },
   levelUp: {
     position: 'absolute',
-    top: 0,
+    top: '15%',
   },
   optionContainer: {
     flexDirection: 'row',

@@ -32,6 +32,11 @@ const VerifyTrans = props => {
 
     const {email, amount, note} = summary;
 
+    if (pin.length < 5) {
+      hasError = true;
+      setPinError(true);
+    }
+
     if (!AuthMail(email.trim())) {
       hasError = true;
     }
@@ -96,23 +101,11 @@ const VerifyTrans = props => {
           return;
         }
 
-        if (statusCode === 400) {
+        if (statusCode !== 200) {
           setNotify(true);
           setNotifyMsg({
             type: 'error',
-            msg: i18n.t('phrases.insufficientFunds'),
-          });
-          setTimeout(() => {
-            setVerify(false);
-          }, 3500);
-          return false;
-        }
-
-        if (statusCode !== 200 && statusCode !== 400) {
-          setNotify(true);
-          setNotifyMsg({
-            type: 'error',
-            msg: i18n.t('phrases.transferFailed'),
+            msg: responseJson.message,
           });
           setTimeout(() => {
             setVerify(false);

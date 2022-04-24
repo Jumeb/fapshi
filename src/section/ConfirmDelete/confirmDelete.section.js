@@ -56,12 +56,12 @@ const ConfirmDelete = props => {
           }, 2500);
         }
 
-        if (statusCode === 403) {
+        if (statusCode !== 200) {
           setNotify(true);
           setNotifyMsg({
-            type: 'success',
+            type: 'error',
             title: 'Unexpected Error',
-            msg: i18n.t('phrases.anErrorOccured'),
+            msg: responseJson.message,
           });
           setTimeout(() => {
             setConfirm(false);

@@ -50,7 +50,7 @@ const Transaction = props => {
     fetchTransfer();
     fetchPayouts();
     fetchTopUps();
-  }, []);
+  }, [topups, transfers, payouts]);
 
   const fetchTopUps = () => {
     let statusCode, responseJson;
@@ -79,7 +79,13 @@ const Transaction = props => {
           setTopups(responseJson);
         }
 
-        if (statusCode === 401) {
+        if (statusCode !== 200) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: responseJson.message,
+          });
         }
       })
       .catch(err => {
@@ -369,7 +375,11 @@ const Transaction = props => {
                 (!tranLoading ? (
                   <RefreshButton
                     i18n={i18n}
-                    info={i18n.t('phrases.noTransfers')}
+                    info={
+                      transfers && transfers.length === 0
+                        ? i18n.t('phrases.noTransfersNow')
+                        : i18n.t('phrases.noTransfers')
+                    }
                     onPress={() => fetchTransfer()}
                   />
                 ) : (
@@ -396,7 +406,11 @@ const Transaction = props => {
                 (!topLoading ? (
                   <RefreshButton
                     i18n={i18n}
-                    info={i18n.t('phrases.noTopups')}
+                    info={
+                      payouts && payouts.length === 0
+                        ? i18n.t('phrases.noTopupsNow')
+                        : i18n.t('phrases.noTopups')
+                    }
                     onPress={() => fetchTopUps()}
                   />
                 ) : (
@@ -423,7 +437,11 @@ const Transaction = props => {
                 (!payLoading ? (
                   <RefreshButton
                     i18n={i18n}
-                    info={i18n.t('phrases.noPayouts')}
+                    info={
+                      payouts && payouts.length === 0
+                        ? i18n.t('phrases.noPayouts')
+                        : i18n.t('phrases.noPayouts')
+                    }
                     onPress={() => fetchPayouts()}
                   />
                 ) : (

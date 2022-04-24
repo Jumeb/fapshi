@@ -3,7 +3,6 @@ import {
   SafeAreaView,
   StatusBar,
   View,
-  Image,
   BackHandler,
   ScrollView,
   TouchableOpacity,
@@ -14,17 +13,10 @@ import {bindActionCreators} from 'redux';
 import Icons from 'react-native-vector-icons/Ionicons';
 
 import styles from './Profile.style';
-import {
-  Button,
-  DataCard,
-  Header,
-  NavBar,
-  Notification,
-  Text,
-} from '../../components';
+import {Button, DataCard, NavBar, Notification, Text} from '../../components';
 import theme from '../../utils/theme';
 import {BASE_URL} from '../../utils';
-import {setUser, signOut} from '../../redux/actions/AuthActions';
+import {setUser, signOut, setAction} from '../../redux/actions/AuthActions';
 import {ChangePassword} from '../../section';
 
 const Profile = props => {
@@ -60,7 +52,8 @@ const Profile = props => {
   const SignOut = () => {
     setSOLoading(true);
     setTimeout(() => {
-      BackHandler.exitApp();
+      props.setAction('signIn');
+      navigation.navigate('Action');
       props.signOut();
     }, 4000);
   };
@@ -132,22 +125,13 @@ const Profile = props => {
           return setEdit(false);
         }
 
-        if (statusCode === 400) {
+        if (statusCode !== 200) {
           setNotify(true);
           setNotifyMsg({
             type: 'error',
-            msg: i18n.t('phrases.inValidEmailOrPassword'),
+            title: 'Unexpected Error',
+            msg: responseJson.message,
           });
-          return false;
-        }
-
-        if (statusCode === 500) {
-          setNotify(true);
-          setNotifyMsg({
-            type: 'error',
-            msg: i18n.t('phrases.unexpectedError'),
-          });
-          return false;
         }
       })
       .catch(err => {
@@ -297,7 +281,7 @@ const mapStateToProps = ({i18n, auth}) => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({setUser, signOut}, dispatch);
+  return bindActionCreators({setUser, signOut, setAction}, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

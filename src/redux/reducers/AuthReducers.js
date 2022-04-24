@@ -39,10 +39,11 @@ const AuthReducer = (state = INITIAL_STATE, action) => {
       return {...state, firstTime: false};
     case SIGNOUT:
       Storage.storeInfo('isFirstTime', {value: true});
-      // Storage.remove({key: 'isNotFirstTime'});
       Storage.remove({key: 'USER'});
       Storage.remove({key: 'TOKEN'});
       Storage.remove({key: 'HasPin'});
+      // Storage.remove({key: 'TRANSFERS'});
+      // Storage.remove({key: 'PAYOUTS'});
       return {
         ...state,
         user: {},

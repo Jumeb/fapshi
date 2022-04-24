@@ -24,10 +24,9 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     marginLeft: 8,
-    fontSize: theme.FONT_SIZE_SMALL + 1,
     color: theme.DARK_GREY,
     letterSpacing: 0.3,
-    fontWeight: theme.FONT_WEIGHT_NORMAL_,
+    fontWeight: theme.FONT_WEIGHT_BOLD,
   },
   functionContainer: {
     flexDirection: 'row',
@@ -38,7 +37,8 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
   },
   functionTitle: {
-    fontSize: theme.FONT_SIZE_SMALL - 0.5,
+    fontSize: theme.FONT_SIZE_SMALL,
+    color: theme.DARK_GREY,
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
   },
 });

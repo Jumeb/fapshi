@@ -35,7 +35,7 @@ const Notifications = props => {
 
   useEffect(() => {
     fetchNotifications();
-  }, []);
+  }, [confirm, i18n]);
 
   const fetchNotifications = () => {
     let statusCode, responseJson;
@@ -64,7 +64,13 @@ const Notifications = props => {
           setNotifs(responseJson);
         }
 
-        if (statusCode === 401) {
+        if (statusCode !== 200) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: responseJson.message,
+          });
         }
       })
       .catch(err => {

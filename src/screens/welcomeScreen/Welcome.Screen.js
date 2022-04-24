@@ -16,41 +16,17 @@ const Welcome = props => {
 
   useEffect(() => {
     setTimeout(() => {
-      moveInBanners();
       increaseOpacity();
+      slideWelcome();
     }, 300);
-    // return () => {
-    //     cleanup
-    // };
   }, []);
 
-  const moveInBanners = () => {
-    Animated.timing(topBB, {
-      toValue: 0,
-      duration: 800,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(topBC, {
-      toValue: -60,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
+  const slideWelcome = () => {
     Animated.timing(wlc, {
       toValue: 0,
       duration: 500,
       useNativeDriver: true,
     }).start();
-
-    // Animated.timing(bottomBB, {
-    //   toValue: 0,
-    //   duration: 800,
-    //   useNativeDriver: true,
-    // }).start();
-    // Animated.timing(bottomBC, {
-    //   toValue: 70,
-    //   duration: 500,
-    //   useNativeDriver: true,
-    // }).start();
   };
 
   const increaseOpacity = () => {
@@ -61,12 +37,6 @@ const Welcome = props => {
     }).start();
   };
 
-  const animatedTopBB = {
-    transform: [{translateY: topBB}, {translateX: topBB}],
-  };
-  const animatedTopBC = {
-    transform: [{translateY: topBC}],
-  };
   const animatedOpacity = {
     opacity: opacity,
     transform: [{scale: opacity}],
@@ -93,9 +63,6 @@ const Welcome = props => {
           translucent={true}
           backgroundColor={'transparent'}
         />
-        <Animated.View style={[styles.topBannerContainer, animatedTopBC]}>
-          <Animated.View style={[styles.topBannerBold, animatedTopBB]} />
-        </Animated.View>
         <View style={styles.welcomeContainer}>
           <Animated.View style={[styles.logoContainer, animatedOpacity]}>
             <Image

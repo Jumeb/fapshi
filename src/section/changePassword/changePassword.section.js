@@ -106,12 +106,12 @@ const ChangePassword = props => {
           }, 2500);
         }
 
-        if (statusCode === 401) {
+        if (statusCode !== 200) {
           setNotify(true);
           setNotifyMsg({
             type: 'error',
             title: 'Unexpected Error',
-            msg: i18n.t('phrases.authenticationError'),
+            msg: responseJson.message,
           });
           setTimeout(() => {
             setConfigurePassword(false);

@@ -91,12 +91,12 @@ const ConfirmEmail = props => {
           }, 2500);
         }
 
-        if (statusCode === 403) {
+        if (statusCode !== 200) {
           setNotify(true);
           setNotifyMsg({
             type: 'success',
             title: 'Unexpected Error',
-            msg: i18n.t('phrases.unexpectedError'),
+            msg: responseJson.message,
           });
           setTimeout(() => {
             setConfirm(false);

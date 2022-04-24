@@ -58,7 +58,7 @@ export default {
     add: 'Ajouter',
     submit: 'Soumettre',
     enter: 'Entrer',
-    payout: 'Payout',
+    payout: 'Paiement',
     hello: 'Bonjour',
     pin: 'Pin',
     successful: 'Succès de',
@@ -179,7 +179,7 @@ export default {
     deletedNotification: 'La notification a été supprimée avec succès.',
     noNotifications: "Désolé, nous n'avons pas pu trouver de notification.",
     noPayouts: "Désolé, nous n'avons pu trouver aucun paiement.",
-    noTopUps: "Désolé, nous n'avons pas pu trouver de recharges.",
+    noTopups: "Désolé, nous n'avons pas pu trouver de recharges.",
     noTransfers: "Désolé, nous n'avons pas pu trouver de transferts.",
   },
 };

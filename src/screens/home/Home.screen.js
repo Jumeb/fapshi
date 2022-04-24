@@ -89,7 +89,13 @@ const Home = props => {
           setTopups(responseJson);
         }
 
-        if (statusCode === 401) {
+        if (statusCode !== 200) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: responseJson.message,
+          });
         }
       })
       .catch(err => {
@@ -132,7 +138,13 @@ const Home = props => {
           setPayouts(responseJson);
         }
 
-        if (statusCode === 401) {
+        if (statusCode !== 200) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: responseJson.message,
+          });
         }
       })
       .catch(err => {
@@ -179,7 +191,8 @@ const Home = props => {
           setNotify(true);
           setNotifyMsg({
             type: 'error',
-            msg: i18n.t('phrases.anErrorOccured'),
+            title: 'Unexpected Error',
+            msg: responseJson.message,
           });
         }
       })
@@ -222,7 +235,13 @@ const Home = props => {
           setBalance(responseJson.balance);
         }
 
-        if (statusCode === 401) {
+        if (statusCode !== 200) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: responseJson.message,
+          });
         }
       })
       .catch(err => {
@@ -262,7 +281,7 @@ const Home = props => {
           return;
         }
 
-        if (statusCode === 401) {
+        if (statusCode !== 200) {
           setValidity(true);
           setTimeout(() => {
             setNotifyMsg({
@@ -395,7 +414,7 @@ const Home = props => {
             onPress={() => setActiveIndex(3)}
           /> */}
           </ScrollView>
-          <View style={styles.detailsContainer}>
+          {/* <View style={styles.detailsContainer}>
             {!tranLoading && !balLoading && !payLoading && (
               <View style={styles.circleTheme} />
             )}
@@ -494,7 +513,7 @@ const Home = props => {
                   data={transfer}
                 />
               ))}
-          </View>
+          </View> */}
         </ScrollView>
       )}
       <SetPin configurePin={configurePin} setConfigurePin={setConfigurePin} />

@@ -112,11 +112,11 @@ const VerifyPayout = props => {
           return;
         }
 
-        if (statusCode === 400) {
+        if (statusCode !== 200) {
           setNotify(true);
           setNotifyMsg({
             type: 'error',
-            msg: i18n.t('phrases.insufficientFunds'),
+            msg: responseJson.message,
           });
           setTimeout(() => {
             setVerify(false);

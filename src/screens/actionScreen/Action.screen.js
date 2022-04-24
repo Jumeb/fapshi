@@ -5,6 +5,7 @@ import {
   Animated,
   Linking,
   View,
+  Image,
   TouchableOpacity,
 } from 'react-native';
 import {connect} from 'react-redux';
@@ -18,21 +19,8 @@ import {ConfirmEmail} from '../../section';
 
 const ActionS = props => {
   const {i18n, modal, navigation} = props;
-  const [topBBIni] = useState(new Animated.Value(-130));
-  const [topBB] = useState(new Animated.Value(-130));
-  const [topBBSU] = useState(new Animated.Value(120));
-  const [topBCIni] = useState(new Animated.Value(-200));
-  const [topBC] = useState(new Animated.Value(-200));
-  const [topBCSU] = useState(new Animated.Value(200));
-  const [opacity] = useState(new Animated.Value(0));
   const [signIn] = useState(new Animated.Value(-350));
   const [signUp] = useState(new Animated.Value(300));
-  const [bottomBBIni] = useState(new Animated.Value(70));
-  const [bottomBB] = useState(new Animated.Value(70));
-  const [bottomBBSU] = useState(new Animated.Value(-70));
-  const [bottomBCIni] = useState(new Animated.Value(200));
-  const [bottomBC] = useState(new Animated.Value(200));
-  const [bottomBCSU] = useState(new Animated.Value(-200));
   const [notify, setNotify] = useState(false);
   const [notifyMsg, setNotifyMsg] = useState({
     msg: i18n.t('phrases.errorHandlingInput'),
@@ -47,75 +35,10 @@ const ActionS = props => {
       if (modal === 'signUp') {
         moveInBannersSU();
       }
-      moveInBanners();
-      increaseOpacity();
     }, 300);
   }, [modal]);
 
-  const moveInBanners = () => {
-    Animated.timing(topBBIni, {
-      toValue: 0,
-      duration: 800,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(topBCIni, {
-      toValue: -60,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(bottomBBIni, {
-      toValue: 0,
-      duration: 800,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(bottomBCIni, {
-      toValue: 70,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  };
-
   const moveInBannersSI = () => {
-    Animated.timing(topBB, {
-      toValue: 0,
-      duration: 800,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(topBC, {
-      toValue: -60,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(topBBSU, {
-      toValue: 0,
-      duration: 800,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(topBCSU, {
-      toValue: -60,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(bottomBB, {
-      toValue: 0,
-      duration: 800,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(bottomBC, {
-      toValue: 70,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(bottomBBSU, {
-      toValue: 0,
-      duration: 800,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(bottomBCSU, {
-      toValue: 70,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
     Animated.timing(signIn, {
       toValue: 0,
       duration: 800,
@@ -128,46 +51,6 @@ const ActionS = props => {
     }).start();
   };
   const moveInBannersSU = () => {
-    Animated.timing(topBB, {
-      toValue: 60,
-      duration: 800,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(topBC, {
-      toValue: -40,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(topBBSU, {
-      toValue: 60,
-      duration: 800,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(topBCSU, {
-      toValue: -40,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(bottomBB, {
-      toValue: -60,
-      duration: 800,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(bottomBC, {
-      toValue: 30,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(bottomBBSU, {
-      toValue: -60,
-      duration: 800,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(bottomBCSU, {
-      toValue: 30,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
     Animated.timing(signIn, {
       toValue: -350,
       duration: 800,
@@ -180,39 +63,6 @@ const ActionS = props => {
     }).start();
   };
 
-  const increaseOpacity = () => {
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration: 900,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const animatedTopBB = {
-    transform: [
-      {translateY: topBBIni},
-      modal === 'signIn' ? {translateX: topBB} : {translateX: topBBSU},
-    ],
-  };
-  const animatedTopBC = {
-    transform: [
-      {translateY: topBCIni},
-      modal === 'signIn' ? {translateX: topBC} : {translateX: topBCSU},
-    ],
-  };
-  const animatedBottomBB = {
-    transform: [
-      {translateY: bottomBBIni},
-      modal === 'signIn' ? {translateX: bottomBB} : {translateX: bottomBBSU},
-    ],
-  };
-  const animatedBottomBC = {
-    transform: [
-      {translateY: bottomBCIni},
-      modal === 'signIn' ? {translateX: bottomBC} : {translateX: bottomBCSU},
-    ],
-  };
-
   const animatedSignIn = {
     transform: [{translateX: signIn}],
   };
@@ -222,12 +72,16 @@ const ActionS = props => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <Animated.View style={[styles.topBannerContainer, animatedTopBC]}>
-        <Animated.View style={[styles.topBannerBold, animatedTopBB]} />
-      </Animated.View>
       <ScrollView
         style={styles.scrollContainer}
-        keyboardShouldPersistTaps={'always'}>
+        keyboardShouldPersistTaps={'always'}
+        contentContainerStyle={styles.contentContainer}>
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('../../utils/images/logo-full.png')}
+            style={styles.appLogo}
+          />
+        </View>
         <Animated.View style={animatedSignUp}>
           <SignUp
             i18n={i18n}
@@ -249,9 +103,6 @@ const ActionS = props => {
           />
         </Animated.View>
       </ScrollView>
-      <Animated.View style={[styles.bottomBannerContainer, animatedBottomBC]}>
-        <Animated.View style={[styles.bottomBannerBold, animatedBottomBB]} />
-      </Animated.View>
       <Notification notify={notify} setNotify={setNotify} info={notifyMsg} />
     </SafeAreaView>
   );
@@ -349,11 +200,11 @@ const SignIn = props => {
           return navigation.navigate('Main Stack');
         }
 
-        if (statusCode === 400) {
+        if (statusCode !== 200) {
           setNotify(true);
           setNotifyMsg({
             type: 'error',
-            msg: i18n.t('phrases.inValidEmailOrPassword'),
+            msg: responseJson.message,
           });
           return false;
         }
@@ -551,14 +402,11 @@ const SignUp = props => {
           setConfirm(true);
         }
 
-        if (statusCode === 400) {
+        if (statusCode !== 201) {
           setNotify(true);
           setNotifyMsg({
             type: 'error',
-            msg:
-              responseJson.message.toLowerCase() === 'email already exist'
-                ? i18n.t('phrases.emailAlreadyExist')
-                : i18n.t('phrases.userNameTaken'),
+            msg: responseJson.message,
           });
           return false;
         }

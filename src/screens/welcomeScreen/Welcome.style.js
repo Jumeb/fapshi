@@ -14,9 +14,7 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     justifyContent: 'center',
-    marginBottom: 60,
-    marginTop: -30,
-    // marginBottom: -80,
+    marginBottom: -30,
   },
   appLogo: {
     resizeMode: 'contain',
@@ -25,26 +23,7 @@ const styles = StyleSheet.create({
     tintColor: theme.PRIMARY_COLOR,
     alignSelf: 'center',
   },
-  topBannerContainer: {
-    position: 'relative',
-    backgroundColor: theme.PRIMARY_COLOR_MONO,
-    opacity: 5,
-    height: 190,
-    width: 190,
-    borderRadius: 100,
-    left: 25,
-    marginLeft: 'auto',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  topBannerBold: {
-    backgroundColor: theme.PRIMARY_COLOR,
-    height: 165,
-    width: 165,
-    borderRadius: 100,
-    marginRight: 68,
-    marginTop: 28,
-  },
+
   actionContainer: {
     paddingHorizontal: 14,
     paddingVertical: 35,
@@ -55,7 +34,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.6,
     shadowOffset: {width: 0, height: 2},
     elevation: 3,
-    // marginTop: 10,
   },
   actionTitle: {
     color: theme.WHITE_COLOR,

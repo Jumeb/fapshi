@@ -73,6 +73,7 @@ export default {
     charges: 'Charges',
     code: 'Code',
     pop: 'Pop',
+    // New
   },
   phrases: {
     signUp: 'Sign Up',
@@ -180,7 +181,12 @@ export default {
     deletedNotification: 'Deleted notification successfully.',
     noNotifications: 'Sorry, we could not find any notification.',
     noPayouts: 'Sorry, we could not find any payouts.',
-    noTopUps: 'Sorry, we could not find any topups.',
+    noTopups: 'Sorry, we could not find any topups.',
     noTransfers: 'Sorry, we could not find any transfers.',
+    // New
+    noNotificationsNow: 'You do not have any notification.',
+    noPayoutsNow: 'You do not have any payouts.',
+    noTopupsNow: 'You do not have any topups.',
+    noTransfersNow: 'You do not have any transfers.',
   },
 };
