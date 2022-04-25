@@ -6,6 +6,7 @@ import {
   Linking,
   View,
   Image,
+  StatusBar,
   TouchableOpacity,
 } from 'react-native';
 import {connect} from 'react-redux';
@@ -16,6 +17,7 @@ import styles from './Action.style';
 import {setAction, setUser, setToken} from '../../redux/actions/AuthActions';
 import {AuthMail, BASE_URL, PasswordAuth} from '../../utils';
 import {ConfirmEmail} from '../../section';
+import theme from '../../utils/theme';
 
 const ActionS = props => {
   const {i18n, modal, navigation} = props;
@@ -72,6 +74,7 @@ const ActionS = props => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
+      <StatusBar backgroundColor={theme.PRIMARY_COLOR} />
       <ScrollView
         style={styles.scrollContainer}
         keyboardShouldPersistTaps={'always'}

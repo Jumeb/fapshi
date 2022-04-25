@@ -7,6 +7,7 @@ import AddTransfer from './AddTransfer/addTransfer.section';
 import ConfirmNumber from './ConfirmNumber/confirmNumber.section';
 import ConfirmEmail from './ConfirmEmail/confirmEmail.section';
 import ConfirmDelete from './ConfirmDelete/confirmDelete.section';
+import Details from './detail/Detail.section';
 
 export {
   VerifyTrans,
@@ -18,4 +19,5 @@ export {
   ConfirmNumber,
   ConfirmEmail,
   ConfirmDelete,
+  Details,
 };

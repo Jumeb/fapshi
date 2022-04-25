@@ -125,6 +125,13 @@ const Notifications = props => {
                 last={index + 1 === notifs.length ? true : false}
               />
             ))
+          ) : notifs && notifs.length === 0 ? (
+            <RefreshButton
+              i18n={i18n}
+              center={true}
+              onPress={() => Refresh()}
+              info={i18n.t('phrases.noNotificationsNow')}
+            />
           ) : (
             <RefreshButton
               i18n={i18n}
@@ -133,19 +140,6 @@ const Notifications = props => {
               info={i18n.t('phrases.noNotifications')}
             />
           )}
-          {/* <NotifcationCard i18n={i18n} receive={true} index={1} />
-        <NotifcationCard i18n={i18n} sent={true} index={2} />
-        <NotifcationCard i18n={i18n} sent={true} index={3} />
-        <NotifcationCard i18n={i18n} pending={true} index={4} />
-        <NotifcationCard i18n={i18n} pay={true} index={5} />
-        <NotifcationCard i18n={i18n} pending={true} index={6} />
-        <NotifcationCard i18n={i18n} pending={true} index={7} />
-        <NotifcationCard i18n={i18n} pay={true} index={8} />
-        <NotifcationCard i18n={i18n} pay={true} index={9} />
-        <NotifcationCard i18n={i18n} sent={true} index={10} />
-        <NotifcationCard i18n={i18n} sent={true} index={11} />
-        <NotifcationCard i18n={i18n} receive={true} index={12} />
-        <NotifcationCard i18n={i18n} receive={true} last={true} index={13} /> */}
           <ConfirmDelete
             confirm={confirm}
             setConfirm={setConfirm}

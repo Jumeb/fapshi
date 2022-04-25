@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   SafeAreaView,
@@ -9,6 +9,13 @@ import {
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import Icons from 'react-native-vector-icons/Ionicons';
+import {
+  Table,
+  Row,
+  Rows,
+  TableWrapper,
+  Cell,
+} from 'react-native-table-component';
 
 import styles from './transfer.style';
 import {
@@ -18,16 +25,17 @@ import {
   NavBar,
   Notification,
   RecentsCard,
+  RefreshButton,
   SquareInput,
   Text,
 } from '../../components';
 import theme from '../../utils/theme';
-import {AddTransfer, VerifyTrans} from '../../section';
-import {AuthMail, AuthNumber} from '../../utils';
+import {AddTransfer, Details, VerifyTrans} from '../../section';
+import {AuthMail, AuthNumber, BASE_URL} from '../../utils';
 import {removeTransfer} from '../../redux/actions/ContactActions';
 
 const Transfer = props => {
-  const {i18n, navigation, transfers} = props;
+  const {i18n, navigation, transfersContacts, token} = props;
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [amount, setAmount] = useState('');
@@ -44,6 +52,19 @@ const Transfer = props => {
     msg: i18n.t('phrases.errorHandlingInput'),
     type: 'danger',
   });
+  const [details, setDetails] = useState(false);
+  const [detail, setDetail] = useState({});
+  const [view, setView] = useState(false);
+  const [tranLoading, setTransLoading] = useState(false);
+  const [transfers, setTransfers] = useState([]);
+  const [tableTransfer, setTableTransfer] = useState({
+    tableHead: [],
+    tableData: [],
+  });
+
+  useEffect(() => {
+    fetchTransfer();
+  }, []);
 
   const ShowSummary = () => {
     let hasError = false;
@@ -83,6 +104,76 @@ const Transfer = props => {
 
   const SetTransfer = info => {
     setEmail(info.email);
+  };
+
+  const fetchTransfer = () => {
+    let statusCode, responseJson;
+    setTransLoading(true);
+    console.log(1234589899);
+
+    fetch(`${BASE_URL}/transfer`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+        Host: 'api.fapshi.com',
+      },
+    })
+      .then(res => {
+        statusCode = res.status;
+        responseJson = res.json();
+        return Promise.all([statusCode, responseJson]);
+      })
+      .then(res => {
+        setTransLoading(false);
+        statusCode = res[0];
+        responseJson = res[1];
+
+        if (statusCode === 200) {
+          setTransfers(responseJson);
+          console.log(res);
+          const tableData = responseJson.map(function (transfer) {
+            return [
+              transfer.senderName.substring(0, 20),
+              transfer.amount,
+              transfer.type.substring(0, 20),
+              transfer.transferId.substring(0, 20),
+              transfer.note.substring(0, 50),
+            ];
+          });
+          setTableTransfer({
+            tableHead: [
+              i18n.t('words.name'),
+              i18n.t('words.amount'),
+              i18n.t('words.type'),
+              i18n.t('phrases.transferId'),
+              i18n.t('words.more'),
+            ],
+            tableData: tableData,
+          });
+        }
+
+        if (statusCode !== 200) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            msg: responseJson.message,
+          });
+          return false;
+        }
+      })
+      .catch(err => {
+        if (err) {
+          setTransLoading(false);
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: i18n.t('phrases.pleaseCheckInternet'),
+          });
+        }
+      });
   };
 
   return (
@@ -151,7 +242,7 @@ const Transfer = props => {
           style={styles.horizontalScroll}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
-          {transfers && transfers.length <= 5 && (
+          {transfersContacts && transfersContacts.length <= 5 && (
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => setAdd(true)}
@@ -163,7 +254,7 @@ const Transfer = props => {
             </TouchableOpacity>
           )}
 
-          {transfers.map((transfer, index) => (
+          {transfersContacts.map((transfer, index) => (
             <RecentsCard
               key={index}
               data={transfer}
@@ -171,7 +262,7 @@ const Transfer = props => {
               onPress={() => SetTransfer(transfer)}
             />
           ))}
-          {transfers && transfers.length >= 1 && (
+          {transfersContacts && transfersContacts.length >= 1 && (
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => props.removeTransfer()}
@@ -194,6 +285,61 @@ const Transfer = props => {
             onPress={() => ShowSummary()}
           />
         </View>
+        {view && (
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            {!tranLoading && transfers.length >= 1 ? (
+              <Table style={styles.table}>
+                <Row
+                  data={tableTransfer.tableHead}
+                  style={styles.headerStyle}
+                  textStyle={styles.headerText}
+                />
+                {tableTransfer.tableData.map((rowData, index) => (
+                  <TableWrapper key={index} style={styles.rowData}>
+                    {rowData.map((cellData, cellIndex) => (
+                      <Cell
+                        key={cellIndex}
+                        data={
+                          cellIndex === 4 ? (
+                            <MoreButton
+                              i18n={i18n}
+                              setDetails={setDetails}
+                              setDetail={setDetail}
+                              data={transfers[index]}
+                            />
+                          ) : (
+                            cellData
+                          )
+                        }
+                        textStyle={styles.dataText}
+                      />
+                    ))}
+                  </TableWrapper>
+                ))}
+              </Table>
+            ) : (
+              <RefreshButton
+                i18n={i18n}
+                info={
+                  transfers && transfers.length === 0
+                    ? i18n.t('phrases.noTransfersNow')
+                    : i18n.t('phrases.noTransfers')
+                }
+                onPress={() => fetchTransfer()}
+              />
+            )}
+          </ScrollView>
+        )}
+        <View style={styles.buttonContainer2}>
+          <Button
+            title={
+              view
+                ? i18n.t('phrases.closeTransfers')
+                : i18n.t('phrases.viewTransfers')
+            }
+            onPress={() => setView(!view)}
+          />
+        </View>
       </ScrollView>
       <VerifyTrans
         verify={verify}
@@ -203,14 +349,16 @@ const Transfer = props => {
       />
       <AddTransfer add={add} setAdd={setAdd} i18n={i18n} />
       <Notification notify={notify} setNotify={setNotify} info={notifyMsg} />
+      <Details details={details} setDetails={setDetails} data={detail} />
     </SafeAreaView>
   );
 };
 
-const mapStateToProps = ({i18n, contacts}) => {
+const mapStateToProps = ({i18n, contacts, auth}) => {
   return {
     i18n: i18n.i18n,
-    transfers: contacts.transfers,
+    token: auth.token,
+    transfersContacts: contacts.transfers,
   };
 };
 
@@ -219,3 +367,18 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Transfer);
+
+const MoreButton = ({i18n, data, setDetail, setDetails}) => {
+  const OpenDetail = () => {
+    setDetail(data);
+    setDetails(true);
+  };
+  return (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      style={styles.signOutButton}
+      onPress={() => OpenDetail()}>
+      <Text style={styles.signOutButtonText}>{i18n.t('words.more')}</Text>
+    </TouchableOpacity>
+  );
+};

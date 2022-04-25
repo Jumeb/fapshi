@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   actContainer: {
     paddingHorizontal: theme.PAD_HR + 6,
     paddingVertical: 20,
-    marginTop: 50,
+    marginTop: 70,
     marginBottom: 60,
     backgroundColor: theme.WHITE_COLOR,
     shadowOffset: {width: 0, height: 2},
@@ -32,9 +32,13 @@ const styles = StyleSheet.create({
     color: theme.DARK_ACCENT,
     fontSize: theme.FONT_SIZE_EXTRA_LARGE + 2,
     fontWeight: theme.FONT_WEIGHT_BOLD,
-    marginBottom: 35,
+    marginBottom: 15,
   },
   logoContainer: {
+    position: 'absolute',
+    top: 10,
+    left: 0,
+    right: 0,
     justifyContent: 'center',
     marginBottom: -30,
   },
@@ -53,6 +57,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   signUpContainer: {
+    marginTop: 95,
     marginLeft: 'auto',
     borderTopLeftRadius: theme.CIRCLE_BORDER_RADIUS,
     borderBottomLeftRadius: theme.CIRCLE_BORDER_RADIUS,

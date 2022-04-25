@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Image, TouchableOpacity} from 'react-native';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -7,38 +7,66 @@ import Icons from 'react-native-vector-icons/Ionicons';
 import styles from './fapCard.styles';
 import {Text} from '..';
 import theme from '../../utils/theme';
-import {KSeparator} from '../../utils';
+import {BASE_URL, Hyphenator, KSeparator} from '../../utils';
 
 const FapCard = props => {
-  const {navigation, user, i18n, setPin, balance, loading, hasPin} = props;
+  const {navigation, user, i18n, setPin, hasPin, token} = props;
+
+  const [loading, setLoading] = useState(false);
+
+  const [balance, setBalance] = useState(0);
+
+  useEffect(() => {
+    let statusCode, responseJson;
+    setLoading(true);
+
+    fetch(`${BASE_URL}/getbalance`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+        Host: 'api.fapshi.com',
+      },
+    })
+      .then(res => {
+        statusCode = res.status;
+        responseJson = res.json();
+        return Promise.all([statusCode, responseJson]);
+      })
+      .then(res => {
+        setLoading(false);
+        statusCode = res[0];
+        responseJson = res[1];
+        if (statusCode === 200) {
+          setBalance(responseJson.balance);
+        }
+
+        if (statusCode === 401) {
+        }
+      })
+      .catch(err => {
+        if (err) {
+          setLoading(false);
+        }
+      });
+  }, [balance, token]);
 
   return (
     <View style={styles.mainContainer}>
-      <Image
-        source={require('../../utils/images/logo-full.png')}
-        style={styles.cardLogo}
-        imageStyle={styles.cardLogo}
-      />
       <View style={styles.cardDetailsContainer}>
         <View style={styles.cardDetails}>
-          <Text style={styles.cardCurrency}>XAF</Text>
           <Text style={styles.cardAmount}>
             {loading ? '-----' : KSeparator(balance || 0)}
           </Text>
+          <Text style={styles.cardCurrency}>XAF</Text>
         </View>
-        <View style={styles.cardIdContainer}>
-          <Text style={styles.cardId}>+237 </Text>
-          <Text style={styles.cardIdHidden}> * ****</Text>
-          <Text style={styles.cardId}>
-            {user && user?.phone && user?.phone.substr(5)}
-          </Text>
-        </View>
+        <Text style={styles.cardBalanceText}>FAPSHI Balance</Text>
         <View style={styles.pinContainer}>
           <View style={styles.expireContainer}>
             <Text style={styles.expiresText}>{user?.username}</Text>
             <Text style={styles.expiresText}>
-              {user && user?.email && user?.email.substr(0, 5)} ---------{' '}
-              {user && user?.email && user?.email.substr(15)}
+              {user && user?.email && user?.email}
             </Text>
           </View>
           {!hasPin && (
@@ -51,7 +79,6 @@ const FapCard = props => {
           )}
         </View>
       </View>
-      <View style={styles.circleTheme} />
     </View>
   );
 };
@@ -59,6 +86,7 @@ const FapCard = props => {
 const mapStateToProps = ({auth, i18n}) => {
   return {
     user: auth.user,
+    token: auth.token,
     i18n: i18n.i18n,
     hasPin: auth.hasPin,
   };

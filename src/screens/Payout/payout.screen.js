@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   SafeAreaView,
@@ -9,6 +9,13 @@ import {
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import Icons from 'react-native-vector-icons/Ionicons';
+import {
+  Table,
+  Row,
+  Rows,
+  TableWrapper,
+  Cell,
+} from 'react-native-table-component';
 
 import styles from './payout.style';
 import {
@@ -19,16 +26,24 @@ import {
   Notification,
   Operator,
   RecentsCard,
+  RefreshButton,
   SquareInput,
   Text,
 } from '../../components';
 import theme from '../../utils/theme';
-import {AddPayout, VerifyPayout} from '../../section';
-import {AuthMTN, AuthNumber, AuthOrange} from '../../utils';
+import {AddPayout, Details, VerifyPayout} from '../../section';
+import {
+  AuthMTN,
+  AuthNumber,
+  AuthOrange,
+  BASE_URL,
+  Hyphenator,
+  KSeparator,
+} from '../../utils';
 import {removePayout} from '../../redux/actions/ContactActions';
 
 const Payout = props => {
-  const {i18n, navigation, payouts} = props;
+  const {i18n, navigation, payoutsContacts, token} = props;
   const [amount, setAmount] = useState('');
   const [amountError, setAmountError] = useState(false);
   const [tel, setTel] = useState('');
@@ -42,6 +57,15 @@ const Payout = props => {
     msg: i18n.t('phrases.errorHandlingInput'),
     type: 'danger',
   });
+  const [payLoading, setPayLoading] = useState(false);
+  const [payouts, setPayouts] = useState([]);
+  const [tablePayout, setTablePayout] = useState({
+    tableHead: [],
+    tableData: [],
+  });
+  const [details, setDetails] = useState(false);
+  const [detail, setDetail] = useState({});
+  const [view, setView] = useState(false);
 
   const ShowSummary = () => {
     let hasError = false;
@@ -93,6 +117,78 @@ const Payout = props => {
     });
     setNotify(true);
     return;
+  };
+
+  useEffect(() => {
+    fetchPayouts();
+  }, []);
+
+  const fetchPayouts = () => {
+    let statusCode, responseJson;
+    setPayLoading(true);
+
+    fetch(`${BASE_URL}/cashout`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+        Host: 'api.fapshi.com',
+      },
+    })
+      .then(res => {
+        statusCode = res.status;
+        responseJson = res.json();
+        return Promise.all([statusCode, responseJson]);
+      })
+      .then(res => {
+        setPayLoading(false);
+        statusCode = res[0];
+        responseJson = res[1];
+
+        if (statusCode === 200) {
+          setPayouts(responseJson);
+          const tableData = responseJson.map(function (payout) {
+            return [
+              Hyphenator(payout.depositNumber),
+              KSeparator(payout.amount),
+              KSeparator(payout.charges),
+              payout.transferId,
+              payout.status,
+            ];
+          });
+          setTablePayout({
+            tableHead: [
+              i18n.t('words.number'),
+              i18n.t('words.amount'),
+              i18n.t('words.charges'),
+              i18n.t('phrases.transferId'),
+              i18n.t('words.more'),
+            ],
+            tableData: tableData,
+          });
+        }
+
+        if (statusCode !== 200) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            msg: responseJson.message,
+          });
+          return false;
+        }
+      })
+      .catch(err => {
+        if (err) {
+          setPayLoading(false);
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: i18n.t('phrases.pleaseCheckInternet'),
+          });
+        }
+      });
   };
 
   const SetPayout = info => {
@@ -177,7 +273,7 @@ const Payout = props => {
           style={styles.horizontalScroll}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
-          {payouts && payouts.length <= 5 && (
+          {payoutsContacts && payoutsContacts.length <= 5 && (
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => setAdd(true)}
@@ -188,7 +284,7 @@ const Payout = props => {
               <Text style={styles.addName}>{i18n.t('words.add')}</Text>
             </TouchableOpacity>
           )}
-          {payouts.map((payout, index) => (
+          {payoutsContacts.map((payout, index) => (
             <RecentsCard
               key={index}
               data={payout}
@@ -196,7 +292,7 @@ const Payout = props => {
               onPress={() => SetPayout(payout)}
             />
           ))}
-          {payouts && payouts.length >= 1 && (
+          {payoutsContacts && payoutsContacts.length >= 1 && (
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => props.removePayout()}
@@ -219,6 +315,61 @@ const Payout = props => {
             onPress={() => ShowSummary()}
           />
         </View>
+        {view && (
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            {!payLoading && payouts.length >= 1 ? (
+              <Table style={styles.table}>
+                <Row
+                  data={tablePayout.tableHead}
+                  style={styles.headerStyle}
+                  textStyle={styles.headerText}
+                />
+                {tablePayout.tableData.map((rowData, index) => (
+                  <TableWrapper key={index} style={styles.rowData}>
+                    {rowData.map((cellData, cellIndex) => (
+                      <Cell
+                        key={cellIndex}
+                        data={
+                          cellIndex === 4 ? (
+                            <MoreButton
+                              i18n={i18n}
+                              setDetails={setDetails}
+                              setDetail={setDetail}
+                              data={payouts[index]}
+                            />
+                          ) : (
+                            cellData
+                          )
+                        }
+                        textStyle={styles.dataText}
+                      />
+                    ))}
+                  </TableWrapper>
+                ))}
+              </Table>
+            ) : (
+              <RefreshButton
+                i18n={i18n}
+                info={
+                  payouts && payouts.length === 0
+                    ? i18n.t('phrases.noPayouts')
+                    : i18n.t('phrases.noPayouts')
+                }
+                onPress={() => fetchPayouts()}
+              />
+            )}
+          </ScrollView>
+        )}
+        <View style={styles.buttonContainer2}>
+          <Button
+            title={
+              view
+                ? i18n.t('phrases.closeTopups')
+                : i18n.t('phrases.viewTopups')
+            }
+            onPress={() => setView(!view)}
+          />
+        </View>
       </ScrollView>
       <VerifyPayout
         verify={verify}
@@ -229,14 +380,16 @@ const Payout = props => {
       />
       <Notification notify={notify} setNotify={setNotify} info={notifyMsg} />
       <AddPayout add={add} setAdd={setAdd} i18n={i18n} />
+      <Details details={details} setDetails={setDetails} data={detail} />
     </SafeAreaView>
   );
 };
 
-const mapStateToProps = ({i18n, contacts}) => {
+const mapStateToProps = ({i18n, contacts, auth}) => {
   return {
     i18n: i18n.i18n,
-    payouts: contacts.payouts,
+    token: auth.token,
+    payoutsContacts: contacts.payouts,
   };
 };
 
@@ -245,3 +398,18 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Payout);
+
+const MoreButton = ({i18n, data, setDetail, setDetails}) => {
+  const OpenDetail = () => {
+    setDetail(data);
+    setDetails(true);
+  };
+  return (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      style={styles.signOutButton}
+      onPress={() => OpenDetail()}>
+      <Text style={styles.signOutButtonText}>{i18n.t('words.more')}</Text>
+    </TouchableOpacity>
+  );
+};

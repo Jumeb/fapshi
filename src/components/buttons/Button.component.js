@@ -23,7 +23,6 @@ const Button = props => {
           {title}
         </Text>
       )}
-      <View style={invert ? styles.circleThemeI : styles.circleTheme} />
     </TouchableOpacity>
   );
 };

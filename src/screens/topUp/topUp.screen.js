@@ -11,6 +11,14 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
+import {
+  Table,
+  Row,
+  Rows,
+  TableWrapper,
+  Cell,
+} from 'react-native-table-component';
+
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import Icons from 'react-native-vector-icons/Ionicons';
@@ -23,6 +31,7 @@ import {
   SquareInput,
   Text,
   Divider,
+  RefreshButton,
 } from '../../components';
 import theme from '../../utils/theme';
 import {
@@ -33,7 +42,7 @@ import {
   Hyphenator,
   KSeparator,
 } from '../../utils';
-import {ConfirmNumber} from '../../section';
+import {ConfirmNumber, Details} from '../../section';
 
 if (
   Platform.OS === 'android' &&
@@ -44,7 +53,7 @@ if (
 
 const TopUp = props => {
   const {i18n, navigation, token} = props;
-  const [activeOper, setActiveOper] = useState('');
+  const [activeOper, setActiveOper] = useState({oper: 'mtn', open: true});
   const [loading, setLoading] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [notify, setNotify] = useState(false);
@@ -56,6 +65,15 @@ const TopUp = props => {
   const [accs, setAccs] = useState({});
   const [tel, setTel] = useState('');
   const [telError, setTelError] = useState(false);
+  const [topLoading, setTopLoading] = useState(false);
+  const [topups, setTopups] = useState([]);
+  const [tableTopups, setTableTopups] = useState({
+    tableHead: [],
+    tableData: [],
+  });
+  const [details, setDetails] = useState(false);
+  const [detail, setDetail] = useState({});
+  const [view, setView] = useState(false);
 
   const animatedHeight = {
     height: 'auto',
@@ -77,7 +95,81 @@ const TopUp = props => {
 
   useEffect(() => {
     fetchTopupAccs();
-  }, [accs]);
+    fetchTopUps();
+  }, []);
+
+  useEffect(() => {
+    fetchTopupAccs();
+    fetchTopUps();
+  }, []);
+
+  const fetchTopUps = () => {
+    let statusCode, responseJson;
+    setTopLoading(true);
+
+    fetch(`${BASE_URL}/topup`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+        Host: 'api.fapshi.com',
+      },
+    })
+      .then(res => {
+        statusCode = res.status;
+        responseJson = res.json();
+        return Promise.all([statusCode, responseJson]);
+      })
+      .then(res => {
+        setTopLoading(false);
+        statusCode = res[0];
+        responseJson = res[1];
+
+        if (statusCode === 200) {
+          setTopups(responseJson);
+          const data = responseJson.map(function (topup) {
+            return [
+              Hyphenator(topup.phone),
+              KSeparator(topup.amount),
+              KSeparator(topup.charges),
+              topup.transferId,
+              topup.status,
+            ];
+          });
+          setTableTopups({
+            tableHead: [
+              i18n.t('words.number'),
+              i18n.t('words.amount'),
+              i18n.t('words.charges'),
+              i18n.t('phrases.transferId'),
+              i18n.t('words.more'),
+            ],
+            tableData: data,
+          });
+        }
+
+        if (statusCode !== 200) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: responseJson.message,
+          });
+        }
+      })
+      .catch(err => {
+        if (err) {
+          setTopLoading(false);
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: i18n.t('phrases.pleaseCheckInternet'),
+          });
+        }
+      });
+  };
 
   const fetchTopupAccs = () => {
     let statusCode, responseJson;
@@ -151,7 +243,7 @@ const TopUp = props => {
 
     let statusCode, responseJson;
 
-    fetch(`${BASE_URL}/topup/${activeOper}`, {
+    fetch(`${BASE_URL}/topup/${activeOper.oper}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -196,14 +288,14 @@ const TopUp = props => {
     let hasError = false;
     setLoading(true);
 
-    if (activeOper.toLowerCase() === 'mtn') {
+    if (activeOper.oper.toLowerCase() === 'mtn') {
       if (!AuthMTN(tel)) {
         hasError = true;
         setTelError(true);
       }
     }
 
-    if (activeOper.toLowerCase() === 'orange') {
+    if (activeOper.oper.toLowerCase() === 'orange') {
       if (!AuthOrange(tel)) {
         hasError = true;
         setTelError(true);
@@ -226,7 +318,7 @@ const TopUp = props => {
 
     let statusCode, responseJson;
 
-    fetch(`${BASE_URL}/addtopup/${activeOper}`, {
+    fetch(`${BASE_URL}/addtopup/${activeOper.oper}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -245,7 +337,6 @@ const TopUp = props => {
         setLoading(false);
         statusCode = res[0];
         responseJson = res[1];
-        console.log(res);
 
         if (statusCode === 200) {
           setConfirm(true);
@@ -289,7 +380,9 @@ const TopUp = props => {
             <TouchableOpacity
               activeOpacity={0.8}
               style={styles.operatorButton}
-              onPress={() => setActiveOper('mtn')}>
+              onPress={() =>
+                setActiveOper({oper: 'mtn', open: !activeOper.open})
+              }>
               <Image
                 source={require('../../utils/images/mtn-2.png')}
                 style={styles.operatorImage}
@@ -303,7 +396,7 @@ const TopUp = props => {
               )}
               <Icons
                 name={
-                  activeOper.toLowerCase() === 'mtn'
+                  activeOper.oper.toLowerCase() === 'mtn' && activeOper.open
                     ? 'ios-chevron-down-outline'
                     : 'ios-chevron-forward-outline'
                 }
@@ -312,11 +405,11 @@ const TopUp = props => {
               />
             </TouchableOpacity>
           </View>
-          {activeOper.toLowerCase() === 'mtn' && (
+          {activeOper.oper.toLowerCase() === 'mtn' && activeOper.open && (
             <View
               style={[
                 styles.loadingContainer,
-                activeOper.toLowerCase() === 'mtn'
+                activeOper.oper.toLowerCase() === 'mtn'
                   ? animatedHeight
                   : hiddenHeight,
               ]}>
@@ -430,7 +523,7 @@ const TopUp = props => {
               )}
               <Icons
                 name={
-                  activeOper.toLowerCase() === 'orange'
+                  activeOper.oper.toLowerCase() === 'orange'
                     ? 'ios-chevron-down-outline'
                     : 'ios-chevron-forward-outline'
                 }
@@ -439,11 +532,11 @@ const TopUp = props => {
               />
             </TouchableOpacity>
           </View> */}
-          {/* {activeOper.toLowerCase() === 'orange' && (
+          {/* {activeOper.oper.toLowerCase() === 'orange' && (
             <View
               style={[
                 styles.loadingContainer,
-                activeOper.toLowerCase() === 'orange'
+                activeOper.oper.toLowerCase() === 'orange'
                   ? animatedHeight
                   : hiddenHeight,
               ]}>
@@ -540,15 +633,73 @@ const TopUp = props => {
               </View>
             </View>
           )} */}
+          {view && (
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              {!topLoading && topups.length >= 1 ? (
+                <Table style={styles.table}>
+                  <Row
+                    data={tableTopups.tableHead}
+                    style={styles.headerStyle}
+                    textStyle={styles.headerText}
+                  />
+                  {tableTopups.tableData.map((rowData, index) => (
+                    <TableWrapper key={index} style={styles.rowData}>
+                      {rowData.map((cellData, cellIndex) => (
+                        <Cell
+                          key={cellIndex}
+                          data={
+                            cellIndex === 4 ? (
+                              <MoreButton
+                                i18n={i18n}
+                                setDetails={setDetails}
+                                setDetail={setDetail}
+                                data={topups[index]}
+                              />
+                            ) : (
+                              cellData
+                            )
+                          }
+                          textStyle={styles.dataText}
+                        />
+                      ))}
+                    </TableWrapper>
+                  ))}
+                </Table>
+              ) : (
+                <RefreshButton
+                  i18n={i18n}
+                  info={
+                    topups && topups.length === 0
+                      ? i18n.t('phrases.noTopupsNow')
+                      : i18n.t('phrases.noTopups')
+                  }
+                  onPress={() => fetchTopUps()}
+                />
+              )}
+            </ScrollView>
+          )}
+          <View style={styles.buttonContainer}>
+            <Button
+              title={
+                view
+                  ? i18n.t('phrases.closeTopups')
+                  : i18n.t('phrases.viewTopups')
+              }
+              onPress={() => setView(!view)}
+            />
+          </View>
         </ScrollView>
       )}
       <ConfirmNumber
         confirm={confirm}
         setConfirm={setConfirm}
         number={tel}
-        oper={activeOper}
+        oper={activeOper.oper}
       />
       <Notification notify={notify} setNotify={setNotify} info={notifyMsg} />
+      <Details details={details} setDetails={setDetails} data={detail} />
     </SafeAreaView>
   );
 };
@@ -566,3 +717,18 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopUp);
+
+const MoreButton = ({i18n, data, setDetail, setDetails}) => {
+  const OpenDetail = () => {
+    setDetail(data);
+    setDetails(true);
+  };
+  return (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      style={styles.signOutButton}
+      onPress={() => OpenDetail()}>
+      <Text style={styles.signOutButtonText}>{i18n.t('words.more')}</Text>
+    </TouchableOpacity>
+  );
+};

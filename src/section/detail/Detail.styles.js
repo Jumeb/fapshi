@@ -3,13 +3,19 @@ import {StyleSheet} from 'react-native';
 import theme from '../../utils/theme';
 
 const styles = StyleSheet.create({
+  modalContainer: {
+    margin: theme.PAD_HR,
+    justifyContent: 'center',
+  },
   mainContainer: {
     justifyContent: 'space-between',
-    paddingVertical: 10,
+    paddingVertical: 15,
     marginVertical: 10,
     marginHorizontal: theme.PAD_HR,
     backgroundColor: theme.WHITE_COLOR,
     zIndex: 999,
+    borderLeftWidth: 2,
+    borderLeftColor: theme.PRIMARY_COLOR,
     paddingHorizontal: 8,
     borderRadius: theme.BORDER_IMAGE,
     shadowOffset: {width: 0, height: 2},
@@ -22,17 +28,15 @@ const styles = StyleSheet.create({
     fontSize: theme.FONT_SIZE_EXTRA_LARGE,
     color: theme.DARK_GREY,
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
-    marginVertical: 5,
+    marginBottom: 5,
   },
   amountContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
   },
   dataContainer: {
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
     paddingHorizontal: 5,
-    borderLeftWidth: 1.8,
-    borderLeftColor: theme.PRIMARY_COLOR,
   },
   amountCurrency: {
     marginRight: 2,
@@ -86,12 +90,13 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     fontSize: theme.FONT_SIZE_EXTRA_SMALL - 1,
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
+    marginVertical: 6,
   },
   status: {
     position: 'absolute',
     color: theme.WHITE_COLOR,
     fontSize: theme.FONT_SIZE_EXTRA_SMALL - 2,
-    top: 10,
+    top: 22,
     right: 10,
     // transform: [{rotateZ: '-20deg'}],
     padding: 2,
@@ -103,6 +108,9 @@ const styles = StyleSheet.create({
   },
   statusSuccess: {
     backgroundColor: theme.GREEN_COLOR,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
   },
 });
 

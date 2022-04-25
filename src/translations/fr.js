@@ -181,5 +181,11 @@ export default {
     noPayouts: "Désolé, nous n'avons pu trouver aucun paiement.",
     noTopups: "Désolé, nous n'avons pas pu trouver de recharges.",
     noTransfers: "Désolé, nous n'avons pas pu trouver de transferts.",
+    // New
+    noNotificationsNow: 'You do not have any notification.',
+    noPayoutsNow: 'You do not have any payouts.',
+    noTopupsNow: 'You do not have any topups.',
+    noTransfersNow: 'You do not have any transfers.',
+    fapshiPayment: 'Paiement Fapshi',
   },
 };

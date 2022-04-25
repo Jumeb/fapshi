@@ -90,12 +90,6 @@ const TabIcon = props => {
       ]}
       onPress={() => navigation.navigate(title)}
       key={element.key}>
-      <View
-        style={[
-          styles.circleTheme,
-          activeTabIndex === index ? {opacity: 0.4} : {opacity: 0},
-        ]}
-      />
       <Icons
         name={icon}
         size={17}

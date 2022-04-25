@@ -216,27 +216,28 @@ const Profile = props => {
           value={address}
           setValue={text => setAddress(text)}
         />
-        {/* <TouchableOpacity
-          style={styles.changePasswordContainer}
-          activeOpacity={0.8}
-          onPress={() => setConfigurePassword(true)}>
-          <Text style={styles.passwordText}>
-            {i18n.t('phrases.changePassword')}
-          </Text>
-          <Icons name={'ios-eye-off'} size={16} color={theme.PRIMARY_COLOR} />
-        </TouchableOpacity> */}
         <View style={styles.buttonContainer}>
-          <Button
-            title={i18n.t('phrases.editProfile')}
-            invert={false}
-            onPress={() => setEdit(!edit)}
-          />
-          <Button
-            title={i18n.t('words.save')}
-            invert={true}
-            loading={loading}
-            onPress={() => Authenticate()}
-          />
+          {!edit ? (
+            <Button
+              title={i18n.t('phrases.editProfile')}
+              invert={false}
+              onPress={() => setEdit(!edit)}
+            />
+          ) : (
+            <View style={styles.buttonContainer}>
+              <Button
+                title={i18n.t('words.cancel')}
+                invert={false}
+                onPress={() => setEdit(false)}
+              />
+              <Button
+                title={i18n.t('words.save')}
+                invert={true}
+                loading={loading}
+                onPress={() => Authenticate()}
+              />
+            </View>
+          )}
         </View>
         <View style={styles.signOutButtonContainer}>
           <TouchableOpacity

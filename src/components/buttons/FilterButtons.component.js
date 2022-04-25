@@ -26,16 +26,13 @@ const Filter = props => {
     ),
   );
 
-  const {title, active, yOffset, onPress} = props;
+  const {title, active, onPress} = props;
   return (
     <TouchableOpacity
       onPress={() => onPress()}
       activeOpacity={0.8}
-      style={[
-        styles.filterContainer,
-        active && {borderBottomColor: theme.PRIMARY_COLOR},
-      ]}>
-      <Text style={[styles.filterText, {color: theme.PRIMARY_COLOR}]}>
+      style={[styles.filterContainer, active && styles.filterContainerActive]}>
+      <Text style={[styles.filterText, active && {color: theme.WHITE_COLOR}]}>
         {title}
       </Text>
     </TouchableOpacity>

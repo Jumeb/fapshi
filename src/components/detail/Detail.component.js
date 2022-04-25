@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import Moment from 'react-moment';
 
 import {Text} from '..';
-import {KSeparator} from '../../utils';
+import {Hyphenator, KSeparator} from '../../utils';
 import theme from '../../utils/theme';
 import styles from './Detail.styles';
 
@@ -14,27 +14,41 @@ const Details = props => {
 
   return (
     <TouchableOpacity activeOpacity={0.8} style={styles.mainContainer}>
-      <View style={styles.amountContainer}>
-        <Text style={styles.amountCurrency}>XAF</Text>
-        <Text style={styles.amountValue}>{KSeparator(data.amount || 0)}</Text>
-      </View>
-      <View style={[styles.iconContainer, {backgroundColor: color}]}>
-        <Icons name={icon} color={theme.WHITE_COLOR} size={13} />
-      </View>
-      <View style={styles.personContainer}>
-        <Image
-          source={require('../../utils/images/logo.png')}
-          style={styles.personImage}
-          imageStyle={styles.personImage}
-        />
-        <Text style={styles.personInitials}>JB</Text>
+      <Text style={styles.title}>
+        {data?.senderName && data?.senderName}
+        {data?.depositNumber && Hyphenator(data?.depositNumber || 0)}
+      </Text>
+      <View style={styles.dataContainer}>
+        <View style={styles.amountContainer}>
+          <Text style={styles.amountValue}>
+            {i18n.t('words.amount')}: {KSeparator(data.amount || 0)}
+          </Text>
+          <Text style={styles.amountCurrency}>XAF</Text>
+        </View>
+        <Text style={styles.infoText}>
+          {data?.type ? i18n.t('words.type') : i18n.t('words.charges')}:
+          {data.type || KSeparator(data?.charges || 0)}
+        </Text>
+        <Text style={styles.infoText}>
+          {i18n.t('phrases.transferId')}: {data.transferId}
+        </Text>
+        {data?.note && (
+          <Text style={styles.infoText}>
+            {i18n.t('words.note')}: {data.note}
+          </Text>
+        )}
+        {data?.medium && (
+          <Text style={styles.infoText}>
+            {i18n.t('words.medium')}: {data.medium}
+          </Text>
+        )}
       </View>
       <View style={styles.dateContainer}>
         <Moment style={styles.dateValue} element={Text} fromNow>
           {data?.date || data?.createdAt}
         </Moment>
       </View>
-      {/* {data?.status && (
+      {data?.status && (
         <Text
           style={[
             styles.status,
@@ -46,7 +60,7 @@ const Details = props => {
             ? i18n.t('words.successful')
             : i18n.t('words.failed')}
         </Text>
-      )} */}
+      )}
     </TouchableOpacity>
   );
 };

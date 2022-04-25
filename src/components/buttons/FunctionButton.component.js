@@ -7,19 +7,18 @@ import theme from '../../utils/theme';
 import styles from './Buttons.style';
 
 const Function = props => {
-  const {navigation, icon, title, color, onPress} = props;
+  const {title, onPress, action} = props;
 
   return (
-    <TouchableOpacity
-      style={styles.funcContainer}
-      activeOpacity={0.8}
-      onPress={() => onPress()}>
-      <View style={[styles.funcIcon, {backgroundColor: color}]}>
-        <Icons name={icon} color={theme.WHITE_COLOR} size={12} />
-      </View>
-      <Text style={styles.funcTitle}>{title}</Text>
-      <View style={styles.circleTheme} />
-    </TouchableOpacity>
+    <View style={styles.funcContainer}>
+      <Text style={styles.funcTitle}>{action}</Text>
+      <TouchableOpacity
+        style={styles.funcButton}
+        activeOpacity={0.8}
+        onPress={() => onPress()}>
+        <Text style={styles.funcButtonText}>{title}</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 

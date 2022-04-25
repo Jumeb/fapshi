@@ -4,15 +4,15 @@ import theme from '../../utils/theme';
 
 const styles = StyleSheet.create({
   mainContainer: {
-    marginBottom: 28,
+    marginBottom: 10,
   },
   titleText: {
-    position: 'absolute',
     paddingHorizontal: theme.PAD_HR + 5,
     color: theme.DARK_GREY,
     fontSize: theme.FONT_SIZE_SMALL,
   },
   inputContainer: {
+    marginTop: 10,
     borderWidth: 1.5,
     borderColor: theme.TRANSPARENT,
     flexDirection: 'row',

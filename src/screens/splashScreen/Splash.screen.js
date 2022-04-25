@@ -8,10 +8,7 @@ import styles from './Splash.style';
 import {setLanguage} from '../../redux/actions/TranslationAction';
 import {setUser, setToken, setPin} from '../../redux/actions/AuthActions';
 import {setPayouts, setTransfers} from '../../redux/actions/ContactActions';
-// import {Text} from '../../components';
-// import {addToCart} from '../../redux/actions/CartAction';
-// import {addToFavourites} from '../../redux/actions/FavouritesActions';
-import {Storage} from '../../utils';
+import {BASE_URL, Storage} from '../../utils';
 
 let currentDeviceLocale = RNLocalize.getLocales()[0];
 
@@ -22,6 +19,8 @@ class SplashScreen extends Component {
       isFirstTime: true,
       opacity: new Animated.Value(0.09),
       animate: false,
+      loading: true,
+      validity: false,
     };
   }
 
@@ -33,11 +32,44 @@ class SplashScreen extends Component {
     }).start();
   };
 
+  FetchValidity = () => {
+    let statusCode;
+    this.setState({loading: true});
+
+    fetch(`${BASE_URL}/token`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': this.props.token,
+        Host: 'api.fapshi.com',
+      },
+    })
+      .then(res => {
+        statusCode = res.status;
+        this.setState({loading: false});
+        if (statusCode === 200) {
+          return;
+        }
+        if (statusCode !== 200) {
+          this.setState({validity: true});
+        }
+      })
+      .catch(err => {
+        if (err) {
+          this.setState({loading: false});
+          return;
+        }
+      });
+  };
+
   componentDidMount() {
     setTimeout(() => {
       this.setState({animate: true});
       this.increaseOpacity();
     }, 500);
+
+    this.FetchValidity();
 
     this.SetDeviceLanguage();
 
@@ -79,10 +111,10 @@ class SplashScreen extends Component {
         }
       });
     Storage.load({key: 'HasPin'})
-      .then(pin => this.props.setPin(pin))
+      .then(pin => this.props.setPin({value: pin}))
       .catch(err => {
         if (err) {
-          this.props.setPin(false);
+          this.props.setPin({value: false});
         }
       });
 
@@ -100,10 +132,20 @@ class SplashScreen extends Component {
       });
 
     setTimeout(() => {
-      if (!this.state.isFirstTime) {
+      if (
+        !this.state.isFirstTime &&
+        this.state.validity &&
+        !this.state.loading
+      ) {
         return this.props.navigation.navigate('Main Stack');
       }
-      this.props.navigation.navigate('Welcome');
+      if (
+        this.state.isFirstTime &&
+        !this.state.validity &&
+        this.state.loading
+      ) {
+        this.props.navigation.navigate('Welcome');
+      }
     }, 4000);
   }
 

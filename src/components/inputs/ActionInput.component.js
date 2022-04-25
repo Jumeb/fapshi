@@ -4,6 +4,7 @@ import Icons from 'react-native-vector-icons/Ionicons';
 
 import styles from './ActionInput.style';
 import theme from '../../utils/theme';
+import {Text} from '..';
 
 const SquareInput = props => {
   const {
@@ -65,9 +66,7 @@ const SquareInput = props => {
 
   return (
     <View style={styles.mainContainer}>
-      <Animated.Text style={[styles.titleText, animatedTitle]}>
-        {title}
-      </Animated.Text>
+      <Text style={styles.titleText}>{title}</Text>
       <View style={[styles.inputContainer, error && styles.borderError]}>
         <Icons name={icon} size={16} color={theme.DARK_GREY} />
         <TextInput

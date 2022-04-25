@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     marginHorizontal: theme.PAD_HR,
-    backgroundColor: theme.PRIMARY_COLOR,
+    backgroundColor: theme.WHITE_COLOR,
     paddingHorizontal: 24,
     paddingVertical: 30,
     justifyContent: 'center',
@@ -18,14 +18,6 @@ const styles = StyleSheet.create({
     elevation: 20,
     overflow: 'hidden',
   },
-  cardLogo: {
-    height: 20,
-    resizeMode: 'center',
-    tintColor: theme.WHITE_COLOR,
-    position: 'absolute',
-    top: 10,
-    left: -30,
-  },
   cardDetailsContainer: {
     zIndex: 999,
     marginTop: 30,
@@ -36,39 +28,23 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginBottom: 10,
   },
+  cardBalanceText: {
+    marginTop: -10,
+    fontSize: theme.FONT_SIZE_EXTRA_SMALL,
+    color: theme.DARK_OVERLAYS,
+    marginBottom: 10,
+  },
   cardCurrency: {
     fontSize: theme.FONT_SIZE_EXTRA_SMALL,
-    marginRight: 7,
+    marginLeft: 7,
     marginBottom: 3,
     fontWeight: theme.FONT_WEIGHT_BOLD,
-    color: theme.WHITE_COLOR,
-  },
-  cardId: {
-    letterSpacing: 1.5,
-    fontSize: theme.FONT_SIZE_SMALL,
-  },
-  cardIdHidden: {
-    marginRight: 4,
-    letterSpacing: 1.5,
-    marginBottom: -3,
-  },
-  cardIdContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    color: theme.DARK_GREY,
   },
   cardAmount: {
     fontSize: theme.FONT_SIZE_EXTRA_LARGE + 7,
-    color: theme.WHITE_COLOR,
+    color: theme.DARK_GREY,
     fontWeight: theme.FONT_WEIGHT_BOLD,
-  },
-  circleTheme: {
-    position: 'absolute',
-    height: 250,
-    width: 250,
-    backgroundColor: theme.PRIMARY_COLOR_MONO,
-    borderRadius: theme.CIRCLE_BORDER_RADIUS + 200,
-    bottom: -100,
-    right: -100,
   },
   expireContainer: {
     marginTop: 10,

@@ -124,6 +124,65 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginTop: 20,
   },
+  buttonContainer: {
+    marginVertical: 10,
+    marginHorizontal: theme.PAD_HR,
+    marginBottom: 160,
+  },
+  table: {
+    marginHorizontal: theme.PAD_HR,
+    marginVertical: 25,
+  },
+  headerStyle: {
+    borderBottomColor: theme.DARK_GREY,
+    borderBottomWidth: 1.5,
+  },
+  headerText: {
+    textAlign: 'left',
+    color: theme.DARK_GREY,
+    fontWeight: theme.FONT_WEIGHT_BOLD,
+    fontSize: theme.FONT_SIZE_SMALL,
+    minWidth: 100,
+    maxWidth: 100,
+  },
+  dataStyle: {
+    height: 50,
+    // justifyContent: ,
+  },
+  dataText: {
+    textAlign: 'left',
+    color: theme.DARK_GREY,
+    fontWeight: theme.FONT_WEIGHT_NORMAL_,
+    fontSize: theme.FONT_SIZE_SMALL,
+    maxWidth: 100,
+    minWidth: 100,
+  },
+  rowData: {
+    flexDirection: 'row',
+  },
+  signOutButton: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: theme.WHITE_COLOR,
+    paddingVertical: 6,
+    paddingHorizontal: 6,
+    marginVertical: 6,
+    borderRadius: theme.BORDER_IMAGE,
+    shadowOffset: {width: 0, height: 2},
+    shadowColor: theme.DARK_GREY,
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 3,
+    maxWidth: 100,
+    minWidth: 100,
+  },
+  signOutButtonText: {
+    textAlign: 'center',
+    color: theme.PRIMARY_COLOR,
+    fontSize: theme.FONT_SIZE_SMALL,
+  },
 });
 
 export default styles;

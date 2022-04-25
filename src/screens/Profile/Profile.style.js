@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: theme.PAD_HR - 4,
-    marginTop: 23,
   },
   changePasswordContainer: {
     flexDirection: 'row',
@@ -59,7 +58,7 @@ const styles = StyleSheet.create({
   signOutButtonContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 20,
     flexDirection: 'row',
   },
   signOutButton: {
