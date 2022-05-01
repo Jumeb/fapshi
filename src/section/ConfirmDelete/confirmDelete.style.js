@@ -4,8 +4,8 @@ import theme from '../../utils/theme';
 
 const styles = StyleSheet.create({
   mainContainer: {
-    margin: theme.PAD_HR,
-    justifyContent: 'center',
+    margin: 0,
+    justifyContent: 'flex-end',
   },
   scrollView: {
     backgroundColor: theme.WHITE_COLOR,

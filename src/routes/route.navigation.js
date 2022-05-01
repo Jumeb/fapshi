@@ -22,6 +22,7 @@ import {
   PayoutScreen,
   TopUpScreen,
   TopUpNotificationScreen,
+  PaymentScreen,
 } from '../screens';
 import {connect} from 'react-redux';
 import {TabBar} from '../components';
@@ -72,6 +73,11 @@ let HomeStackScreen = () => {
       <Stack.Screen
         name="Success"
         component={SuccessScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Payment"
+        component={PaymentScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

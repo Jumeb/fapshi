@@ -30,10 +30,21 @@ const styles = StyleSheet.create({
     marginHorizontal: theme.PAD_HR,
     marginTop: 8,
   },
+  transContainer2: {
+    marginHorizontal: theme.PAD_HR,
+    marginTop: 8,
+  },
   cardNumber: {
     color: theme.DARK_GREY,
     fontSize: theme.FONT_SIZE_NORMAL + 2,
     fontWeight: theme.FONT_WEIGHT_BOLD,
+    letterSpacing: 1,
+  },
+  cardNumber2: {
+    marginBottom: 7,
+    color: theme.DARK_GREY,
+    fontSize: theme.FONT_SIZE_SMALL,
+    fontWeight: theme.FONT_WEIGHT_NORMAL,
     letterSpacing: 1,
   },
   cardNumberHidden: {
@@ -58,6 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 5,
+    marginTop: 15,
   },
   amountText: {
     fontSize: theme.FONT_SIZE_SMALL - 2,
@@ -85,6 +97,23 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingHorizontal: 5,
     marginBottom: -15,
+  },
+  status: {
+    position: 'absolute',
+    color: theme.WHITE_COLOR,
+    fontSize: theme.FONT_SIZE_EXTRA_SMALL - 2,
+    top: 22,
+    right: 10,
+    // transform: [{rotateZ: '-20deg'}],
+    padding: 2,
+    paddingHorizontal: 4,
+    borderRadius: theme.BORDER_IMAGE,
+  },
+  statusFailed: {
+    backgroundColor: theme.DANGER_COLOR,
+  },
+  statusSuccess: {
+    backgroundColor: theme.GREEN_COLOR,
   },
 });
 

@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
 
-import styles from './verifyTrans.style';
+import styles from './verifyPayment.style';
 import {
   Button,
   Text,
@@ -13,10 +13,10 @@ import {
   Notification,
 } from '../../components';
 import theme from '../../utils/theme';
-import {AuthMail, AuthNumber, BASE_URL, KSeparator} from '../../utils';
+import {BASE_URL, Hyphenator, KSeparator} from '../../utils';
 
-const VerifyTrans = props => {
-  const {i18n, verify, setVerify, navigation, summary, user, token} = props;
+const VerifyPayout = props => {
+  const {i18n, verify, setVerify, data, user, token} = props;
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -30,23 +30,11 @@ const VerifyTrans = props => {
     let hasError = false;
     setLoading(true);
 
-    const {email, amount, note} = summary;
+    const {code} = data;
 
     if (pin.length < 5) {
       hasError = true;
       setPinError(true);
-    }
-
-    if (!AuthMail(email.trim())) {
-      hasError = true;
-    }
-
-    if (note.length < 5) {
-      hasError = true;
-    }
-
-    if (!AuthNumber(amount)) {
-      hasError = true;
     }
 
     if (hasError) {
@@ -60,14 +48,12 @@ const VerifyTrans = props => {
     }
 
     const body = {
-      amount,
+      tranferId: code,
       pin,
-      note,
-      email,
     };
 
     let statusCode, responseJson;
-    fetch(`${BASE_URL}/transfer`, {
+    fetch(`${BASE_URL}/fapshi/confirmPay`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -92,7 +78,7 @@ const VerifyTrans = props => {
           setNotify(true);
           setNotifyMsg({
             type: 'success',
-            msg: i18n.t('phrases.transferSuccessful'),
+            msg: i18n.t('phrases.paymentSuccessful'),
           });
 
           setTimeout(() => {
@@ -106,6 +92,18 @@ const VerifyTrans = props => {
           setNotifyMsg({
             type: 'error',
             msg: responseJson.message,
+          });
+          setTimeout(() => {
+            setVerify(false);
+          }, 3500);
+          return false;
+        }
+
+        if (statusCode !== 200 && statusCode !== 400) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            msg: i18n.t('phrases.transferFailed'),
           });
           setTimeout(() => {
             setVerify(false);
@@ -141,36 +139,77 @@ const VerifyTrans = props => {
       onBackdropPress={() => setVerify(false)}
       onBackButtonPress={() => setVerify(false)}>
       <View style={styles.scrollView}>
+        {data?.status && (
+          <Text
+            style={[
+              styles.status,
+              data?.status.toLowerCase() === 'successful'
+                ? styles.statusSuccess
+                : styles.statusFailed,
+            ]}>
+            {data?.status.toLowerCase() === 'successful'
+              ? i18n.t('words.successful')
+              : i18n.t('words.failed')}
+          </Text>
+        )}
         <Text style={styles.transTitle}>
-          {i18n.t('phrases.confirmTransfer')}
+          {i18n.t('words.confirm')} {data.productName}
         </Text>
         <Text style={styles.transFrom}>{i18n.t('phrases.transferFrom')}</Text>
         <View style={styles.transContainer}>
           <Text style={styles.cardNumber}>{user?.email}</Text>
-          {/* <Text style={styles.cardNumberHidden}> **** </Text>
-          <Text style={styles.cardNumberHidden}> **** </Text>
-          <Text style={styles.cardNumber}>7890</Text> */}
         </View>
         <Text style={styles.originText}>FAPSHI</Text>
         <Divider />
         <Text style={styles.originText}>{i18n.t('words.to')}</Text>
-        <View style={styles.transContainer}>
-          <Text style={styles.cardNumber}>{summary?.email}</Text>
-          {/* <Text style={styles.cardNumberHidden}> **** </Text>
-          <Text style={styles.cardNumberHidden}> **** </Text>
-          <Text style={styles.cardNumber}>4321</Text> */}
+        <View style={styles.transContainer2}>
+          <Text style={styles.cardNumber2}>
+            {data?.clientName &&
+              data?.clientName + ' ' + i18n.t('words.for') + ' '}
+            {data?.tel
+              ? Hyphenator(data?.tel || 0)
+              : data?.reason || data.organisation || data?.productName}
+          </Text>
+          {data?.address && (
+            <Text style={styles.cardNumber2}>
+              {i18n.t('words.address')}: {data?.address}
+            </Text>
+          )}
+          {data?.clientEmail && (
+            <Text style={styles.cardNumber2}>
+              {i18n.t('words.email')}: {data?.clientEmail}
+            </Text>
+          )}
+          {data?.clientPhone && (
+            <Text style={styles.cardNumber2}>
+              {i18n.t('words.phone')}: {Hyphenator(data?.clientPhone || 0)}
+            </Text>
+          )}
+          {data?.quantity && (
+            <Text style={styles.cardNumber2}>
+              {i18n.t('words.quantity')}: {data.quantity}
+            </Text>
+          )}
         </View>
         <View style={styles.summaryContainer}>
           <View style={styles.amountContainer}>
             <Text style={styles.amountText}>{i18n.t('words.amount')}</Text>
             <Text style={styles.amountValue}>
-              XAF {KSeparator(summary?.amount || 0)}
+              {KSeparator(
+                data?.amount ||
+                  Number(data?.total - data?.deliveryFee) ||
+                  data?.total ||
+                  0,
+              )}{' '}
+              XAF
             </Text>
           </View>
           <View style={styles.amountContainer}>
             <Text style={styles.amountText}>{i18n.t('words.fee')}</Text>
             <Text style={styles.amountValue}>
-              XAF {KSeparator(Math.round(summary?.amount * 0.03) || 0)}
+              {data?.deliveryFee
+                ? KSeparator(data?.deliveryFee || 0)
+                : i18n.t('words.free')}
             </Text>
           </View>
           <Divider />
@@ -179,11 +218,7 @@ const VerifyTrans = props => {
               {i18n.t('phrases.totalAmount')}
             </Text>
             <Text style={styles.amountValue}>
-              XAF{' '}
-              {KSeparator(
-                Number(summary?.amount) +
-                  Number(Math.round(summary?.amount * 0.03)) || 0,
-              )}
+              XAF {KSeparator(data?.amount || data?.total || 0)}
             </Text>
           </View>
           <View style={styles.inputContainer}>
@@ -204,14 +239,21 @@ const VerifyTrans = props => {
           </View>
           <View style={styles.amountContainer}>
             <Button
+              title={i18n.t('words.close')}
+              invert={true}
+              onPress={() => setVerify(false)}
+              loading={loading}
+            />
+            <Button
               title={
-                i18n.t('words.transfer') +
-                ' XAF ' +
-                KSeparator(summary?.amount || 0)
+                i18n.t('words.pay') +
+                ' ' +
+                KSeparator(data?.amount || data?.total || 0) +
+                ' XAF'
               }
               invert={true}
-              loading={loading}
               onPress={() => Authenticate()}
+              loading={loading}
             />
           </View>
         </View>
@@ -233,4 +275,4 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators({}, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(VerifyTrans);
+export default connect(mapStateToProps, mapDispatchToProps)(VerifyPayout);

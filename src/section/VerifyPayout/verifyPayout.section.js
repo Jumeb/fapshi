@@ -208,7 +208,7 @@ const VerifyPayout = props => {
               errorMessage={i18n.t('phrases.pinInvalid')}
               error={pinError}
               toggleError={() => setPinError(false)}
-              icon={'ios-cash'}
+              icon={'ios-create'}
             />
           </View>
           <View style={styles.amountContainer}>

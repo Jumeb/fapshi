@@ -46,6 +46,8 @@ const Header = props => {
       ? i18n.t('words.payout')
       : screen.toString() === 'My Dashboard'
       ? i18n.t('phrases.myDashboard')
+      : screen.toString() === 'Payment'
+      ? i18n.t('words.payment')
       : i18n.t('words.cart1');
 
   const animatedWidth = {

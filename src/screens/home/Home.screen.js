@@ -118,6 +118,7 @@ const Home = props => {
             navigation={navigation}
             action={i18n.t('phrases.fapshiPay')}
             title={i18n.t('words.payment')}
+            onPress={() => navigation.navigate('Payment')}
           />
           <Function
             navigation={navigation}

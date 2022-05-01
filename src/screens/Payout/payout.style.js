@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     marginBottom: 25,
-    marginTop: 10,
   },
   originText: {
     textAlign: 'center',

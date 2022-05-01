@@ -21,6 +21,7 @@ const NotifcationCard = props => {
   return (
     <View style={[styles.noticationContainer, last && {marginBottom: 150}]}>
       <View style={styles.containerText}>
+        <Text style={styles.notificationTitle}>{notif.title}</Text>
         <Text style={styles.notificationText}>{notif.message}</Text>
       </View>
       {pay && (

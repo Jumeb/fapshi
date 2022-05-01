@@ -4,14 +4,12 @@ import theme from '../../utils/theme';
 
 const styles = StyleSheet.create({
   modalContainer: {
-    margin: theme.PAD_HR,
-    justifyContent: 'center',
+    margin: 0,
+    justifyContent: 'flex-end',
   },
   mainContainer: {
     justifyContent: 'space-between',
     paddingVertical: 15,
-    marginVertical: 10,
-    marginHorizontal: theme.PAD_HR,
     backgroundColor: theme.WHITE_COLOR,
     zIndex: 999,
     borderLeftWidth: 2,

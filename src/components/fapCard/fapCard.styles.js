@@ -5,6 +5,7 @@ import theme from '../../utils/theme';
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
+    marginTop: 30,
     marginHorizontal: theme.PAD_HR,
     backgroundColor: theme.WHITE_COLOR,
     paddingHorizontal: 24,

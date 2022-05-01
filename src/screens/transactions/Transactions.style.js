@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   },
   filterContainer2: {
     marginTop: 6,
-    marginHorizontal: theme.PAD_HR,
+    paddingHorizontal: theme.PAD_HR,
   },
   circleTheme: {
     position: 'absolute',

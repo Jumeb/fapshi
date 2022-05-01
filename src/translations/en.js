@@ -73,7 +73,6 @@ export default {
     charges: 'Charges',
     code: 'Code',
     pop: 'Pop',
-    // New
     type: 'Type',
     medium: 'Medium',
     name: 'Name',
@@ -81,6 +80,11 @@ export default {
     status: 'Status',
     number: 'Number',
     close: 'Close',
+    for: 'for',
+    address: 'Address',
+    phone: 'Phone',
+    quantity: 'Quantity',
+    // New
   },
   phrases: {
     signUp: 'Sign Up',
@@ -190,7 +194,6 @@ export default {
     noPayouts: 'Sorry, we could not find any payouts.',
     noTopups: 'Sorry, we could not find any topups.',
     noTransfers: 'Sorry, we could not find any transfers.',
-    // New
     noNotificationsNow: 'You do not have any notification.',
     noPayoutsNow: 'You do not have any payouts.',
     noTopupsNow: 'You do not have any topups.',
@@ -208,5 +211,11 @@ export default {
     closeTopups: 'Close your Topups',
     closePayouts: 'Close your Payouts',
     closeTransfers: 'Close your transfers',
+    noPayment: 'Sorry, we could not find any payment.',
+    noPaymentNow: 'You do not have any payment.',
+    closePaments: 'Close your Payments',
+    viewPayments: 'View your Payments',
+    // New
+    paymentSuccessful: 'Payment successful',
   },
 };

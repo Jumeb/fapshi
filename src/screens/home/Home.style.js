@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     position: 'relative',
-    paddingTop: 60,
+    paddingTop: 30,
   },
   centralize: {
     height: theme.HEIGHT_100,

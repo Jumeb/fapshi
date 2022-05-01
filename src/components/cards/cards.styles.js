@@ -57,6 +57,12 @@ const styles = StyleSheet.create({
     fontSize: theme.FONT_SIZE_EXTRA_SMALL - 1,
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
   },
+  notificationTitle: {
+    lineHeight: 18,
+    color: theme.DARK_GREY,
+    fontWeight: theme.FONT_WEIGHT_NORMAL_,
+    textAlign: 'left',
+  },
   notificationText: {
     fontSize: theme.FONT_SIZE_SMALL - 1,
     lineHeight: 18,

@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
     marginHorizontal: theme.PAD_HR,
     borderRadius: theme.BORDER_IMAGE,
     backgroundColor: theme.WHITE_COLOR,
+    overflow: 'hidden',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.8,
     shadowRadius: 8,

@@ -8,6 +8,7 @@ import ConfirmNumber from './ConfirmNumber/confirmNumber.section';
 import ConfirmEmail from './ConfirmEmail/confirmEmail.section';
 import ConfirmDelete from './ConfirmDelete/confirmDelete.section';
 import Details from './detail/Detail.section';
+import VerifyPayment from './VerifyPayment/verifyPayment.section';
 
 export {
   VerifyTrans,
@@ -20,4 +21,5 @@ export {
   ConfirmEmail,
   ConfirmDelete,
   Details,
+  VerifyPayment,
 };

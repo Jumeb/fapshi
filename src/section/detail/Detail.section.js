@@ -26,6 +26,7 @@ const Details = props => {
       onBackButtonPress={() => setDetails(false)}>
       <TouchableOpacity activeOpacity={0.8} style={styles.mainContainer}>
         <Text style={styles.title}>
+          {data?.productName && data?.productName}
           {data?.senderName && data?.senderName}
           {data?.depositNumber ||
             (data?.phone &&
@@ -34,13 +35,19 @@ const Details = props => {
         <View style={styles.dataContainer}>
           <View style={styles.amountContainer}>
             <Text style={styles.amountValue}>
-              {i18n.t('words.amount')}: {KSeparator(data.amount || 0)}
+              {i18n.t('words.amount')}:{' '}
+              {KSeparator(
+                data?.amount ||
+                  Number(data?.total - data?.deliveryFee) ||
+                  data?.total ||
+                  0,
+              )}
             </Text>
             <Text style={styles.amountCurrency}>XAF</Text>
           </View>
           <Text style={styles.infoText}>
             {data?.type ? i18n.t('words.type') : i18n.t('words.charges')}:
-            {data.type || KSeparator(data?.charges || 0)}
+            {data.type || KSeparator(data?.charges || data?.deliveryFee || 0)}
           </Text>
           <Text style={styles.infoText}>
             {i18n.t('phrases.transferId')}: {data.transferId}
@@ -55,12 +62,36 @@ const Details = props => {
               {i18n.t('words.medium')}: {data.medium}
             </Text>
           )}
+          {data?.address && (
+            <Text style={styles.infoText}>
+              {i18n.t('words.address')}: {data?.address}
+            </Text>
+          )}
+          {data?.clientEmail && (
+            <Text style={styles.infoText}>
+              {i18n.t('words.email')}: {data?.clientEmail}
+            </Text>
+          )}
+          {data?.clientPhone && (
+            <Text style={styles.infoText}>
+              {i18n.t('words.phone')}: {Hyphenator(data?.clientPhone || 0)}
+            </Text>
+          )}
+          {data?.quantity && (
+            <Text style={styles.infoText}>
+              {i18n.t('words.quantity')}: {data.quantity}
+            </Text>
+          )}
         </View>
         <View style={styles.dateContainer}>
           <Text style={styles.dateValue} element={Text} fromNow>
-            {new Date(data.date || data.createdAt).toLocaleDateString() +
+            {new Date(
+              data.date || data.createdAt || data?.dateInitiated,
+            ).toLocaleDateString() +
               ' at ' +
-              new Date(data.date || data.createdAt).toLocaleTimeString([], {
+              new Date(
+                data.date || data.createdAt || data?.dateInitiated,
+              ).toLocaleTimeString([], {
                 timeStyle: 'short',
               })}
           </Text>

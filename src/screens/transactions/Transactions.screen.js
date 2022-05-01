@@ -32,11 +32,13 @@ const Transaction = props => {
   const [tranLoading, setTransLoading] = useState(false);
   const [payLoading, setPayLoading] = useState(false);
   const [topLoading, setTopLoading] = useState(false);
+  const [paymentLoading, setPaymentLoading] = useState(false);
   const [balance, setBalance] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const [transfers, setTransfers] = useState([]);
   const [topups, setTopups] = useState([]);
   const [payouts, setPayouts] = useState([]);
+  const [payments, setPayments] = useState([]);
   const [details, setDetails] = useState(false);
   const [detail, setDetail] = useState({});
   const [tableTransfer, setTableTransfer] = useState({
@@ -48,6 +50,10 @@ const Transaction = props => {
     tableData: [],
   });
   const [tableTopups, setTableTopups] = useState({
+    tableHead: [],
+    tableData: [],
+  });
+  const [tablePayments, setTablePayments] = useState({
     tableHead: [],
     tableData: [],
   });
@@ -63,6 +69,7 @@ const Transaction = props => {
     fetchTransfer();
     fetchPayouts();
     fetchTopUps();
+    fetchPayments();
   }, [i18n, user]);
 
   const fetchTopUps = () => {
@@ -87,7 +94,6 @@ const Transaction = props => {
         setTopLoading(false);
         statusCode = res[0];
         responseJson = res[1];
-        console.log(responseJson);
 
         if (statusCode === 200) {
           setTopups(responseJson);
@@ -191,6 +197,79 @@ const Transaction = props => {
       .catch(err => {
         if (err) {
           setPayLoading(false);
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            title: 'Unexpected Error',
+            msg: i18n.t('phrases.pleaseCheckInternet'),
+          });
+        }
+      });
+  };
+
+  const fetchPayments = () => {
+    let statusCode, responseJson;
+    setPayLoading(true);
+
+    fetch(`${BASE_URL}/product-bought`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+        Host: 'api.fapshi.com',
+      },
+    })
+      .then(res => {
+        statusCode = res.status;
+        responseJson = res.json();
+        return Promise.all([statusCode, responseJson]);
+      })
+      .then(res => {
+        setPaymentLoading(false);
+        statusCode = res[0];
+        responseJson = res[1];
+
+        if (statusCode === 200) {
+          setPayments(responseJson);
+          const data = responseJson.map(function (payment) {
+            return [
+              Hyphenator(payment.productName),
+              KSeparator(
+                payment?.amount ||
+                  Number(payment?.total - payment?.deliveryFee) ||
+                  payment?.total ||
+                  0,
+              ),
+              KSeparator(payment.deliveryFee || 0),
+              payment.transferId,
+              payment.status,
+            ];
+          });
+          setTablePayments({
+            tableHead: [
+              i18n.t('words.title'),
+              i18n.t('words.amount'),
+              i18n.t('words.to'),
+              i18n.t('phrases.transferId'),
+              i18n.t('words.more'),
+            ],
+            tableData: data,
+          });
+        }
+
+        if (statusCode !== 200) {
+          setNotify(true);
+          setNotifyMsg({
+            type: 'error',
+            msg: responseJson.message,
+          });
+          return false;
+        }
+      })
+      .catch(err => {
+        if (err) {
+          setPaymentLoading(false);
           setNotify(true);
           setNotifyMsg({
             type: 'error',
@@ -451,6 +530,12 @@ const Transaction = props => {
               active={activeIndex === 2}
               onPress={() => SetActive(2)}
             />
+            <Filter
+              yOffset={10}
+              title={i18n.t('words.payment')}
+              active={activeIndex === 3}
+              onPress={() => SetActive(3)}
+            />
           </ScrollView>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             {activeIndex === 0 && !tranLoading && transfers.length >= 1 ? (
@@ -575,8 +660,51 @@ const Transaction = props => {
                   i18n={i18n}
                   info={
                     payouts && payouts.length === 0
-                      ? i18n.t('phrases.noPayouts')
+                      ? i18n.t('phrases.noPayoutsNow')
                       : i18n.t('phrases.noPayouts')
+                  }
+                  onPress={() => fetchPayouts()}
+                />
+              )
+            )}
+            {activeIndex === 3 && !paymentLoading && payments.length >= 1 ? (
+              <Table style={styles.table}>
+                <Row
+                  data={tablePayout.tableHead}
+                  style={styles.headerStyle}
+                  textStyle={styles.headerText}
+                />
+                {tablePayout.tableData.map((rowData, index) => (
+                  <TableWrapper key={index} style={styles.rowData}>
+                    {rowData.map((cellData, cellIndex) => (
+                      <Cell
+                        key={cellIndex}
+                        data={
+                          cellIndex === 4 ? (
+                            <Button
+                              i18n={i18n}
+                              setDetails={setDetails}
+                              setDetail={setDetail}
+                              data={payments[index]}
+                            />
+                          ) : (
+                            cellData
+                          )
+                        }
+                        textStyle={styles.dataText}
+                      />
+                    ))}
+                  </TableWrapper>
+                ))}
+              </Table>
+            ) : (
+              activeIndex === 3 && (
+                <RefreshButton
+                  i18n={i18n}
+                  info={
+                    payments && payments.length === 0
+                      ? i18n.t('phrases.noPaymentNow')
+                      : i18n.t('phrases.noPayments')
                   }
                   onPress={() => fetchPayouts()}
                 />
@@ -609,7 +737,6 @@ const Button = ({i18n, data, setDetail, setDetails}) => {
   const OpenDetail = () => {
     setDetail(data);
     setDetails(true);
-    console.log(data);
   };
   return (
     <TouchableOpacity
