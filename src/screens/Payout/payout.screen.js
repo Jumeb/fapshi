@@ -40,7 +40,10 @@ import {
   Hyphenator,
   KSeparator,
 } from '../../utils';
-import {removePayout} from '../../redux/actions/ContactActions';
+import {
+  removePayout,
+  removePayoutIndex,
+} from '../../redux/actions/ContactActions';
 
 const Payout = props => {
   const {i18n, navigation, payoutsContacts, token} = props;
@@ -272,7 +275,8 @@ const Payout = props => {
         <ScrollView
           style={styles.horizontalScroll}
           horizontal={true}
-          showsHorizontalScrollIndicator={false}>
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{alignItems: 'center'}}>
           {payoutsContacts && payoutsContacts.length <= 5 && (
             <TouchableOpacity
               activeOpacity={0.8}
@@ -287,6 +291,7 @@ const Payout = props => {
           {payoutsContacts.map((payout, index) => (
             <RecentsCard
               key={index}
+              onDet={() => props.removePayoutIndex(index)}
               data={payout}
               active={tel}
               onPress={() => SetPayout(payout)}
@@ -394,7 +399,7 @@ const mapStateToProps = ({i18n, contacts, auth}) => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({removePayout}, dispatch);
+  return bindActionCreators({removePayout, removePayoutIndex}, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Payout);

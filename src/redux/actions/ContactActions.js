@@ -2,7 +2,9 @@ import {
   ADD_PAYOUT,
   ADD_TRANSFER,
   REMOVE_PAYOUT,
+  REMOVE_PAYOUT_INDEX,
   REMOVE_TRANSFER,
+  REMOVE_TRANSFER_INDEX,
   SET_PAYOUTS,
   SET_TRANSFERS,
 } from '../types';
@@ -44,5 +46,19 @@ export const removeTransfer = () => {
 export const removePayout = () => {
   return {
     type: REMOVE_PAYOUT,
+  };
+};
+
+export const removeTransferIndex = index => {
+  return {
+    type: REMOVE_TRANSFER_INDEX,
+    payload: index,
+  };
+};
+
+export const removePayoutIndex = index => {
+  return {
+    type: REMOVE_PAYOUT_INDEX,
+    payload: index,
   };
 };

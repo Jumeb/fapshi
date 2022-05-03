@@ -32,7 +32,10 @@ import {
 import theme from '../../utils/theme';
 import {AddTransfer, Details, VerifyTrans} from '../../section';
 import {AuthMail, AuthNumber, BASE_URL} from '../../utils';
-import {removeTransfer} from '../../redux/actions/ContactActions';
+import {
+  removeTransfer,
+  removeTransferIndex,
+} from '../../redux/actions/ContactActions';
 
 const Transfer = props => {
   const {i18n, navigation, transfersContacts, token} = props;
@@ -258,6 +261,7 @@ const Transfer = props => {
             <RecentsCard
               key={index}
               data={transfer}
+              onDet={() => props.removeTransferIndex(index)}
               active={email}
               onPress={() => SetTransfer(transfer)}
             />
@@ -363,7 +367,7 @@ const mapStateToProps = ({i18n, contacts, auth}) => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({removeTransfer}, dispatch);
+  return bindActionCreators({removeTransfer, removeTransferIndex}, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Transfer);

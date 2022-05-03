@@ -181,11 +181,12 @@ const styles = StyleSheet.create({
   //  Recent Card
   recentContainer: {
     marginRight: 4,
-    width: 70,
+    width: 120,
+    marginVertical: 10,
   },
   recentImageContainer: {
-    height: 45,
-    width: 45,
+    height: 70,
+    width: 70,
     borderRadius: theme.BORDER_IMAGE,
     overflow: 'hidden',
     alignItems: 'center',
@@ -212,6 +213,18 @@ const styles = StyleSheet.create({
     fontSize: theme.FONT_SIZE_EXTRA_SMALL,
     textAlign: 'center',
     fontWeight: theme.FONT_WEIGHT_NORMAL_,
+  },
+  recentRemove: {
+    position: 'absolute',
+    top: -10,
+    right: 15,
+    height: 25,
+    width: 25,
+    zIndex: 999,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: theme.CIRCLE_BORDER_RADIUS + 100,
+    backgroundColor: theme.DANGER_COLOR,
   },
 });
 

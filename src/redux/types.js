@@ -11,4 +11,6 @@ export const ADD_TRANSFER = 'add_transfer';
 export const SET_PAYOUTS = 'set_payouts';
 export const SET_TRANSFERS = 'set_transfers';
 export const REMOVE_PAYOUT = 'remove_payout';
+export const REMOVE_PAYOUT_INDEX = 'remove_payout_index';
 export const REMOVE_TRANSFER = 'remove_transfer';
+export const REMOVE_TRANSFER_INDEX = 'remove_transfer_index';

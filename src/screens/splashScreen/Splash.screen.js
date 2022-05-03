@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {Image, SafeAreaView, StatusBar, View, Animated} from 'react-native';
+import {
+  Image,
+  SafeAreaView,
+  StatusBar,
+  View,
+  Animated,
+  ActivityIndicator,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as RNLocalize from 'react-native-localize';
@@ -9,6 +16,7 @@ import {setLanguage} from '../../redux/actions/TranslationAction';
 import {setUser, setToken, setPin} from '../../redux/actions/AuthActions';
 import {setPayouts, setTransfers} from '../../redux/actions/ContactActions';
 import {BASE_URL, Storage} from '../../utils';
+import theme from '../../utils/theme';
 
 let currentDeviceLocale = RNLocalize.getLocales()[0];
 
@@ -132,20 +140,10 @@ class SplashScreen extends Component {
       });
 
     setTimeout(() => {
-      if (
-        !this.state.isFirstTime &&
-        this.state.validity &&
-        !this.state.loading
-      ) {
+      if (!this.state.loading && !this.state.isFirstTime) {
         return this.props.navigation.navigate('Main Stack');
       }
-      if (
-        this.state.isFirstTime &&
-        !this.state.validity &&
-        this.state.loading
-      ) {
-        this.props.navigation.navigate('Welcome');
-      }
+      this.props.navigation.navigate('Welcome');
     }, 4000);
   }
 
@@ -183,6 +181,11 @@ class SplashScreen extends Component {
               style={styles.appLogo}
             />
           </Animated.View>
+          {(this.state.isFirstTime ||
+            !this.state.validity ||
+            this.state.loading) && (
+            <ActivityIndicator size="small" color={theme.PRIMARY_COLOR} />
+          )}
         </View>
       </SafeAreaView>
     );
