@@ -215,5 +215,7 @@ export default {
     noPaymentNow: "Vous n'avez aucun paiement.",
     closePaments: 'Clôturez vos paiements',
     viewPayments: 'Consulter vos paiements',
+    paymentSuccessful: 'Paiement réussi',
+    fapshiBalance: 'Solde FAPSHI',
   },
 };

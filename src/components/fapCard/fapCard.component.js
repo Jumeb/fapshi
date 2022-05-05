@@ -61,7 +61,9 @@ const FapCard = props => {
           </Text>
           <Text style={styles.cardCurrency}>XAF</Text>
         </View>
-        <Text style={styles.cardBalanceText}>FAPSHI Balance</Text>
+        <Text style={styles.cardBalanceText}>
+          {i18n.t('phrases.fapshiBalance')}
+        </Text>
         <View style={styles.pinContainer}>
           <View style={styles.expireContainer}>
             <Text style={styles.expiresText}>{user?.username}</Text>
