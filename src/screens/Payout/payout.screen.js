@@ -297,21 +297,6 @@ const Payout = props => {
               onPress={() => SetPayout(payout)}
             />
           ))}
-          {payoutsContacts && payoutsContacts.length >= 1 && (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => props.removePayout()}
-              style={styles.addContainer}>
-              <View style={styles.addImageContainer}>
-                <Icons
-                  name={'ios-remove'}
-                  color={theme.PRIMARY_COLOR}
-                  size={35}
-                />
-              </View>
-              <Text style={styles.addName}>{i18n.t('words.pop')}</Text>
-            </TouchableOpacity>
-          )}
         </ScrollView>
         <View style={styles.buttonContainer}>
           <Button

@@ -244,7 +244,8 @@ const Transfer = props => {
         <ScrollView
           style={styles.horizontalScroll}
           horizontal={true}
-          showsHorizontalScrollIndicator={false}>
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{alignItems: 'center'}}>
           {transfersContacts && transfersContacts.length <= 5 && (
             <TouchableOpacity
               activeOpacity={0.8}
@@ -266,21 +267,6 @@ const Transfer = props => {
               onPress={() => SetTransfer(transfer)}
             />
           ))}
-          {transfersContacts && transfersContacts.length >= 1 && (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => props.removeTransfer()}
-              style={styles.addContainer}>
-              <View style={styles.addImageContainer}>
-                <Icons
-                  name={'ios-remove'}
-                  color={theme.PRIMARY_COLOR}
-                  size={35}
-                />
-              </View>
-              <Text style={styles.addName}>{i18n.t('words.add')}</Text>
-            </TouchableOpacity>
-          )}
         </ScrollView>
         <View style={styles.buttonContainer}>
           <Button
