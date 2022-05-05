@@ -1,0 +1,104 @@
+name: Android Build ## name of the workflow
+
+
+on:
+  pull_request:
+    types: [opened, reopened, auto_merge_enabled, edited] 
+    ## only run workflow when pull_request in opened, reopened
+
+# on:
+#   workflow_dispatch: # To trigger manual build
+#   release:
+#     types: [published] # only run the workflow when a new release has been published
+
+jobs:
+  android-build:
+    name: Android Build
+    runs-on: ubuntu-latest # using ubuntu latest version / or you can use a specific version
+
+    steps:
+      - name: Check out Git repository # clone the repo to local ci workspace
+        uses: actions/checkout@v2
+
+      - name: Set up our JDK environment # setup JDK environment: mandatory as we need to build  android project
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 11
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Restore node_modules from cache
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies # install project deps with --frozen-lockfile to make sure we will have the same packages version ( very recommended  on running yarn install on ci)
+        run: yarn install --frozen-lockfile
+
+      ## configure cash for gradle : will help to reduce build time
+      - name: Cache Gradle Wrapper
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+
+      - name: Cache Gradle Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-caches-
+      - name: Make Gradlew Executable
+        run: cd android && chmod +x ./gradlew
+
+      - name: Generate App APK
+        run: |
+          cd android && ./gradlew assembleRelease --no-daemon
+      - name: Generate App AAB
+        run: |
+          cd android && ./gradlew bundleRelease --no-daemon 
+
+      ## sign generated apk
+      - name: Sign APK
+        id: sign_app
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: android/app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
+          alias: ${{ secrets.ANDROID_ALIAS }}
+          keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+
+      ## sign generated aab
+      - name: Sign AAB
+        id: sign_aab
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: android/app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
+          alias: ${{ secrets.ANDROID_ALIAS }}
+          keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+
+
+      ## Push the artifact back to origin
+      - name: Upload artifact(APK)
+        uses: actions/upload-artifact@v3
+        with: 
+          name: app-release.apk
+          path: android/app/build/outputs/apk/release/app-release.apk
+
+      ## Push the aab bact to origin
+      - name: Upload artifact(AAB)
+        uses: actions/upload-artifact@v3
+        with: 
+          name: app-release.aab
+          path: android/app/build/outputs/bundle/release/app-release.aab
+
