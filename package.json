@@ -57,5 +57,8 @@
   "repository": {
    "type": "git",
    "url": "git+https://github.com/Jumeb/fapshi.git"
- }
+ },
+"resolutions": {
+  "moment": "2.24.0"
+  }
 }
