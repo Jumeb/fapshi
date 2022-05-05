@@ -217,5 +217,7 @@ export default {
     viewPayments: 'Consulter vos paiements',
     paymentSuccessful: 'Paiement réussi',
     fapshiBalance: 'Solde FAPSHI',
+    aboutFapshi:
+      "Utilisez l'application mobile de Fapshi pour accepter des paiements, vendre des produits, envoyer des factures, collecter des contributions, transférer de l'argent et gérer vos entreprises en ligne.",
   },
 };

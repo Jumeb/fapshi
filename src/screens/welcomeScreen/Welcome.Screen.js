@@ -73,10 +73,7 @@ const Welcome = props => {
         </View>
         <Animated.View style={[styles.actionContainer, animatedWelcome]}>
           <Text style={styles.actionTitle}>{i18n.t('words.welcome')}</Text>
-          <Text style={styles.actionText}>
-            Enim nulla ea in nisi est tempor non sunt tempor laborum laborum
-            tempor. Do sunt dolor et elit eu nostrud.
-          </Text>
+          <Text style={styles.actionText}>{i18n.t('phrases.aboutFapshi')}</Text>
           <View style={styles.buttonContainer}>
             <ActionButton
               title={i18n.t('phrases.signIn')}

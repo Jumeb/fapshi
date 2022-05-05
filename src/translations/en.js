@@ -218,5 +218,7 @@ export default {
     paymentSuccessful: 'Payment successful',
     fapshiBalance: 'FAPSHI balance',
     // New
+    aboutFapshi:
+      "Use Fapshi's mobile application to accept payments, sell products, send invoices, collect contributions, transfer money, and manage your businesses online.",
   },
 };
