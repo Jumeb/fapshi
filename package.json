@@ -30,6 +30,8 @@
     "react-native-safe-area-context": "^4.1.2",
     "react-native-screens": "^3.13.1",
     "react-native-storage": "^1.0.1",
+    "moment": "^2.25.0",
+    "moment-timezone": "^0.5.28",
     "react-native-swiper-flatlist": "^3.0.16",
     "react-native-tab-view": "^3.1.1",
     "react-native-table-component": "^1.2.2",
