@@ -153,14 +153,14 @@ android {
             keyPassword 'android'
         }
     }
-    // signingConfigs {
-    //     release {
-    //     storeFile file('fapshi.keystore')
-    //     storePassword 'fapshi'
-    //     keyAlias 'fapshi_key'
-    //     keyPassword 'fapshi'
-    //     }
-    // }
+    signingConfigs {
+        release {
+        storeFile file('fapshi.keystore')
+        storePassword 'fapshi'
+        keyAlias 'fapshi_key'
+        keyPassword 'fapshi'
+        }
+    }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
@@ -173,9 +173,9 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            // crunchPngs false
+            crunchPngs false
             signingConfig signingConfigs.debug
-            // signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }

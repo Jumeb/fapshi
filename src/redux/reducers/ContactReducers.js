@@ -74,8 +74,7 @@ export default (state = INITIAL_STATE, action) => {
       if (state.transfers.length >= 1) {
         state.transfers.splice(index, 1);
       }
-      payouts = state.payouts;
-      transfers = state.transfers.splice(index, 1);
+      transfers = state.transfers;
       Storage.storeInfo('TRANSFERS', transfers);
       return {...state, transfers: [...transfers]};
     case REMOVE_PAYOUT_INDEX:
