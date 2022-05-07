@@ -144,7 +144,7 @@ class SplashScreen extends Component {
         return this.props.navigation.navigate('Main Stack');
       }
       this.props.navigation.navigate('Welcome');
-    }, 4000);
+    }, 3000);
   }
 
   SetDeviceLanguage = async () => {
