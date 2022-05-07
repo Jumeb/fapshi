@@ -18,7 +18,7 @@ jobs:
       - name: Assemble Keystore
         run: |
           echo "${{ secrets.RELEASE_KEYSTORE }}" > romis.keystore.asc
-          gpg -d --passphrase "${{ secrets.ANDROID_KEY_PASSWORD }}" --batch romis.keystore.asc > app/romis.keystore
+          gpg -d --passphrase "${{ secrets.ANDROID_KEY_PASSWORD }}" --batch romis.keystore.asc > app/fapshi.keystore
 
       - name: Set up our JDK environment # setup JDK environment: mandatory as we need to build  android project
         uses: actions/setup-java@v3
