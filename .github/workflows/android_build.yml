@@ -2,9 +2,8 @@ name: Android Build ## name of the workflow
 
 
 on:
-  workflow_dispatch: # To trigger manual build
-  release:
-    types: [published] # only run the workflow when a new release has been published
+  pull_request:
+    types: [opened, reopened, review_requested, edited, auto_merge_enabled] # only run the workflow when on a pull request
 
 jobs:
   android-build:

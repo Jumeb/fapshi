@@ -161,14 +161,6 @@ android {
             }
         }
     }
-    // signingConfigs {
-    //     release {
-    //     storeFile file('fapshi.keystore')
-    //     storePassword 'fapshi'
-    //     keyAlias 'fapshi_key'
-    //     keyPassword 'fapshi'
-    //     }
-    // }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
